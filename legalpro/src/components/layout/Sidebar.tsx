@@ -16,6 +16,9 @@ import {
   X,
   LogOut,
   Scale,
+  FileSearch,
+  UserSearch,
+  Gavel,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -35,6 +38,9 @@ const navItems: NavItem[] = [
   { label: 'Billing', path: '/billing', icon: CreditCard },
   { label: 'Compliance', path: '/compliance', icon: ShieldCheck },
   { label: 'Reports', path: '/reports', icon: BarChart3 },
+  { label: 'FIR Hub', path: '/fir', icon: FileSearch },
+  { label: 'Profiling', path: '/profiling', icon: UserSearch },
+  { label: 'Court', path: '/court', icon: Gavel },
   { label: 'Settings', path: '/settings', icon: Settings },
 ];
 
