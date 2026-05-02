@@ -1,11 +1,33 @@
 import { useState, useMemo } from 'react';
 import { FileSearch } from 'lucide-react';
 import { PageHeader, GlassCard, SearchInput, FilterBar, DataTable, StatusBadge, Modal } from '@/components/ui';
-import { mockFIRRecords } from '@/data/mockData';
-import type { FIRRecord } from '@/types';
+import firData from '@/data/firRecords.json';
 
-/* ── Derive unique areas for filter dropdown ── */
-const areaOptions = [...new Set(mockFIRRecords.map((r) => r.areaName))];
+/* ── FIR Record type ── */
+interface FIRRecord {
+  id: string;
+  dateTime: string;
+  caseNumber: string;
+  policeStation: string;
+  areaName: string;
+  city: string;
+  status: 'Registered' | 'Pending' | 'Closed';
+  sections: string;
+  complainant: string;
+  complainantPhone: string;
+  complainantAddress: string;
+  accused: string;
+  officer: string;
+  actionTaken: string;
+  complaint: string;
+}
+
+const firRecords = firData as FIRRecord[];
+
+/* ── Derive unique filter options ── */
+const areaOptions = [...new Set(firRecords.map((r) => r.areaName))].sort();
+const cityOptions = [...new Set(firRecords.map((r) => r.city))].sort();
+const statusOptions = ['Registered', 'Pending', 'Closed'];
 
 /* ── Row type compatible with DataTable ── */
 type FIRRow = Record<string, unknown> & FIRRecord;
@@ -41,13 +63,19 @@ const columns = [
 
 export function FIRPage() {
   const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState<Record<string, string>>({ area: 'All' });
+  const [filters, setFilters] = useState<Record<string, string>>({ area: 'All', city: 'All', status: 'All' });
   const [selectedFIR, setSelectedFIR] = useState<FIRRecord | null>(null);
 
   const filtered = useMemo(() => {
-    let data = mockFIRRecords;
+    let data = firRecords;
     if (filters.area && filters.area !== 'All') {
       data = data.filter((r) => r.areaName === filters.area);
+    }
+    if (filters.city && filters.city !== 'All') {
+      data = data.filter((r) => r.city === filters.city);
+    }
+    if (filters.status && filters.status !== 'All') {
+      data = data.filter((r) => r.status === filters.status);
     }
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -57,7 +85,8 @@ export function FIRPage() {
           r.policeStation.toLowerCase().includes(q) ||
           r.areaName.toLowerCase().includes(q) ||
           r.city.toLowerCase().includes(q) ||
-          r.status.toLowerCase().includes(q)
+          r.complainant.toLowerCase().includes(q) ||
+          r.sections.toLowerCase().includes(q)
       );
     }
     return data;
@@ -70,7 +99,7 @@ export function FIRPage() {
       <GlassCard>
         <h2 className="text-xl font-bold text-text-primary mb-1">Local Case Intelligence Hub</h2>
         <p className="text-sm text-text-secondary mb-5">
-          Search and monitor FIR records across jurisdictions with real-time status tracking
+          {firRecords.length} FIR records from police stations across India • Search and filter by area, city, or status
         </p>
 
         {/* Search + Filter */}
@@ -83,7 +112,11 @@ export function FIRPage() {
             />
           </div>
           <FilterBar
-            filters={[{ key: 'area', label: 'Area', options: areaOptions }]}
+            filters={[
+              { key: 'area', label: 'Area', options: areaOptions },
+              { key: 'city', label: 'City', options: cityOptions },
+              { key: 'status', label: 'Status', options: statusOptions },
+            ]}
             values={filters}
             onChange={(k, v) => setFilters((prev) => ({ ...prev, [k]: v }))}
           />
@@ -136,23 +169,34 @@ export function FIRPage() {
 
             <div className="border-t border-border pt-4">
               <h4 className="text-text-primary font-medium mb-2">Sections Applied</h4>
-              <p className="text-text-secondary text-xs">
-                IPC Section 420 (Cheating), Section 406 (Criminal Breach of Trust), Section 34 (Common Intention)
-              </p>
+              <p className="text-text-secondary text-xs">{selectedFIR.sections}</p>
             </div>
 
             <div className="border-t border-border pt-4">
               <h4 className="text-text-primary font-medium mb-2">Complainant Information</h4>
               <p className="text-text-secondary text-xs">
-                Name: Ramesh Gupta &bull; Contact: +91 98765 43210 &bull; Address: 45, MG Road, {selectedFIR.city}
+                Name: {selectedFIR.complainant} &bull; Contact: {selectedFIR.complainantPhone} &bull; Address: {selectedFIR.complainantAddress}
               </p>
             </div>
 
             <div className="border-t border-border pt-4">
-              <h4 className="text-text-primary font-medium mb-2">Case Description</h4>
-              <p className="text-text-secondary text-xs leading-relaxed">
-                The complainant alleges that the accused entered into a business agreement on 10 Jan 2026 and received an advance payment of ₹5,00,000 for supply of goods. The accused failed to deliver the goods within the stipulated time and has been avoiding communication. The complainant seeks legal action under the applicable sections of the Indian Penal Code.
-              </p>
+              <h4 className="text-text-primary font-medium mb-2">Accused / Suspected Person</h4>
+              <p className="text-text-secondary text-xs">{selectedFIR.accused}</p>
+            </div>
+
+            <div className="border-t border-border pt-4">
+              <h4 className="text-text-primary font-medium mb-2">Investigating Officer</h4>
+              <p className="text-text-secondary text-xs">{selectedFIR.officer}</p>
+            </div>
+
+            <div className="border-t border-border pt-4">
+              <h4 className="text-text-primary font-medium mb-2">Action Taken</h4>
+              <p className="text-text-secondary text-xs leading-relaxed">{selectedFIR.actionTaken}</p>
+            </div>
+
+            <div className="border-t border-border pt-4">
+              <h4 className="text-text-primary font-medium mb-2">Complaint Details</h4>
+              <p className="text-text-secondary text-xs leading-relaxed">{selectedFIR.complaint}</p>
             </div>
           </div>
         )}
