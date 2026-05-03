@@ -34,7 +34,21 @@ export function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <PageHeader title="Reports" icon={BarChart3} />
-        <button className="gradient-btn flex items-center gap-2 px-4 py-2 text-sm font-medium">
+        <button
+          onClick={() => {
+            const report = `PRACTICE PERFORMANCE REPORT\n${'='.repeat(35)}\nGenerated: ${new Date().toLocaleDateString()}\n\nKPIs:\n• Cases Per Month: 7.8\n• Revenue per Case: ₹65K\n• Monthly Growth: +18%\n• Time to Closure: 8.5 months\n\nPractice Area Performance:\n• Civil: 18 cases, 72% win rate, ₹8.2L revenue\n• Criminal: 12 cases, 68% win rate, ₹5.4L revenue\n• Family: 8 cases, 80% win rate, ₹3.8L revenue\n• Corporate: 5 cases, 85% win rate, ₹6.5L revenue\n• IPR: 3 cases, 67% win rate, ₹2.1L revenue\n• Taxation: 1 case, 100% win rate, ₹1.2L revenue\n\nReferral Sources:\n• Client Referrals: 45%\n• Bar Network: 30%\n• Direct Inquiry: 20%\n• Online: 5%`;
+            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'practice-performance-report.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }}
+          className="gradient-btn flex items-center gap-2 px-4 py-2 text-sm font-medium"
+        >
           <FileBarChart className="w-4 h-4" /> Generate Report
         </button>
       </div>

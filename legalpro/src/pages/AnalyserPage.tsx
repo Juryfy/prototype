@@ -56,7 +56,24 @@ export function AnalyserPage() {
   };
 
   const handleExport = (type: string) => {
-    alert(`${type} — feature coming soon!`);
+    const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${mockAnalysisResult.caseSummary.legalIssue}\n\nSuccess Probability: ${mockAnalysisResult.caseSummary.successProbability}%\n\nKey Points:\n${mockAnalysisResult.caseSummary.keyPoints.map(p => '• ' + p).join('\n')}\n\nRelevant Case Laws:\n${mockAnalysisResult.relevantCaseLaws.map(l => '• ' + l.citation + ' (' + l.outcome + ')').join('\n')}\n\nApplicable Sections:\n${mockAnalysisResult.applicableSections.map(s => '• ' + s.section + ' - ' + s.description).join('\n')}\n\nStrengths:\n${mockAnalysisResult.strengths.map(s => '✓ ' + s.title + ': ' + s.description).join('\n')}\n\nChallenges:\n${mockAnalysisResult.challenges.map(c => '⚠ ' + c.title + ': ' + c.description).join('\n')}\n\nRecommended Strategy:\n${mockAnalysisResult.strategy.map(s => s.step + '. ' + s.title + ': ' + s.description).join('\n')}\n\nExpert Recommendation:\n${mockAnalysisResult.expertRecommendation}`;
+
+    if (type === 'Download PDF Report' || type === 'Export to Word' || type === 'Print Analysis') {
+      const blob = new Blob([analysisText], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `case-analysis-report.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else if (type === 'Save to Case File') {
+      localStorage.setItem('juryfy_saved_analysis', analysisText);
+      alert('Analysis saved to case file!');
+    } else if (type === 'Email Report') {
+      window.open(`mailto:?subject=Case Analysis Report&body=${encodeURIComponent(analysisText.substring(0, 2000))}`);
+    }
   };
 
   if (isAnalyzing) {

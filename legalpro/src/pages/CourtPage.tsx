@@ -135,7 +135,21 @@ function CauseListMonitor() {
             </li>
           </ul>
           <div className="flex gap-2 mt-4">
-            <button className="gradient-btn px-3 py-1.5 text-xs flex items-center gap-1">
+            <button
+              onClick={() => {
+                const brief = `AUTO-PREPARED BRIEF KIT\n${'='.repeat(30)}\nCase: Mehta v. Kumar — CS 450/2023\nCourt: Delhi High Court, Chamber 5\nHearing: 10:30 AM\n\n1. Last Order Summary:\n   Court directed parties to file written submissions by next date.\n\n2. Pending Compliance:\n   - Written submissions to be filed\n\n3. Key Arguments:\n   - Plaintiff has established prima facie case\n   - Defendant's delay tactics noted by court\n   - Settlement discussions failed\n\n4. Judge Profile: Justice Singh\n   - Known for strict timelines\n   - Favors documentary evidence`;
+                const blob = new Blob([brief], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'brief-kit-mehta-v-kumar.txt';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+              }}
+              className="gradient-btn px-3 py-1.5 text-xs flex items-center gap-1"
+            >
               <Download className="w-3 h-3" /> Download Brief
             </button>
             <button className="px-3 py-1.5 text-xs rounded-lg border border-border text-text-secondary hover:bg-bg-elevated transition-colors">
