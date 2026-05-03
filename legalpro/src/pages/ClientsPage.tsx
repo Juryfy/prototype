@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Users, Plus, MessageSquare, Download } from 'lucide-react';
-import { PageHeader, GlassCard, Modal } from '@/components/ui';
+import { Users, Plus, MessageSquare } from 'lucide-react';
+import { PageHeader, GlassCard, Modal, DownloadButton } from '@/components/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { STORAGE_KEYS, mockClients, mockCommunications } from '@/data/mockData';
-import { exportToCSV } from '@/utils/export';
 import type { Client, PracticeArea } from '@/types';
 
 const AVATAR_COLORS = ['#6366F1', '#10B981', '#F59E0B', '#F43F5E', '#8B5CF6', '#06B6D4'];
@@ -50,12 +49,7 @@ export function ClientsPage() {
             <p className="text-sm text-text-secondary">Manage your client relationships and communications</p>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => exportToCSV(clients as unknown as Record<string, unknown>[], 'clients-export')}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-border text-text-secondary hover:bg-bg-elevated transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" /> Export
-            </button>
+            <DownloadButton data={clients as unknown as Record<string, unknown>[]} filename="clients" />
             <button
               onClick={() => setShowAddModal(true)}
               className="gradient-btn flex items-center gap-2 px-4 py-2 text-sm font-medium"

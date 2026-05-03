@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Briefcase, Plus, Eye, FileText, Scale, Gavel, Clock, PauseCircle, FolderOpen, Download } from 'lucide-react';
-import { PageHeader, GlassCard, TabBar, DataTable, StatusBadge, Modal } from '@/components/ui';
+import { Briefcase, Plus, Eye, FileText, Scale, Gavel, Clock, PauseCircle, FolderOpen } from 'lucide-react';
+import { PageHeader, GlassCard, TabBar, DataTable, StatusBadge, Modal, DownloadButton } from '@/components/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { STORAGE_KEYS, mockCases } from '@/data/mockData';
-import { exportToCSV } from '@/utils/export';
 import type { Case, PracticeArea, CourtLevel, CaseStage } from '@/types';
 
 const PRACTICE_AREAS: PracticeArea[] = ['Civil', 'Criminal', 'Family', 'Corporate', 'IPR', 'Tax'];
@@ -116,12 +115,7 @@ export function CasesPage() {
             <p className="text-sm text-text-secondary">Complete case lifecycle management with status tracking and court details</p>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => exportToCSV(filteredCases as unknown as Record<string, unknown>[], 'cases-export')}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-border text-text-secondary hover:bg-bg-elevated transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" /> Export
-            </button>
+            <DownloadButton data={filteredCases as unknown as Record<string, unknown>[]} filename="cases" />
             <button
               onClick={() => setShowCreateModal(true)}
               className="gradient-btn flex items-center gap-2 px-4 py-2 text-sm font-medium"

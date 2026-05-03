@@ -8,3 +8,4 @@ export { TabBar } from './TabBar';
 export { PageHeader } from './PageHeader';
 export { Modal } from './Modal';
 export { ChartCard } from './ChartCard';
+export { DownloadButton } from './DownloadButton';
