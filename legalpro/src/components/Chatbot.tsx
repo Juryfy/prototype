@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import firData from '@/data/firRecords.json';
 
 interface Message {
   id: string;
@@ -52,6 +53,34 @@ function getBotResponse(input: string): string {
 
   if (q.includes('client') && (q.includes('list') || q.includes('show') || q.includes('active'))) {
     return 'You have 12 clients in your directory:\n• 8 with active cases\n• 4 with pending payments (₹2,45,000 total)\n• 1 unread message from Rajesh Kumar\n\nWould you like to add a new client or view details?';
+  }
+
+  // ── Crime-type specific FIR queries ──
+  const crimeKeywords: { keywords: string[]; sections: string[]; label: string }[] = [
+    { keywords: ['cheat', 'cheating', 'fraud', 'scam', 'defraud'], sections: ['305', '310'], label: 'Cheating/Fraud' },
+    { keywords: ['theft', 'steal', 'stolen', 'stole'], sections: ['115'], label: 'Theft' },
+    { keywords: ['robbery', 'rob', 'snatch', 'loot', 'dacoity'], sections: ['392', '394'], label: 'Robbery/Dacoity' },
+    { keywords: ['assault', 'hurt', 'attack', 'beat', 'violence'], sections: ['301', '303'], label: 'Assault/Hurt' },
+    { keywords: ['harassment', 'intimidat', 'threaten', 'stalk', 'abuse'], sections: ['109', '113'], label: 'Harassment/Intimidation' },
+    { keywords: ['breach of trust', 'misappropriat', 'embezzle'], sections: ['318', '320', '322'], label: 'Criminal Breach of Trust' },
+    { keywords: ['cyber', 'online', 'digital', 'hacking', 'otp'], sections: ['305', '310', '318', '320'], label: 'Cyber Crime' },
+  ];
+
+  for (const crime of crimeKeywords) {
+    if (crime.keywords.some((kw) => q.includes(kw))) {
+      const matchingFIRs = (firData as { id: string; caseNumber: string; city: string; policeStation: string; status: string; sections: string; complainant: string; accused: string; complaint: string }[])
+        .filter((fir) => crime.sections.some((sec) => fir.sections.includes(sec)));
+      const total = matchingFIRs.length;
+      const registered = matchingFIRs.filter((f) => f.status === 'Registered').length;
+      const pending = matchingFIRs.filter((f) => f.status === 'Pending').length;
+      const closed = matchingFIRs.filter((f) => f.status === 'Closed').length;
+      const sample = matchingFIRs.slice(0, 5);
+
+      let response = `Found ${total} ${crime.label} cases in the FIR Intelligence Hub:\n\n📊 Status Breakdown:\n• Registered: ${registered}\n• Pending: ${pending}\n• Closed: ${closed}\n\n📋 Recent Records:\n`;
+      response += sample.map((f) => `• Case ${f.caseNumber} — ${f.city} (${f.policeStation}) [${f.status}]\n  Sections: ${f.sections} | Accused: ${f.accused}`).join('\n');
+      response += `\n\nVisit the FIR Intelligence Hub page to view all ${total} records with full details.`;
+      return response;
+    }
   }
 
   if (q.includes('fir') && (q.includes('status') || q.includes('check') || q.includes('track'))) {
