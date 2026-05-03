@@ -3,6 +3,8 @@ import { Download, ChevronDown } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Document, Packer, Paragraph, Table as DocxTable, TableRow, TableCell, TextRun, WidthType, HeadingLevel, BorderStyle, AlignmentType } from 'docx';
+import { saveAs } from 'file-saver';
 
 type DownloadFormat = 'xlsx' | 'csv' | 'pdf' | 'docx';
 
@@ -44,11 +46,26 @@ function downloadAsCSV(data: Record<string, unknown>[], filename: string) {
 
 function downloadAsXLSX(data: Record<string, unknown>[], filename: string) {
   if (data.length === 0) return;
-  const ws = XLSX.utils.json_to_sheet(data);
+
+  // Flatten data: convert any nested objects/arrays to strings for Excel compatibility
+  const flatData = data.map((row) => {
+    const flat: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(row)) {
+      if (value !== null && typeof value === 'object') {
+        flat[key] = JSON.stringify(value);
+      } else {
+        flat[key] = value;
+      }
+    }
+    return flat;
+  });
+
+  const ws = XLSX.utils.json_to_sheet(flatData);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Data');
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  // Wrap in Uint8Array to ensure proper binary blob creation
+  const blob = new Blob([new Uint8Array(wbout)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   triggerDownload(blob, `${filename}.xlsx`);
 }
 
@@ -69,44 +86,70 @@ function downloadAsPDF(data: Record<string, unknown>[], filename: string) {
     headStyles: { fillColor: [99, 102, 241] },
   });
 
-  doc.save(`${filename}.pdf`);
+  // Use blob output + triggerDownload for reliable cross-browser PDF download
+  const pdfBlob = doc.output('blob');
+  triggerDownload(pdfBlob, `${filename}.pdf`);
 }
 
 function downloadAsDOCX(data: Record<string, unknown>[], filename: string) {
   if (data.length === 0) return;
   const headers = Object.keys(data[0]);
 
-  // Generate HTML that Word can open natively
-  const html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-    <head><meta charset="utf-8"><title>${filename}</title>
-    <style>
-      body { font-family: Calibri, sans-serif; font-size: 11pt; }
-      h1 { color: #6366F1; font-size: 16pt; }
-      table { border-collapse: collapse; width: 100%; margin-top: 12pt; }
-      th { background-color: #6366F1; color: white; padding: 6pt 8pt; text-align: left; font-size: 9pt; }
-      td { border: 1px solid #ddd; padding: 4pt 8pt; font-size: 9pt; }
-      tr:nth-child(even) { background-color: #f9f9f9; }
-      .meta { color: #666; font-size: 9pt; margin-bottom: 8pt; }
-    </style></head>
-    <body>
-      <h1>${filename.replace(/-/g, ' ').toUpperCase()}</h1>
-      <p class="meta">Generated: ${new Date().toLocaleDateString()} | Total Records: ${data.length}</p>
-      <table>
-        <tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr>
-        ${data.map((row) => `<tr>${headers.map((h) => `<td>${row[h] ?? ''}</td>`).join('')}</tr>`).join('')}
-      </table>
-    </body></html>`;
+  // Build header row
+  const headerRow = new TableRow({
+    children: headers.map((h) => new TableCell({
+      children: [new Paragraph({ children: [new TextRun({ text: h, bold: true, color: 'FFFFFF', size: 18 })] })],
+      shading: { fill: '6366F1' },
+    })),
+  });
 
-  const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
-  triggerDownload(blob, `${filename}.doc`);
+  // Build data rows
+  const dataRows = data.map((row) => new TableRow({
+    children: headers.map((h) => new TableCell({
+      children: [new Paragraph({ children: [new TextRun({ text: String(row[h] ?? ''), size: 18 })] })],
+    })),
+  }));
+
+  const table = new DocxTable({
+    rows: [headerRow, ...dataRows],
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    borders: {
+      top: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+      bottom: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+      left: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+      right: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+      insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+      insideVertical: { style: BorderStyle.SINGLE, size: 1, color: 'DDDDDD' },
+    },
+  });
+
+  const doc = new Document({
+    sections: [{
+      children: [
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          children: [new TextRun({ text: filename.replace(/-/g, ' ').toUpperCase(), color: '6366F1' })],
+        }),
+        new Paragraph({
+          alignment: AlignmentType.LEFT,
+          children: [new TextRun({ text: `Generated: ${new Date().toLocaleDateString()} | Total Records: ${data.length}`, color: '666666', size: 18 })],
+        }),
+        new Paragraph({ children: [] }), // spacer
+        table,
+      ],
+    }],
+  });
+
+  Packer.toBlob(doc).then((blob) => {
+    saveAs(blob, `${filename}.docx`);
+  });
 }
 
 const FORMAT_OPTIONS: { value: DownloadFormat; label: string }[] = [
   { value: 'xlsx', label: 'Excel (.xlsx)' },
   { value: 'csv', label: 'CSV (.csv)' },
   { value: 'pdf', label: 'PDF (.pdf)' },
-  { value: 'docx', label: 'Word (.doc)' },
+  { value: 'docx', label: 'Word (.docx)' },
 ];
 
 export function DownloadButton({ data, filename, label = 'Download' }: DownloadButtonProps) {
