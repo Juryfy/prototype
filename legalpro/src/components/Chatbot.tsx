@@ -13,8 +13,10 @@ const SUGGESTIONS = [
   'What hearings do I have today?',
   'Find a lawyer in Delhi',
   'Analyze my case',
-  'What is Section 420 IPC?',
+  'Show FIR status',
+  'What is BNS Section 305?',
   'Show my pending invoices',
+  'Search FIR records',
 ];
 
 function getBotResponse(input: string): string {
@@ -52,15 +54,35 @@ function getBotResponse(input: string): string {
     return 'You have 12 clients in your directory:\n• 8 with active cases\n• 4 with pending payments (₹2,45,000 total)\n• 1 unread message from Rajesh Kumar\n\nWould you like to add a new client or view details?';
   }
 
+  if (q.includes('fir') && (q.includes('status') || q.includes('check') || q.includes('track'))) {
+    return 'Here\'s a summary of FIR statuses in the Intelligence Hub:\n• Registered: 340 FIRs\n• Pending: 330 FIRs\n• Closed: 330 FIRs\n\nYou can search by case number, police station, city, or area. Visit the FIR Intelligence Hub page for detailed records.\n\nWould you like me to help you find a specific FIR?';
+  }
+
+  if (q.includes('fir') && (q.includes('search') || q.includes('find') || q.includes('lookup') || q.includes('number'))) {
+    return 'To search for a specific FIR in the Intelligence Hub:\n1. Go to the FIR Intelligence Hub page\n2. Use the search bar to find by case number, complainant name, or police station\n3. Filter by City, Area, or Status\n\nYou can also view full FIR details including:\n• Complainant information\n• Accused details\n• Investigating officer\n• Sections applied\n• Action taken\n\nWhat FIR details are you looking for?';
+  }
+
+  if (q.includes('fir') && (q.includes('register') || q.includes('file') || q.includes('lodge') || q.includes('new'))) {
+    return 'To file/register a new FIR:\n1. Visit the nearest police station with jurisdiction\n2. Provide a written complaint with details of the incident\n3. The officer will register the FIR under applicable BNS sections\n\nCommon BNS sections:\n• BNS 115(2) — Theft\n• BNS 305, 310 — Fraud/Cheating\n• BNS 318, 320 — Criminal breach of trust\n• BNS 392, 394 — Robbery/Dacoity\n• BNS 109, 113 — Criminal intimidation\n\nThe FIR Intelligence Hub tracks all registered FIRs with real-time status updates.';
+  }
+
+  if (q.includes('fir') || q.includes('intelligence hub') || q.includes('police station') || q.includes('police report')) {
+    return 'The FIR Intelligence Hub provides:\n• 1000+ FIR records across India\n• Real-time status tracking (Registered/Pending/Closed)\n• Search by case number, police station, city, or area\n• Detailed FIR information including complainant, accused, sections, and action taken\n• Filter by city, area name, and status\n\nCities covered: Mumbai, Delhi, Chennai, Bengaluru, Hyderabad, Kolkata, Jaipur, and 20+ more.\n\nWould you like to:\n• Check FIR status?\n• Search for a specific FIR?\n• Know about FIR registration process?';
+  }
+
+  if (q.includes('bns') || q.includes('bharatiya nyaya') || q.includes('section')) {
+    return 'Common BNS (Bharatiya Nyaya Sanhita) sections in FIR records:\n\n• BNS 115(2) — Voluntarily causing hurt / Theft\n• BNS 109, 113 — Criminal intimidation & harassment\n• BNS 301, 303 — Causing hurt by dangerous means\n• BNS 305, 310 — Cheating and fraud\n• BNS 318, 320 — Criminal breach of trust\n• BNS 320, 322 — Dishonest misappropriation\n• BNS 392, 394 — Robbery and dacoity\n\nThe BNS replaced the Indian Penal Code (IPC) from July 2024. Would you like details on any specific section?';
+  }
+
   if (q.includes('hello') || q.includes('hi') || q.includes('hey')) {
-    return 'Hello! 👋 I\'m your Juryfy AI assistant. I can help you with:\n• Case management & status\n• Hearing schedules\n• Finding lawyers\n• Legal analysis\n• Billing & invoices\n• Deadlines & compliance\n\nWhat would you like to know?';
+    return 'Hello! 👋 I\'m your Juryfy AI assistant. I can help you with:\n• Case management & status\n• Hearing schedules\n• Finding lawyers\n• Legal analysis\n• Billing & invoices\n• Deadlines & compliance\n• FIR Intelligence Hub\n\nWhat would you like to know?';
   }
 
   if (q.includes('thank')) {
     return 'You\'re welcome! Let me know if there\'s anything else I can help with. 😊';
   }
 
-  return 'I can help you with case management, hearing schedules, finding lawyers, legal analysis, billing, and more. Could you please be more specific about what you need?\n\nTry asking:\n• "Show my active cases"\n• "What hearings do I have today?"\n• "What is Section 420 IPC?"';
+  return 'I can help you with case management, hearing schedules, finding lawyers, legal analysis, billing, FIR Intelligence Hub, and more. Could you please be more specific about what you need?\n\nTry asking:\n• "Show my active cases"\n• "What hearings do I have today?"\n• "What is Section 420 IPC?"\n• "Show FIR status"\n• "Search FIR by case number"';
 }
 
 export function Chatbot() {
