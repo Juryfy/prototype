@@ -120,7 +120,7 @@ export function DownloadButton({ data, filename, label = 'Download' }: DownloadB
     <div ref={ref} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-border text-text-secondary hover:bg-bg-elevated hover:text-text-primary transition-colors"
+        className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-lg bg-accent-primary text-white hover:bg-accent-hover transition-colors shadow-md shadow-accent-primary/20"
       >
         <Download className="w-3.5 h-3.5" />
         {label}
