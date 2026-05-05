@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import firData from '@/data/firRecords.json';
 
 interface Message {
@@ -24,19 +25,19 @@ function getBotResponse(input: string): string {
   const q = input.toLowerCase();
 
   if (q.includes('case') && (q.includes('active') || q.includes('show') || q.includes('list'))) {
-    return 'You currently have 6 active cases:\n• CC/2345/2025 — Property Dispute (Delhi HC)\n• CR/789/2025 — Bail Application (District Court)\n• FC/1892/2025 — Divorce Proceedings (Tis Hazari)\n• CP/4567/2025 — Corporate Litigation (NCLT)\n• CC/1234/2025 — Contract Dispute (Delhi HC)\n• IP/901/2025 — Patent Infringement (Delhi HC)\n\nWould you like details on any specific case?';
+    return 'You currently have 6 active cases:\n• CC/2345/2025 — Property Dispute (Delhi HC)\n• CR/789/2025 — Bail Application (District Court)\n• FC/1892/2025 — Divorce Proceedings (Tis Hazari)\n• CP/4567/2025 — Corporate Litigation (NCLT)\n• CC/1234/2025 — Contract Dispute (Delhi HC)\n• IP/901/2025 — Patent Infringement (Delhi HC)\n\n👉 [View All Cases](/cases)\n\nWould you like details on any specific case?';
   }
 
   if (q.includes('hearing') && (q.includes('today') || q.includes('schedule'))) {
-    return 'You have 3 hearings today:\n• 10:30 AM — CC/2345/2025 Property Dispute at Delhi High Court\n• 2:00 PM — CR/789/2025 Bail Application at District Court\n• 3:30 PM — FC/1892/2025 Divorce Petition at Tis Hazari Court\n\nShall I prepare a brief for any of these?';
+    return 'You have 3 hearings today:\n• 10:30 AM — CC/2345/2025 Property Dispute at Delhi High Court\n• 2:00 PM — CR/789/2025 Bail Application at District Court\n• 3:30 PM — FC/1892/2025 Divorce Petition at Tis Hazari Court\n\n👉 [View Calendar](/calendar)\n\nShall I prepare a brief for any of these?';
   }
 
   if (q.includes('lawyer') || q.includes('advocate') || q.includes('find')) {
-    return 'I can help you find lawyers! We have 1000+ advocates in our directory. You can filter by:\n• Location (Delhi, Chennai, Mumbai, etc.)\n• Practice Area (Civil, Criminal, Family, Corporate, IPR, Tax)\n• Court Level\n• Experience\n\nVisit the "Lawyers Near You" page or tell me your specific requirements.';
+    return 'I can help you find lawyers! We have 1000+ advocates in our directory. You can filter by:\n• Location (Delhi, Chennai, Mumbai, etc.)\n• Practice Area (Civil, Criminal, Family, Corporate, IPR, Tax)\n• Court Level\n• Experience\n\n👉 [Go to Lawyers Near You](/profiling)\n\nOr tell me your specific requirements.';
   }
 
   if (q.includes('analyze') || q.includes('analyser') || q.includes('analysis')) {
-    return 'I can help analyze your case! Go to the Analyser page and:\n1. Enter your case details in the text area\n2. Add any recommendations\n3. Click "Analyze Case"\n\nThe AI will provide:\n• Case type & jurisdiction\n• Applicable legal sections\n• Similar historical cases\n• Outcome prediction (win/loss %)\n• Recommended legal strategy\n\nWould you like me to navigate you there?';
+    return 'I can help analyze your case! The AI Analyser provides:\n• Case type & jurisdiction\n• Applicable legal sections\n• Similar historical cases\n• Outcome prediction (win/loss %)\n• Recommended legal strategy\n\n👉 [Open AI Analyser](/analyser)\n\nEnter your case details and click "Analyze Case" to get started.';
   }
 
   if (q.includes('section 420') || q.includes('ipc')) {
@@ -44,15 +45,15 @@ function getBotResponse(input: string): string {
   }
 
   if (q.includes('invoice') || q.includes('billing') || q.includes('payment')) {
-    return 'Your billing summary:\n• Outstanding Invoices: ₹2.4L (8 pending)\n• Fees Collected (Feb): ₹3,85,000\n• Overdue: INV-2026-038 (TechCorp Ltd, ₹25,000)\n\nWould you like to create a new invoice or view details?';
+    return 'Your billing summary:\n• Outstanding Invoices: ₹2.4L (8 pending)\n• Fees Collected (Feb): ₹3,85,000\n• Overdue: INV-2026-038 (TechCorp Ltd, ₹25,000)\n\n👉 [Go to Billing](/billing)\n\nWould you like to create a new invoice or view details?';
   }
 
   if (q.includes('deadline') || q.includes('limitation')) {
-    return 'Your upcoming critical deadlines:\n• Appeal Window Closing — CC/890/2025 (6 days left)\n• Written Statement Filing — CC/2345/2025 (11 days left)\n• Vakalatname Renewal — Supreme Court (14 days left)\n\n⚠️ The appeal window is urgent — please take action soon!';
+    return 'Your upcoming critical deadlines:\n• Appeal Window Closing — CC/890/2025 (6 days left)\n• Written Statement Filing — CC/2345/2025 (11 days left)\n• Vakalatname Renewal — Supreme Court (14 days left)\n\n⚠️ The appeal window is urgent — please take action soon!\n\n👉 [View Calendar](/calendar)';
   }
 
   if (q.includes('client') && (q.includes('list') || q.includes('show') || q.includes('active'))) {
-    return 'You have 12 clients in your directory:\n• 8 with active cases\n• 4 with pending payments (₹2,45,000 total)\n• 1 unread message from Rajesh Kumar\n\nWould you like to add a new client or view details?';
+    return 'You have 12 clients in your directory:\n• 8 with active cases\n• 4 with pending payments (₹2,45,000 total)\n• 1 unread message from Rajesh Kumar\n\n👉 [View All Clients](/clients)\n\nWould you like to add a new client or view details?';
   }
 
   // ── Crime-type specific FIR queries ──
@@ -78,25 +79,25 @@ function getBotResponse(input: string): string {
 
       let response = `Found ${total} ${crime.label} cases in the FIR Intelligence Hub:\n\n📊 Status Breakdown:\n• Registered: ${registered}\n• Pending: ${pending}\n• Closed: ${closed}\n\n📋 Recent Records:\n`;
       response += sample.map((f) => `• Case ${f.caseNumber} — ${f.city} (${f.policeStation}) [${f.status}]\n  Sections: ${f.sections} | Accused: ${f.accused}`).join('\n');
-      response += `\n\nVisit the FIR Intelligence Hub page to view all ${total} records with full details.`;
+      response += `\n\n👉 [View All in FIR Intelligence Hub](/fir)`;
       return response;
     }
   }
 
   if (q.includes('fir') && (q.includes('status') || q.includes('check') || q.includes('track'))) {
-    return 'Here\'s a summary of FIR statuses in the Intelligence Hub:\n• Registered: 340 FIRs\n• Pending: 330 FIRs\n• Closed: 330 FIRs\n\nYou can search by case number, police station, city, or area. Visit the FIR Intelligence Hub page for detailed records.\n\nWould you like me to help you find a specific FIR?';
+    return 'Here\'s a summary of FIR statuses in the Intelligence Hub:\n• Registered: 340 FIRs\n• Pending: 330 FIRs\n• Closed: 330 FIRs\n\nYou can search by case number, police station, city, or area.\n\n👉 [Open FIR Intelligence Hub](/fir)\n\nWould you like me to help you find a specific FIR?';
   }
 
   if (q.includes('fir') && (q.includes('search') || q.includes('find') || q.includes('lookup') || q.includes('number'))) {
-    return 'To search for a specific FIR in the Intelligence Hub:\n1. Go to the FIR Intelligence Hub page\n2. Use the search bar to find by case number, complainant name, or police station\n3. Filter by City, Area, or Status\n\nYou can also view full FIR details including:\n• Complainant information\n• Accused details\n• Investigating officer\n• Sections applied\n• Action taken\n\nWhat FIR details are you looking for?';
+    return 'To search for a specific FIR in the Intelligence Hub:\n1. Use the search bar to find by case number, complainant name, or police station\n2. Filter by City, Area, or Status\n\nYou can view full FIR details including:\n• Complainant information\n• Accused details\n• Investigating officer\n• Sections applied\n• Action taken\n\n👉 [Search FIR Records](/fir)\n\nWhat FIR details are you looking for?';
   }
 
   if (q.includes('fir') && (q.includes('register') || q.includes('file') || q.includes('lodge') || q.includes('new'))) {
-    return 'To file/register a new FIR:\n1. Visit the nearest police station with jurisdiction\n2. Provide a written complaint with details of the incident\n3. The officer will register the FIR under applicable BNS sections\n\nCommon BNS sections:\n• BNS 115(2) — Theft\n• BNS 305, 310 — Fraud/Cheating\n• BNS 318, 320 — Criminal breach of trust\n• BNS 392, 394 — Robbery/Dacoity\n• BNS 109, 113 — Criminal intimidation\n\nThe FIR Intelligence Hub tracks all registered FIRs with real-time status updates.';
+    return 'To file/register a new FIR:\n1. Visit the nearest police station with jurisdiction\n2. Provide a written complaint with details of the incident\n3. The officer will register the FIR under applicable BNS sections\n\nCommon BNS sections:\n• BNS 115(2) — Theft\n• BNS 305, 310 — Fraud/Cheating\n• BNS 318, 320 — Criminal breach of trust\n• BNS 392, 394 — Robbery/Dacoity\n• BNS 109, 113 — Criminal intimidation\n\n👉 [View FIR Intelligence Hub](/fir)';
   }
 
   if (q.includes('fir') || q.includes('intelligence hub') || q.includes('police station') || q.includes('police report')) {
-    return 'The FIR Intelligence Hub provides:\n• 1000+ FIR records across India\n• Real-time status tracking (Registered/Pending/Closed)\n• Search by case number, police station, city, or area\n• Detailed FIR information including complainant, accused, sections, and action taken\n• Filter by city, area name, and status\n\nCities covered: Mumbai, Delhi, Chennai, Bengaluru, Hyderabad, Kolkata, Jaipur, and 20+ more.\n\nWould you like to:\n• Check FIR status?\n• Search for a specific FIR?\n• Know about FIR registration process?';
+    return 'The FIR Intelligence Hub provides:\n• 1000+ FIR records across India\n• Real-time status tracking (Registered/Pending/Closed)\n• Search by case number, police station, city, or area\n• Detailed FIR information including complainant, accused, sections, and action taken\n• Filter by city, area name, and status\n\nCities covered: Mumbai, Delhi, Chennai, Bengaluru, Hyderabad, Kolkata, Jaipur, and 20+ more.\n\n👉 [Open FIR Intelligence Hub](/fir)';
   }
 
   if (q.includes('bns') || q.includes('bharatiya nyaya') || q.includes('section')) {
@@ -104,14 +105,34 @@ function getBotResponse(input: string): string {
   }
 
   if (q.includes('hello') || q.includes('hi') || q.includes('hey')) {
-    return 'Hello! 👋 I\'m your Juryfy AI assistant. I can help you with:\n• Case management & status\n• Hearing schedules\n• Finding lawyers\n• Legal analysis\n• Billing & invoices\n• Deadlines & compliance\n• FIR Intelligence Hub\n\nWhat would you like to know?';
+    return 'Hello! 👋 I\'m your Juryfy AI assistant. I can help you with:\n• [Cases](/cases) — Case management & status\n• [Calendar](/calendar) — Hearing schedules\n• [Lawyers Near You](/profiling) — Find lawyers\n• [AI Analyser](/analyser) — Legal analysis\n• [Billing](/billing) — Invoices & payments\n• [Compliance](/compliance) — Deadlines & compliance\n• [FIR Intelligence Hub](/fir) — FIR records\n\nWhat would you like to know?';
   }
 
   if (q.includes('thank')) {
     return 'You\'re welcome! Let me know if there\'s anything else I can help with. 😊';
   }
 
-  return 'I can help you with case management, hearing schedules, finding lawyers, legal analysis, billing, FIR Intelligence Hub, and more. Could you please be more specific about what you need?\n\nTry asking:\n• "Show my active cases"\n• "What hearings do I have today?"\n• "What is Section 420 IPC?"\n• "Show FIR status"\n• "Search FIR by case number"';
+  if (q.includes('dashboard') || q.includes('home') || q.includes('overview')) {
+    return 'Your dashboard shows a complete overview of your practice:\n• Active cases & upcoming hearings\n• Revenue & billing summary\n• Tasks & deadlines\n• Recent activity\n\n👉 [Go to Dashboard](/dashboard)';
+  }
+
+  if (q.includes('compliance') || q.includes('regulation')) {
+    return 'The Compliance module helps you track:\n• Regulatory requirements\n• Filing deadlines\n• Document renewals\n• Bar council compliance\n\n👉 [View Compliance](/compliance)';
+  }
+
+  if (q.includes('report') || q.includes('analytics')) {
+    return 'The Reports page provides analytics on:\n• Case outcomes & win rates\n• Revenue trends\n• Client acquisition\n• Practice area performance\n\n👉 [View Reports](/reports)';
+  }
+
+  if (q.includes('court') || q.includes('courtroom')) {
+    return 'The Court module provides:\n• Court schedules & listings\n• Bench information\n• Court-specific procedures\n• Filing requirements\n\n👉 [View Court Info](/court)';
+  }
+
+  if (q.includes('setting') || q.includes('profile') || q.includes('account')) {
+    return 'You can manage your account settings including:\n• Profile information\n• Notification preferences\n• Security settings\n• Display preferences\n\n👉 [Go to Settings](/settings)';
+  }
+
+  return 'I can help you with case management, hearing schedules, finding lawyers, legal analysis, billing, FIR Intelligence Hub, and more.\n\nQuick links:\n• [Cases](/cases) • [Calendar](/calendar) • [Billing](/billing)\n• [FIR Hub](/fir) • [Analyser](/analyser) • [Lawyers](/profiling)\n\nTry asking:\n• "Show my active cases"\n• "What hearings do I have today?"\n• "Show FIR status"\n• "Get all cheating cases"';
 }
 
 export function Chatbot() {
@@ -127,10 +148,50 @@ export function Chatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Render message text with clickable links: [text](/path)
+  const renderMessageText = useCallback((text: string) => {
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const parts: (string | { text: string; path: string })[] = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index));
+      }
+      parts.push({ text: match[1], path: match[2] });
+      lastIndex = match.index + match[0].length;
+    }
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts.map((part, i) => {
+      if (typeof part === 'string') {
+        return <span key={i}>{part}</span>;
+      }
+      return (
+        <a
+          key={i}
+          href={part.path}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(part.path);
+            setIsOpen(false);
+          }}
+          className="text-accent-primary hover:text-accent-hover underline underline-offset-2 font-medium transition-colors"
+        >
+          {part.text}
+        </a>
+      );
+    });
+  }, [navigate]);
 
   function handleSend(text?: string) {
     const messageText = text || input.trim();
@@ -223,7 +284,7 @@ export function Chatbot() {
                       : 'bg-bg-elevated text-text-primary rounded-bl-md'
                   }`}
                 >
-                  {msg.text}
+                  {msg.role === 'bot' ? renderMessageText(msg.text) : msg.text}
                 </div>
                 {msg.role === 'user' && (
                   <div className="w-7 h-7 rounded-full bg-bg-elevated flex items-center justify-center shrink-0 mt-1">
