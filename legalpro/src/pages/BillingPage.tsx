@@ -101,17 +101,19 @@ export function BillingPage() {
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={revenueData}>
             <defs>
-              <linearGradient id="barGradientGold" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#E8C068" />
+              <linearGradient id="barGradientGold" x1="0" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stopColor="#F5E0A0" />
+                <stop offset="20%" stopColor="#E8C068" />
                 <stop offset="50%" stopColor="#D4A853" />
+                <stop offset="80%" stopColor="#B8860B" />
                 <stop offset="100%" stopColor="#8B6914" />
               </linearGradient>
               <linearGradient id="barGradientLight" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#11CDEF" />
+                <stop offset="0%" stopColor="#4DD9F0" />
                 <stop offset="100%" stopColor="#1171EF" />
               </linearGradient>
               <linearGradient id="barGradientDark" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#818CF8" />
+                <stop offset="0%" stopColor="#A5B4FC" />
                 <stop offset="100%" stopColor="#6366F1" />
               </linearGradient>
             </defs>

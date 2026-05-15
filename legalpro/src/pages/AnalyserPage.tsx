@@ -598,14 +598,18 @@ function ResultsView({
               <PieChart>
                 <defs>
                   <linearGradient id="pieGold" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#E8C068" />
+                    <stop offset="0%" stopColor="#F5E0A0" />
+                    <stop offset="25%" stopColor="#E8C068" />
                     <stop offset="50%" stopColor="#D4A853" />
+                    <stop offset="75%" stopColor="#B8860B" />
                     <stop offset="100%" stopColor="#8B6914" />
                   </linearGradient>
                   <linearGradient id="pieSilver" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#E8E8E8" />
+                    <stop offset="0%" stopColor="#FFFFFF" />
+                    <stop offset="25%" stopColor="#E8E8E8" />
                     <stop offset="50%" stopColor="#C0C0C0" />
-                    <stop offset="100%" stopColor="#808080" />
+                    <stop offset="75%" stopColor="#A0A0A0" />
+                    <stop offset="100%" stopColor="#707070" />
                   </linearGradient>
                 </defs>
                 <Pie
