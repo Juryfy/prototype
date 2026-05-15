@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { PageHeader, GlassCard, KPICard, ChartCard, DataTable, Modal, StatusBadge } from '@/components/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { mockInvoices, STORAGE_KEYS } from '@/data/mockData';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { Invoice } from '@/types';
 
 const revenueData = [
@@ -30,6 +31,14 @@ export function BillingPage() {
   const [invoices, { add: addInvoice }] = useLocalStorage<Invoice>(STORAGE_KEYS.invoices, mockInvoices);
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ clientName: '', amount: '', issueDate: '', dueDate: '' });
+  const { theme } = useTheme();
+
+  const barColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#11CDEF';
+  const gridColor = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#1E293B' : '#E9ECEF';
+  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#8898AA';
+  const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#111827' : '#FFFFFF';
+  const tooltipBorder = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#1E293B' : '#E9ECEF';
+  const tooltipText = theme === 'gold' ? '#F5E6D3' : theme === 'dark' ? '#F8FAFC' : '#172B4D';
 
   function handleCreate() {
     if (!form.clientName || !form.amount || !form.issueDate || !form.dueDate) return;
@@ -92,14 +101,29 @@ export function BillingPage() {
       <ChartCard title="Monthly Revenue Trend" description="Revenue over the last 6 months (in Lakhs)">
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={revenueData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-            <XAxis dataKey="month" stroke="#94A3B8" fontSize={12} />
-            <YAxis stroke="#94A3B8" fontSize={12} tickFormatter={(v: number) => `₹${v}L`} />
+            <defs>
+              <linearGradient id="barGradientGold" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E8C068" />
+                <stop offset="50%" stopColor="#D4A853" />
+                <stop offset="100%" stopColor="#8B6914" />
+              </linearGradient>
+              <linearGradient id="barGradientLight" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#11CDEF" />
+                <stop offset="100%" stopColor="#1171EF" />
+              </linearGradient>
+              <linearGradient id="barGradientDark" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#818CF8" />
+                <stop offset="100%" stopColor="#6366F1" />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+            <XAxis dataKey="month" stroke={axisColor} fontSize={12} />
+            <YAxis stroke={axisColor} fontSize={12} tickFormatter={(v: number) => `₹${v}L`} />
             <Tooltip
-              contentStyle={{ background: '#111827', border: '1px solid #1E293B', borderRadius: 12, color: '#F8FAFC' }}
+              contentStyle={{ background: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: 12, color: tooltipText }}
               formatter={(value) => [`₹${value}L`, 'Revenue']}
             />
-            <Bar dataKey="revenue" fill="#6366F1" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="revenue" fill={`url(#barGradient${theme === 'gold' ? 'Gold' : theme === 'dark' ? 'Dark' : 'Light'})`} radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>

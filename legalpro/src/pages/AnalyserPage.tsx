@@ -16,6 +16,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { mockAnalysisResult } from '@/data/mockAnalyserData';
 import { PageHeader, GlassCard, Modal } from '@/components/ui';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 const ANALYSIS_TYPES = [
@@ -269,7 +270,8 @@ function ResultsView({
     { name: 'Winning', value: data.outcomePrediction.winningPct },
     { name: 'Losing', value: data.outcomePrediction.losingPct },
   ];
-  const PIE_COLORS = ['#10B981', '#F43F5E'];
+  const { theme } = useTheme();
+  const PIE_COLORS = theme === 'gold' ? ['#D4A853', '#C0C0C0'] : ['#10B981', '#F43F5E'];
 
   const selectedSimilarCase = data.similarCases.find((c) => c.citation === similarCaseModal);
 
@@ -594,6 +596,18 @@ function ResultsView({
           <div className="w-48 h-48">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
+                <defs>
+                  <linearGradient id="pieGold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#E8C068" />
+                    <stop offset="50%" stopColor="#D4A853" />
+                    <stop offset="100%" stopColor="#8B6914" />
+                  </linearGradient>
+                  <linearGradient id="pieSilver" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#E8E8E8" />
+                    <stop offset="50%" stopColor="#C0C0C0" />
+                    <stop offset="100%" stopColor="#808080" />
+                  </linearGradient>
+                </defs>
                 <Pie
                   data={pieData}
                   cx="50%"
@@ -604,7 +618,7 @@ function ResultsView({
                   strokeWidth={0}
                 >
                   {pieData.map((_, idx) => (
-                    <Cell key={idx} fill={PIE_COLORS[idx]} />
+                    <Cell key={idx} fill={theme === 'gold' ? (idx === 0 ? 'url(#pieGold)' : 'url(#pieSilver)') : PIE_COLORS[idx]} />
                   ))}
                 </Pie>
               </PieChart>

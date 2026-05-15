@@ -5,6 +5,7 @@ import {
   LineChart, Line,
 } from 'recharts';
 import { PageHeader, GlassCard } from '@/components/ui';
+import { useTheme } from '@/contexts/ThemeContext';
 
 /* ── Mock chart data ── */
 
@@ -37,7 +38,7 @@ function Pill({ label, color = 'bg-accent-primary/20 text-accent-hover' }: { lab
 }
 
 /* ── Circular indicator ── */
-function CircularIndicator({ value, size = 80, color = '#6366F1' }: { value: number; size?: number; color?: string }) {
+function CircularIndicator({ value, size = 80, color = 'var(--accent-primary)' }: { value: number; size?: number; color?: string }) {
   return (
     <div
       className="rounded-full border-4 flex items-center justify-center font-bold"
@@ -64,6 +65,12 @@ function ProgressBar({ label, value, color = 'bg-accent-primary' }: { label: str
 }
 
 export function ProfilingPage() {
+  const { theme } = useTheme();
+  const chartColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#11CDEF';
+  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#8898AA';
+  const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#1E293B' : '#FFFFFF';
+  const tooltipBorder = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#334155' : '#E9ECEF';
+
   return (
     <div className="space-y-6">
       <PageHeader title="Intelligent Profiling" icon={UserSearch} />
@@ -103,7 +110,7 @@ export function ProfilingPage() {
                 <ProgressBar label="Plaintiff" value={33} color="bg-purple-500" />
               </div>
               <div className="flex-shrink-0">
-                <CircularIndicator value={68} size={72} color="#6366F1" />
+                <CircularIndicator value={68} size={72} color={chartColor} />
                 <p className="text-[10px] text-text-muted text-center mt-1">Overall</p>
               </div>
             </div>
@@ -116,9 +123,9 @@ export function ProfilingPage() {
             <div className="h-32">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={caseDurationData}>
-                  <Line type="monotone" dataKey="months" stroke="#6366F1" strokeWidth={2} dot={{ r: 3, fill: '#6366F1' }} />
-                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#1E293B', border: 'none', borderRadius: 8, fontSize: 12 }} />
+                  <Line type="monotone" dataKey="months" stroke={chartColor} strokeWidth={2} dot={{ r: 3, fill: chartColor }} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: axisColor }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: 8, fontSize: 12 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -139,10 +146,10 @@ export function ProfilingPage() {
             <div className="h-40">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={decisionSpeedData}>
-                  <XAxis dataKey="type" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#1E293B', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                  <Bar dataKey="days" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                  <XAxis dataKey="type" tick={{ fontSize: 10, fill: axisColor }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: axisColor }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: 8, fontSize: 12 }} />
+                  <Bar dataKey="days" fill={chartColor} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -195,7 +202,7 @@ export function ProfilingPage() {
                         <Cell key={i} fill={counselColors[i]} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ background: '#1E293B', border: 'none', borderRadius: 8, fontSize: 12 }} />
+                    <Tooltip contentStyle={{ background: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: 8, fontSize: 12 }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex items-center justify-center">

@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveCo
 import { PageHeader, KPICard, GlassCard, ChartCard } from '@/components/ui';
 import { mockTasks, mockCases, STORAGE_KEYS } from '@/data/mockData';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { Task } from '@/types';
 
 // ─── Chart Data ───
@@ -13,7 +14,36 @@ const courtDistributionData = [
   { name: 'Tribunals', value: 8 },
   { name: 'Supreme Court', value: 3 },
 ];
-const COURT_COLORS = ['#6366F1', '#10B981', '#F59E0B', '#F43F5E'];
+
+const THEME_CHART_COLORS = {
+  light: ['#11CDEF', '#2DCE89', '#FB6340', '#F5365C'],
+  dark: ['#6366F1', '#10B981', '#F59E0B', '#F43F5E'],
+  gold: ['#D4A853', '#C0C0C0', '#CD7F32', '#8B6914'],
+};
+
+const THEME_BAR_COLOR = {
+  light: '#11CDEF',
+  dark: '#6366F1',
+  gold: '#D4A853',
+};
+
+const THEME_ACCENT = {
+  light: '#11CDEF',
+  dark: '#6366F1',
+  gold: '#D4A853',
+};
+
+const THEME_TOOLTIP = {
+  light: { bg: '#FFFFFF', border: '#E9ECEF', label: '#172B4D', item: '#525F7F' },
+  dark: { bg: '#1E293B', border: '#334155', label: '#F8FAFC', item: '#94A3B8' },
+  gold: { bg: '#1A2332', border: '#2D3A4A', label: '#F5E6D3', item: '#B8A080' },
+};
+
+const THEME_AXIS_COLOR = {
+  light: '#8898AA',
+  dark: '#94A3B8',
+  gold: '#7A6B5A',
+};
 
 const practiceAreaData = [
   { name: 'Civil', cases: 15 },
@@ -70,6 +100,13 @@ function getPriorityBadge(priority: string, status: string) {
 
 export function DashboardPage() {
   const [tasks, { update: updateTask }] = useLocalStorage<Task>(STORAGE_KEYS.tasks, mockTasks);
+  const { theme } = useTheme();
+
+  const COURT_COLORS = THEME_CHART_COLORS[theme];
+  const barColor = THEME_BAR_COLOR[theme];
+  const accentColor = THEME_ACCENT[theme];
+  const tooltip = THEME_TOOLTIP[theme];
+  const axisColor = THEME_AXIS_COLOR[theme];
 
   // Read case data from localStorage (available for dynamic KPI computation)
   const storedCases = (() => {
@@ -96,7 +133,7 @@ export function DashboardPage() {
           trend="↑ +8.3% from last month"
           trendUp={true}
           icon={Briefcase}
-          accentColor="#6366F1"
+          accentColor={accentColor}
         />
         <KPICard
           title="New Cases This Month"
@@ -142,9 +179,9 @@ export function DashboardPage() {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }}
-                labelStyle={{ color: '#F8FAFC' }}
-                itemStyle={{ color: '#94A3B8' }}
+                contentStyle={{ backgroundColor: tooltip.bg, border: `1px solid ${tooltip.border}`, borderRadius: '8px' }}
+                labelStyle={{ color: tooltip.label }}
+                itemStyle={{ color: tooltip.item }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -161,14 +198,29 @@ export function DashboardPage() {
         <ChartCard title="Practice Area Breakdown" description="Case volume by legal specialization">
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={practiceAreaData}>
-              <XAxis dataKey="name" tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={false} tickLine={false} />
+              <defs>
+                <linearGradient id="dashBarGold" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#E8C068" />
+                  <stop offset="50%" stopColor="#D4A853" />
+                  <stop offset="100%" stopColor="#8B6914" />
+                </linearGradient>
+                <linearGradient id="dashBarLight" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#11CDEF" />
+                  <stop offset="100%" stopColor="#1171EF" />
+                </linearGradient>
+                <linearGradient id="dashBarDark" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#818CF8" />
+                  <stop offset="100%" stopColor="#6366F1" />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="name" tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }}
-                labelStyle={{ color: '#F8FAFC' }}
-                itemStyle={{ color: '#94A3B8' }}
+                contentStyle={{ backgroundColor: tooltip.bg, border: `1px solid ${tooltip.border}`, borderRadius: '8px' }}
+                labelStyle={{ color: tooltip.label }}
+                itemStyle={{ color: tooltip.item }}
               />
-              <Bar dataKey="cases" fill="#6366F1" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="cases" fill={`url(#dashBar${theme === 'gold' ? 'Gold' : theme === 'dark' ? 'Dark' : 'Light'})`} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

@@ -4,6 +4,7 @@ import { seedLocalStorage } from '@/data/mockData';
 import { AuthGuard } from '@/components/AuthGuard';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Chatbot } from '@/components/Chatbot';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 // Public pages
 import { HomePage } from '@/pages/HomePage';
@@ -30,6 +31,7 @@ function App() {
   }, []);
 
   return (
+    <ThemeProvider>
     <BrowserRouter>
       <Routes>
         {/* Public routes */}
@@ -61,6 +63,7 @@ function App() {
       </Routes>
       <Chatbot />
     </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
