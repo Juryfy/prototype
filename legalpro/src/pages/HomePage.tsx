@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router';
-import { MapPin, Briefcase, Building2, Clock, Users } from 'lucide-react';
+import { MapPin, Briefcase, Building2, Clock, Users, Sun, Moon, Sparkles } from 'lucide-react';
 import { GlassCard, FilterBar, DataTable, Modal } from '@/components/ui';
+import { useTheme, type Theme } from '@/contexts/ThemeContext';
 import lawyersData from '@/data/lawyers.json';
 import type { Lawyer } from '@/types';
 
@@ -65,6 +66,17 @@ export function HomePage() {
     lawyerType: 'All',
   });
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  const { theme, setTheme } = useTheme();
+
+  const themeIcons: Record<Theme, typeof Sun> = { light: Sun, dark: Moon, gold: Sparkles };
+  const themeOrder: Theme[] = ['light', 'dark', 'gold'];
+
+  function cycleTheme() {
+    const idx = themeOrder.indexOf(theme);
+    setTheme(themeOrder[(idx + 1) % themeOrder.length]);
+  }
+
+  const ThemeIcon = themeIcons[theme];
 
   const filteredLawyers = useMemo(() => {
     return lawyers.filter((l) => {
@@ -126,12 +138,22 @@ export function HomePage() {
             From criminal to corporate, quickly find nearby India lawyers who fit needs, and start private chat to explain case.
           </p>
         </div>
-        <Link
-          to="/login"
-          className="px-5 py-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-sm font-medium transition-colors shrink-0"
-        >
-          Log In
-        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={cycleTheme}
+            className="p-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white transition-colors"
+            title={`Theme: ${theme} (click to switch)`}
+            aria-label="Switch theme"
+          >
+            <ThemeIcon className="w-5 h-5" />
+          </button>
+          <Link
+            to="/login"
+            className="px-5 py-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-sm font-medium transition-colors"
+          >
+            Log In
+          </Link>
+        </div>
       </header>
       {/* Mobile title */}
       <div className="sm:hidden text-center px-4 pb-2">
