@@ -33,7 +33,6 @@ export function BillingPage() {
   const [form, setForm] = useState({ clientName: '', amount: '', issueDate: '', dueDate: '' });
   const { theme } = useTheme();
 
-  const barColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#11CDEF';
   const gridColor = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#1E293B' : '#E9ECEF';
   const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#8898AA';
   const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#111827' : '#FFFFFF';

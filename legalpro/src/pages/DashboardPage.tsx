@@ -21,12 +21,6 @@ const THEME_CHART_COLORS = {
   gold: ['#D4A853', '#C0C0C0', '#CD7F32', '#8B6914'],
 };
 
-const THEME_BAR_COLOR = {
-  light: '#11CDEF',
-  dark: '#6366F1',
-  gold: '#D4A853',
-};
-
 const THEME_ACCENT = {
   light: '#11CDEF',
   dark: '#6366F1',
@@ -103,7 +97,6 @@ export function DashboardPage() {
   const { theme } = useTheme();
 
   const COURT_COLORS = THEME_CHART_COLORS[theme];
-  const barColor = THEME_BAR_COLOR[theme];
   const accentColor = THEME_ACCENT[theme];
   const tooltip = THEME_TOOLTIP[theme];
   const axisColor = THEME_AXIS_COLOR[theme];
