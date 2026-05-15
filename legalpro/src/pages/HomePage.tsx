@@ -78,6 +78,15 @@ export function HomePage() {
 
   const ThemeIcon = themeIcons[theme];
 
+  // Gold theme button classes
+  const btnClass = theme === 'gold'
+    ? 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-[#F5E6D3] border border-[#D4A853]/40 bg-gradient-to-b from-[#D4A853]/25 to-[#8B6914]/20 hover:from-[#E8C068]/40 hover:to-[#B8860B]/30 shadow-[inset_0_1px_1px_rgba(255,235,150,0.1)]'
+    : 'px-3 py-1.5 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-xs font-medium transition-colors';
+
+  const loginBtnClass = theme === 'gold'
+    ? 'px-5 py-2 rounded-lg text-sm font-medium transition-all text-[#F5E6D3] border border-[#D4A853]/40 bg-gradient-to-b from-[#D4A853]/25 to-[#8B6914]/20 hover:from-[#E8C068]/40 hover:to-[#B8860B]/30 shadow-[inset_0_1px_1px_rgba(255,235,150,0.1)]'
+    : 'px-5 py-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-sm font-medium transition-colors';
+
   const filteredLawyers = useMemo(() => {
     return lawyers.filter((l) => {
       if (filters.location !== 'All' && l.primaryLocation !== filters.location) return false;
@@ -116,7 +125,7 @@ export function HomePage() {
             e.stopPropagation();
             setSelectedLawyer(row as unknown as Lawyer);
           }}
-          className="px-3 py-1.5 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-xs font-medium transition-colors"
+          className={btnClass}
         >
           View
         </button>
@@ -141,7 +150,7 @@ export function HomePage() {
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={cycleTheme}
-            className="p-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white transition-colors"
+            className={`p-2 rounded-lg transition-all ${theme === 'gold' ? 'text-[#D4A853] border border-[#D4A853]/40 bg-gradient-to-b from-[#D4A853]/20 to-[#8B6914]/15 hover:from-[#E8C068]/30 hover:to-[#B8860B]/20' : 'bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white'}`}
             title={`Theme: ${theme} (click to switch)`}
             aria-label="Switch theme"
           >
@@ -149,7 +158,7 @@ export function HomePage() {
           </button>
           <Link
             to="/login"
-            className="px-5 py-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-sm font-medium transition-colors"
+            className={loginBtnClass}
           >
             Log In
           </Link>
