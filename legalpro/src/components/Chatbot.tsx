@@ -228,12 +228,16 @@ export function Chatbot() {
       })
       .catch((error) => {
         console.error('Gemini chat error:', error);
-        // Fallback to local response if Gemini fails
-        const fallbackResponse = getBotResponse(messageText);
+        // Try local fallback first, if no match show AI unavailable message
+        const localResponse = getBotResponse(messageText);
+        const isGenericFallback = localResponse.includes('I can help you with case management');
+        
         const botMsg: Message = {
           id: `bot-${Date.now()}`,
           role: 'bot',
-          text: fallbackResponse,
+          text: isGenericFallback
+            ? `⚠️ AI is temporarily unavailable (high demand). Please try again in a moment.\n\nIn the meantime, I can help with basic queries like:\n• "Show my active cases"\n• "What hearings do I have today?"\n• "What is Section 420 IPC?"\n• "Show FIR status"`
+            : localResponse,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, botMsg]);
