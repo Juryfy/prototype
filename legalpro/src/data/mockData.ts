@@ -386,6 +386,5 @@ export function seedLocalStorage(): void {
   seedIfEmpty(STORAGE_KEYS.compliance, mockComplianceItems);
   seedIfEmpty(STORAGE_KEYS.firRecords, mockFIRRecords);
   seedIfEmpty(STORAGE_KEYS.communications, mockCommunications);
-  seedIfEmpty(STORAGE_KEYS.notifications, mockNotifications);
   seedIfEmpty(STORAGE_KEYS.user, defaultUser);
 }

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { chatWithGemini } from '@/services/geminiService';
 import firData from '@/data/firRecords.json';
 
 interface Message {
@@ -208,18 +209,38 @@ export function Chatbot() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate bot thinking
-    setTimeout(() => {
-      const botResponse = getBotResponse(messageText);
-      const botMsg: Message = {
-        id: `bot-${Date.now()}`,
-        role: 'bot',
-        text: botResponse,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 800 + Math.random() * 700);
+    // Build conversation history for context
+    const history = [...messages, userMsg].map((m) => ({
+      role: m.role === 'bot' ? 'bot' as const : 'user' as const,
+      text: m.text,
+    }));
+
+    // Call Gemini AI
+    chatWithGemini(messageText, history)
+      .then((response) => {
+        const botMsg: Message = {
+          id: `bot-${Date.now()}`,
+          role: 'bot',
+          text: response,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMsg]);
+      })
+      .catch((error) => {
+        console.error('Gemini chat error:', error);
+        // Fallback to local response if Gemini fails
+        const fallbackResponse = getBotResponse(messageText);
+        const botMsg: Message = {
+          id: `bot-${Date.now()}`,
+          role: 'bot',
+          text: fallbackResponse,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMsg]);
+      })
+      .finally(() => {
+        setIsTyping(false);
+      });
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {

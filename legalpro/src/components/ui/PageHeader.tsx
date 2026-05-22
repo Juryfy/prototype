@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Bell, Plus, User, Calendar, CheckSquare, FileText, Clock, Search } from 'lucide-react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { mockNotifications, mockCases, mockClients, STORAGE_KEYS } from '@/data/mockData';
+import { useAuth } from '@/contexts/AuthContext';
+import { mockCases, mockClients, STORAGE_KEYS } from '@/data/mockData';
 import type { Notification, Case, Client } from '@/types';
 
 interface PageHeaderProps {
@@ -51,7 +52,8 @@ function getNotificationIcon(type: Notification['type']) {
 }
 
 export function PageHeader({ title, icon: Icon, showNewCase = false }: PageHeaderProps) {
-  const [notifications, { set: setNotifications }] = useLocalStorage<Notification>(STORAGE_KEYS.notifications, mockNotifications);
+  const { user } = useAuth();
+  const [notifications, { set: setNotifications }] = useLocalStorage<Notification>(STORAGE_KEYS.notifications, []);
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
 
@@ -235,8 +237,8 @@ export function PageHeader({ title, icon: Icon, showNewCase = false }: PageHeade
             <User className="w-4 h-4 text-accent-primary" />
           </div>
           <div className="hidden sm:block">
-            <p className="text-sm font-medium text-text-primary">Adv. Sharma</p>
-            <p className="text-xs text-text-muted">Senior Advocate</p>
+            <p className="text-sm font-medium text-text-primary">{user?.name || 'User'}</p>
+            <p className="text-xs text-text-muted">{user?.email || ''}</p>
           </div>
         </div>
       </div>
