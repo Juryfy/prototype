@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import {
   Brain,
-  CheckCircle,
-  AlertTriangle,
-  Lightbulb,
   Download,
   FileText,
   Save,
   Mail,
   Printer,
   Search,
-  ArrowLeft,
   Loader2,
   Upload,
 } from 'lucide-react';

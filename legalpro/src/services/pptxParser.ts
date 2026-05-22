@@ -124,7 +124,7 @@ async function decompressEntry(data: Uint8Array, entry: ZipEntry): Promise<strin
   if (entry.compressionMethod === 8) {
     try {
       const stream = new Blob([compressedData]).stream();
-      const decompressedStream = stream.pipeThrough(new DecompressionStream('raw'));
+      const decompressedStream = stream.pipeThrough(new DecompressionStream('deflate-raw'));
       const reader = decompressedStream.getReader();
       const chunks: Uint8Array[] = [];
 

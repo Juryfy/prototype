@@ -148,7 +148,7 @@ async function decompressEntry(data: Uint8Array, entry: ZipEntry): Promise<strin
     try {
       // Add raw deflate header for DecompressionStream
       const stream = new Blob([compressedData]).stream();
-      const decompressedStream = stream.pipeThrough(new DecompressionStream('raw'));
+      const decompressedStream = stream.pipeThrough(new DecompressionStream('deflate-raw'));
       const reader = decompressedStream.getReader();
       const chunks: Uint8Array[] = [];
       
