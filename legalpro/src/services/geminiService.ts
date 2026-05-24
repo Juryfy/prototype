@@ -7,8 +7,8 @@
  * For this prototype, the key is embedded (free tier, restricted to this project).
  */
 
-// Use environment variable if available, fallback to embedded key for prototype
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyD3_sJd_rjBvZrTMDReE5tAvOlvOo2Ekqs';
+// Use environment variable — API key must be set in .env file
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 // Primary and fallback models
 const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash-lite'];
@@ -16,6 +16,9 @@ const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 2000;
 
 function getGeminiUrl(model: string): string {
+  if (!GEMINI_API_KEY) {
+    throw new Error('VITE_GEMINI_API_KEY is not set. Add it to your .env file.');
+  }
   return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 }
 
