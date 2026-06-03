@@ -370,6 +370,11 @@ const STORAGE_KEYS = {
 export { STORAGE_KEYS };
 
 export function seedLocalStorage(): void {
+  const SEED_VERSION = '2';
+  const currentVersion = localStorage.getItem('juryfy_seed_version');
+
+  if (currentVersion === SEED_VERSION) return; // Already seeded with current version
+
   const seedIfEmpty = (key: string, data: unknown) => {
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, JSON.stringify(data));
@@ -387,4 +392,6 @@ export function seedLocalStorage(): void {
   seedIfEmpty(STORAGE_KEYS.firRecords, mockFIRRecords);
   seedIfEmpty(STORAGE_KEYS.communications, mockCommunications);
   seedIfEmpty(STORAGE_KEYS.user, defaultUser);
+
+  localStorage.setItem('juryfy_seed_version', SEED_VERSION);
 }

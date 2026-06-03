@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink, useNavigate, useLocation } from 'react-router';
 import {
   LayoutDashboard,
   Briefcase,
@@ -61,6 +61,7 @@ export function Sidebar() {
   const { logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
@@ -153,6 +154,7 @@ export function Sidebar() {
                     ${collapsed ? 'justify-center' : ''}`
                   }
                   title={collapsed ? item.label : undefined}
+                  aria-current={location.pathname === item.path ? 'page' : undefined}
                 >
                   <item.icon className="w-5 h-5 shrink-0" />
                   {!collapsed && <span>{item.label}</span>}

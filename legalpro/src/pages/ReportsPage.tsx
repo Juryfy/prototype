@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BarChart3, TrendingUp, DollarSign, Clock, FileBarChart } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { PageHeader, GlassCard, KPICard, TabBar, ChartCard } from '@/components/ui';
+import { useTheme } from '@/contexts/ThemeContext';
 
 import type { PieLabelRenderProps } from 'recharts';
 
@@ -29,6 +30,14 @@ const referralData = [
 
 export function ReportsPage() {
   const [activeTab, setActiveTab] = useState('performance');
+  const { theme } = useTheme();
+
+  const tooltipStyle = {
+    background: theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#1E293B' : '#FFFFFF',
+    border: `1px solid ${theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#334155' : '#E9ECEF'}`,
+    borderRadius: 12,
+    color: theme === 'gold' ? '#F5E6D3' : theme === 'dark' ? '#F8FAFC' : '#172B4D',
+  };
 
   return (
     <div className="space-y-6">
@@ -105,7 +114,7 @@ export function ReportsPage() {
                     <Cell key={entry.name} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#111827', border: '1px solid #1E293B', borderRadius: 12, color: '#F8FAFC' }} formatter={(value) => [`${value}%`, 'Share']} />
+                <Tooltip contentStyle={tooltipStyle} formatter={(value) => [`${value}%`, 'Share']} />
                 <Legend wrapperStyle={{ color: '#94A3B8', fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
@@ -115,15 +124,43 @@ export function ReportsPage() {
 
       {activeTab === 'financial' && (
         <GlassCard>
-          <h3 className="text-lg font-semibold text-text-primary mb-2">Financial Reports</h3>
-          <p className="text-text-secondary text-sm">Detailed financial analytics and revenue breakdowns coming soon.</p>
+          <h3 className="text-lg font-semibold text-text-primary mb-4">Financial Reports</h3>
+          <p className="text-sm text-text-secondary mb-4">Revenue analysis, expense tracking, and billing insights.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-accent-primary">₹12.5L</p>
+              <p className="text-xs text-text-secondary mt-1">Total Revenue (YTD)</p>
+            </div>
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-success">₹8.2L</p>
+              <p className="text-xs text-text-secondary mt-1">Collected</p>
+            </div>
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-warning">₹4.3L</p>
+              <p className="text-xs text-text-secondary mt-1">Outstanding</p>
+            </div>
+          </div>
         </GlassCard>
       )}
 
       {activeTab === 'case-analysis' && (
         <GlassCard>
-          <h3 className="text-lg font-semibold text-text-primary mb-2">Case Analysis</h3>
-          <p className="text-text-secondary text-sm">In-depth case outcome analysis and trends coming soon.</p>
+          <h3 className="text-lg font-semibold text-text-primary mb-4">Case Analysis Reports</h3>
+          <p className="text-sm text-text-secondary mb-4">Win/loss trends, practice area breakdown, and duration analysis.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-success">72%</p>
+              <p className="text-xs text-text-secondary mt-1">Overall Win Rate</p>
+            </div>
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-accent-primary">47</p>
+              <p className="text-xs text-text-secondary mt-1">Total Cases Analyzed</p>
+            </div>
+            <div className="p-4 bg-bg-elevated rounded-xl text-center">
+              <p className="text-2xl font-bold text-text-primary">8.5</p>
+              <p className="text-xs text-text-secondary mt-1">Avg. Duration (months)</p>
+            </div>
+          </div>
         </GlassCard>
       )}
     </div>

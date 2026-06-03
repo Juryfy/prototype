@@ -68,7 +68,6 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
 
         if (response.status === 503 || response.status === 429) {
           // Server overloaded or rate limited — retry after delay
-          console.warn(`Gemini ${model} returned ${response.status}, attempt ${attempt}/${MAX_RETRIES}. Retrying...`);
           if (attempt < MAX_RETRIES) {
             await delay(RETRY_DELAY_MS * attempt); // Exponential backoff
             continue;
@@ -96,7 +95,6 @@ async function callGemini(prompt: string, systemInstruction?: string): Promise<s
         return text;
       } catch (error) {
         if (attempt === MAX_RETRIES) {
-          console.warn(`Gemini ${model} failed after ${MAX_RETRIES} attempts. Trying next model...`);
           break; // Try next model
         }
         await delay(RETRY_DELAY_MS * attempt);

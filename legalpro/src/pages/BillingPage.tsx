@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CreditCard, Plus, Clock, FileText, IndianRupee, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { differenceInDays } from 'date-fns';
 import { PageHeader, GlassCard, KPICard, ChartCard, DataTable, Modal, StatusBadge } from '@/components/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { mockInvoices, STORAGE_KEYS } from '@/data/mockData';
@@ -41,6 +42,18 @@ export function BillingPage() {
 
   function handleCreate() {
     if (!form.clientName || !form.amount || !form.issueDate || !form.dueDate) return;
+    if (!form.clientName.trim()) {
+      alert('Please enter a client name');
+      return;
+    }
+    if (Number(form.amount) <= 0) {
+      alert('Amount must be greater than 0');
+      return;
+    }
+    if (form.dueDate && form.issueDate && new Date(form.dueDate) <= new Date(form.issueDate)) {
+      alert('Due date must be after issue date');
+      return;
+    }
     const inv: Invoice = {
       id: `inv-${Date.now()}`,
       invoiceNo: `INV-2026-${String(invoices.length + 46).padStart(3, '0')}`,
@@ -57,8 +70,7 @@ export function BillingPage() {
   }
 
   function ageDays(issueDate: string) {
-    const diff = Date.now() - new Date(issueDate).getTime();
-    return Math.max(0, Math.floor(diff / 86400000));
+    return Math.max(0, differenceInDays(new Date(), new Date(issueDate)));
   }
 
   const invoiceColumns = [

@@ -22,6 +22,13 @@ const SUGGESTIONS = [
   'Search FIR records',
 ];
 
+const firStats = {
+  total: (firData as Array<{status: string}>).length,
+  registered: (firData as Array<{status: string}>).filter(f => f.status === 'Registered').length,
+  pending: (firData as Array<{status: string}>).filter(f => f.status === 'Pending').length,
+  closed: (firData as Array<{status: string}>).filter(f => f.status === 'Closed').length,
+};
+
 function getBotResponse(input: string): string {
   const q = input.toLowerCase();
 
@@ -86,7 +93,7 @@ function getBotResponse(input: string): string {
   }
 
   if (q.includes('fir') && (q.includes('status') || q.includes('check') || q.includes('track'))) {
-    return 'Here\'s a summary of FIR statuses in the Intelligence Hub:\n• Registered: 340 FIRs\n• Pending: 330 FIRs\n• Closed: 330 FIRs\n\nYou can search by case number, police station, city, or area.\n\n👉 [Open FIR Intelligence Hub](/fir)\n\nWould you like me to help you find a specific FIR?';
+    return `Here's a summary of FIR statuses in the Intelligence Hub:\n• Registered: ${firStats.registered} FIRs\n• Pending: ${firStats.pending} FIRs\n• Closed: ${firStats.closed} FIRs\n\nYou can search by case number, police station, city, or area.\n\n👉 [Open FIR Intelligence Hub](/fir)\n\nWould you like me to help you find a specific FIR?`;
   }
 
   if (q.includes('fir') && (q.includes('search') || q.includes('find') || q.includes('lookup') || q.includes('number'))) {
@@ -226,8 +233,7 @@ export function Chatbot() {
         };
         setMessages((prev) => [...prev, botMsg]);
       })
-      .catch((error) => {
-        console.error('Gemini chat error:', error);
+      .catch(() => {
         // Try local fallback first, if no match show AI unavailable message
         const localResponse = getBotResponse(messageText);
         const isGenericFallback = localResponse.includes('I can help you with case management');
@@ -291,7 +297,7 @@ export function Chatbot() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" role="log" aria-live="polite" aria-label="Chat messages">
             {messages.map((msg) => (
               <div
                 key={msg.id}

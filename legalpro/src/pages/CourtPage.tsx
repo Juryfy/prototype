@@ -20,6 +20,9 @@ function LiveCourtroomAssistant() {
           Live Mode Active
         </span>
       </div>
+      <p className="text-xs text-text-muted italic mb-3">
+        Real-time court features will be available with e-Courts API integration in the production release.
+      </p>
 
       {/* Active session indicator */}
       <div className="flex items-center gap-2 mb-5 p-3 rounded-lg bg-bg-elevated/60">
@@ -222,6 +225,13 @@ function SmartSteno() {
           <span className={`w-2 h-2 rounded-full ${isRecording ? 'bg-white animate-pulse' : 'bg-white/60'}`} />
           {isRecording ? 'Stop Recording' : 'Start Dictation'}
         </button>
+        {isRecording && (
+          <div className="mt-3 p-3 rounded-lg bg-warning/10 border border-warning/30">
+            <p className="text-xs text-warning text-center">
+              🎙️ Voice recognition requires microphone access. This feature will be available in the production release with Deepgram STT integration.
+            </p>
+          </div>
+        )}
         <p className="text-xs text-text-muted mt-2">Voice-to-text conversion in Hindi &amp; English</p>
       </div>
 

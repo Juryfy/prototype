@@ -1,10 +1,10 @@
 import { LayoutDashboard, Briefcase, FolderPlus, CheckCircle, TrendingUp } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PageHeader, KPICard, GlassCard, ChartCard } from '@/components/ui';
-import { mockTasks, mockCases, STORAGE_KEYS } from '@/data/mockData';
+import { mockTasks, mockCases, mockInvoices, mockHearings, STORAGE_KEYS } from '@/data/mockData';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useTheme } from '@/contexts/ThemeContext';
-import type { Task } from '@/types';
+import type { Task, Case, Invoice, Hearing } from '@/types';
 
 // ─── Chart Data ───
 
@@ -48,38 +48,6 @@ const practiceAreaData = [
   { name: 'Tax', cases: 2 },
 ];
 
-// ─── Mock Hearings for Today (Feb 12) ───
-
-const todayHearings = [
-  {
-    id: 'th-1',
-    time: '10:30 AM',
-    caseNumber: 'CC/2345/2025',
-    type: 'Civil',
-    description: 'Property Dispute',
-    court: 'Delhi High Court',
-    bench: 'Justice K.K. Sharma',
-  },
-  {
-    id: 'th-2',
-    time: '02:00 PM',
-    caseNumber: 'CR/789/2025',
-    type: 'Criminal',
-    description: 'Bail Application',
-    court: 'District Court',
-    bench: 'Judge R.S. Verma',
-  },
-  {
-    id: 'th-3',
-    time: '03:30 PM',
-    caseNumber: 'FC/1892/2025',
-    type: 'Family',
-    description: 'Divorce Petition',
-    court: 'Tis Hazari Court',
-    bench: 'Judge S.P. Gupta',
-  },
-];
-
 // ─── Priority Badge Helper ───
 
 function getPriorityBadge(priority: string, status: string) {
@@ -94,6 +62,9 @@ function getPriorityBadge(priority: string, status: string) {
 
 export function DashboardPage() {
   const [tasks, { update: updateTask }] = useLocalStorage<Task>(STORAGE_KEYS.tasks, mockTasks);
+  const [cases] = useLocalStorage<Case>(STORAGE_KEYS.cases, mockCases);
+  const [invoices] = useLocalStorage<Invoice>(STORAGE_KEYS.invoices, mockInvoices);
+  const [hearings] = useLocalStorage<Hearing>(STORAGE_KEYS.hearings, mockHearings);
   const { theme } = useTheme();
 
   const COURT_COLORS = THEME_CHART_COLORS[theme];
@@ -101,14 +72,19 @@ export function DashboardPage() {
   const tooltip = THEME_TOOLTIP[theme];
   const axisColor = THEME_AXIS_COLOR[theme];
 
-  // Read case data from localStorage (available for dynamic KPI computation)
-  const storedCases = (() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.cases);
-      return raw ? (JSON.parse(raw) as typeof mockCases) : mockCases;
-    } catch { return mockCases; }
-  })();
-  const activeCaseCount = storedCases.filter((c) => c.status === 'Active').length;
+  // Compute KPIs dynamically from localStorage
+  const activeCases = cases.filter(c => c.status === 'Active').length;
+  const totalCases = cases.length;
+  const wonCases = cases.filter(c => c.status === 'Won').length;
+  const winRate = totalCases > 0 ? Math.round((wonCases / totalCases) * 100) : 0;
+  const closedCases = cases.filter(c => c.status === 'Won' || c.status === 'Lost' || c.status === 'Settled').length;
+  const pendingTasks = tasks.filter(t => t.status === 'Pending').length;
+  const completedTasks = tasks.filter(t => t.status === 'Completed').length;
+  const totalRevenue = invoices.filter(i => i.status === 'Paid').reduce((sum, i) => sum + Number(i.amount), 0);
+
+  // Today's hearings from localStorage
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayHearings = hearings.filter(h => h.date === todayStr);
 
   const toggleTask = (taskId: string, currentStatus: string) => {
     updateTask(taskId, { status: currentStatus === 'Completed' ? 'Pending' : 'Completed' } as Partial<Task>);
@@ -122,31 +98,31 @@ export function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <KPICard
           title="Total Active Cases"
-          value={String(activeCaseCount)}
-          trend="↑ +8.3% from last month"
+          value={String(activeCases)}
+          trend={`${totalCases} total cases`}
           trendUp={true}
           icon={Briefcase}
           accentColor={accentColor}
         />
         <KPICard
-          title="New Cases This Month"
-          value="12"
-          trend="↑ +3 from January"
-          trendUp={true}
+          title="Pending Tasks"
+          value={String(pendingTasks)}
+          trend={`${completedTasks} completed`}
+          trendUp={false}
           icon={FolderPlus}
           accentColor="#10B981"
         />
         <KPICard
-          title="Cases Closed This Month"
-          value="8"
-          subtitle="6 Won • 1 Lost • 1 Settled"
+          title="Cases Closed"
+          value={String(closedCases)}
+          subtitle={`${wonCases} Won • ${cases.filter(c => c.status === 'Lost').length} Lost • ${cases.filter(c => c.status === 'Settled').length} Settled`}
           icon={CheckCircle}
           accentColor="#F59E0B"
         />
         <KPICard
           title="Win Rate"
-          value="75%"
-          trend="↑ +5% this month"
+          value={`${winRate}%`}
+          trend={totalRevenue > 0 ? `₹${(totalRevenue / 100000).toFixed(1)}L revenue` : ''}
           trendUp={true}
           icon={TrendingUp}
           accentColor="#F43F5E"
@@ -400,23 +376,26 @@ export function DashboardPage() {
             <p className="text-sm text-text-secondary mt-1">Scheduled court appearances with bench details</p>
           </div>
           <div className="space-y-3">
-            {todayHearings.map((hearing) => (
-              <div key={hearing.id} className="flex items-start gap-4 p-4 rounded-lg bg-bg-elevated/30 border border-border/50">
-                <div className="text-center min-w-[70px]">
-                  <p className="text-sm font-bold" style={{ color: '#F43F5E' }}>{hearing.time}</p>
+            {todayHearings.length > 0 ? (
+              todayHearings.map((hearing) => (
+                <div key={hearing.id} className="flex items-start gap-4 p-4 rounded-lg bg-bg-elevated/30 border border-border/50">
+                  <div className="text-center min-w-[70px]">
+                    <p className="text-sm font-bold" style={{ color: '#F43F5E' }}>{hearing.time}</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-text-primary">
+                      {hearing.caseNumber} — {hearing.caseTitle}
+                    </p>
+                    <p className="text-xs text-text-muted mt-1">
+                      {hearing.courtName}{hearing.benchInfo ? ` • ${hearing.benchInfo}` : ''}
+                    </p>
+                  </div>
+                  <span className="badge badge-info">Scheduled</span>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-text-primary">
-                    {hearing.type} Case {hearing.caseNumber}
-                  </p>
-                  <p className="text-sm text-text-secondary">{hearing.description}</p>
-                  <p className="text-xs text-text-muted mt-1">
-                    {hearing.court} • {hearing.bench}
-                  </p>
-                </div>
-                <span className="badge badge-info">Scheduled</span>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-text-muted text-center py-4">No hearings scheduled for today.</p>
+            )}
           </div>
         </GlassCard>
       </div>

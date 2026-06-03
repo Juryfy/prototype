@@ -1,23 +1,25 @@
-import { Calendar, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { format, getDaysInMonth as dfnsGetDaysInMonth, getDay, startOfMonth, addMonths, subMonths, isSameMonth, differenceInDays } from 'date-fns';
 import { PageHeader, GlassCard, StatusBadge } from '@/components/ui';
-import { mockHearings, mockDeadlines } from '@/data/mockData';
+import { mockHearings, mockDeadlines, STORAGE_KEYS } from '@/data/mockData';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import type { Hearing } from '@/types';
 
-// February 2026 calendar data
 const DAY_HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const DAYS_IN_FEB_2026 = 28;
-// Feb 1, 2026 is a Sunday → offset = 6 (Mon=0 ... Sun=6)
-const FIRST_DAY_OFFSET = 6;
-const HEARING_DATES = [12, 14, 15, 18];
-const CURRENT_DATE = 12;
 
-function buildCalendarGrid(): (number | null)[][] {
+function getFirstDayOffset(date: Date): number {
+  const day = getDay(startOfMonth(date));
+  return day === 0 ? 6 : day - 1; // Adjust for Monday start
+}
+
+function buildCalendarGrid(date: Date): (number | null)[][] {
+  const daysInMonth = dfnsGetDaysInMonth(date);
+  const firstDayOffset = getFirstDayOffset(date);
   const cells: (number | null)[] = [];
-  // Leading empty cells
-  for (let i = 0; i < FIRST_DAY_OFFSET; i++) cells.push(null);
-  for (let d = 1; d <= DAYS_IN_FEB_2026; d++) cells.push(d);
-  // Pad to complete last row
+  for (let i = 0; i < firstDayOffset; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
   while (cells.length % 7 !== 0) cells.push(null);
-  // Split into weeks
   const weeks: (number | null)[][] = [];
   for (let i = 0; i < cells.length; i += 7) {
     weeks.push(cells.slice(i, i + 7));
@@ -26,18 +28,42 @@ function buildCalendarGrid(): (number | null)[][] {
 }
 
 function formatHearingDate(dateStr: string): string {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return format(new Date(dateStr), 'MMM d');
 }
 
-function getDaysRemaining(dueDate: string): number {
-  const now = new Date('2026-02-12');
-  const due = new Date(dueDate);
-  return Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+function formatMonthYear(date: Date): string {
+  return format(date, 'MMMM yyyy');
 }
 
 export function CalendarPage() {
-  const weeks = buildCalendarGrid();
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const today = new Date();
+  const [hearings] = useLocalStorage<Hearing>(STORAGE_KEYS.hearings, mockHearings);
+
+  const weeks = buildCalendarGrid(currentMonth);
+
+  // Get hearing dates for the current displayed month
+  const hearingDatesInMonth = hearings
+    .filter(h => {
+      const hDate = new Date(h.date);
+      return hDate.getFullYear() === currentMonth.getFullYear() &&
+             hDate.getMonth() === currentMonth.getMonth();
+    })
+    .map(h => new Date(h.date).getDate());
+
+  const isCurrentMonth = isSameMonth(today, currentMonth);
+
+  const goToPrevMonth = () => {
+    setCurrentMonth(subMonths(currentMonth, 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth(addMonths(currentMonth, 1));
+  };
+
+  function getDaysRemaining(dueDate: string): number {
+    return differenceInDays(new Date(dueDate), new Date());
+  }
 
   return (
     <div className="space-y-6">
@@ -50,8 +76,23 @@ export function CalendarPage() {
           <p className="text-sm text-text-secondary">Monthly view with hearing dates and critical filing deadlines</p>
         </div>
 
-        <div className="mb-2">
-          <h3 className="text-base font-semibold text-text-primary text-center">February 2026</h3>
+        {/* Month Navigation */}
+        <div className="flex items-center justify-between mb-2">
+          <button
+            onClick={goToPrevMonth}
+            className="p-2 rounded-lg hover:bg-bg-elevated/60 transition-colors text-text-secondary hover:text-text-primary"
+            aria-label="Previous month"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <h3 className="text-base font-semibold text-text-primary">{formatMonthYear(currentMonth)}</h3>
+          <button
+            onClick={goToNextMonth}
+            className="p-2 rounded-lg hover:bg-bg-elevated/60 transition-colors text-text-secondary hover:text-text-primary"
+            aria-label="Next month"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Day headers */}
@@ -65,8 +106,8 @@ export function CalendarPage() {
         <div className="grid grid-cols-7 gap-1">
           {weeks.flat().map((day, i) => {
             if (day === null) return <div key={`empty-${i}`} className="aspect-square" />;
-            const hasHearing = HEARING_DATES.includes(day);
-            const isToday = day === CURRENT_DATE;
+            const hasHearing = hearingDatesInMonth.includes(day);
+            const isToday = isCurrentMonth && day === today.getDate();
 
             let bgClass = 'hover:bg-bg-elevated/60';
             if (isToday) bgClass = 'bg-danger/30';
@@ -98,8 +139,9 @@ export function CalendarPage() {
           <p className="text-sm text-text-secondary mb-4">Week-ahead schedule with court details and case information</p>
 
           <div className="space-y-3">
-            {mockHearings.map((h) => {
-              const isToday = h.date === '2026-02-12';
+            {hearings.map((h) => {
+              const todayStr = today.toISOString().split('T')[0];
+              const isHearingToday = h.date === todayStr;
               return (
                 <div key={h.id} className="flex items-start gap-3 p-3 rounded-xl bg-bg-elevated/50">
                   <div className="shrink-0 w-14 text-center">
@@ -109,7 +151,7 @@ export function CalendarPage() {
                     <p className="text-sm font-medium text-text-primary">{h.caseNumber} — {h.caseTitle}</p>
                     <p className="text-xs text-text-secondary">{h.courtName} • {h.time}</p>
                   </div>
-                  <StatusBadge status={isToday ? 'Today' : 'Upcoming'} variant={isToday ? 'danger' : 'info'} />
+                  <StatusBadge status={isHearingToday ? 'Today' : 'Upcoming'} variant={isHearingToday ? 'danger' : 'info'} />
                 </div>
               );
             })}

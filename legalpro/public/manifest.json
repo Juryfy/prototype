@@ -1,0 +1,16 @@
+{
+  "name": "Juryfy - Legal Practice Management",
+  "short_name": "Juryfy",
+  "description": "AI-powered legal practice management for Indian advocates",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0F1923",
+  "theme_color": "#D4A853",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

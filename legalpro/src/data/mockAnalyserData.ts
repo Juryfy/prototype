@@ -150,7 +150,7 @@ export const mockAnalysisResult: AnalysisResult = {
   applicableSections: [
     { section: 'Section 420 IPC', description: 'Cheating and dishonesty inducing delivery of property', relevance: 'High relevance' },
     { section: 'Criminal 406 IPC', description: 'Criminal breach of trust', relevance: 'Medium relevance' },
-    { section: 'IT Act Section 660', description: 'Online fraud by impersonation', relevance: 'Medium relevance' },
+    { section: 'IT Act Section 66D', description: 'Online fraud by impersonation', relevance: 'Medium relevance' },
   ],
 
   requiredDocuments: [
@@ -160,9 +160,9 @@ export const mockAnalysisResult: AnalysisResult = {
   ],
 
   similarCases: [
-    { citation: 'Sharma vs State (2001)', outcome: 'Outcome: Conviction', badge: 'WIN' },
-    { citation: 'Smith vs John (2010)', outcome: 'Outcome: Acquittal', badge: 'LOSS' },
-    { citation: 'Raj vs Ramesh (2018)', outcome: 'Outcome: Settlement', badge: 'Partial' },
+    { citation: 'Deepika Singh v. Central Administrative Tribunal (2022) 3 SCC 1', outcome: 'Outcome: Allowed', badge: 'WIN' },
+    { citation: 'Lata Goyal v. State of NCT Delhi (2019) 8 SCC 456', outcome: 'Outcome: Dismissed', badge: 'LOSS' },
+    { citation: 'Rajesh Kumar v. State of UP (2020) AIR SC 2345', outcome: 'Outcome: Settlement', badge: 'Partial' },
   ],
 
   outcomePrediction: {

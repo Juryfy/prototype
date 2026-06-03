@@ -1,17 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router';
 import { MapPin, Briefcase, Building2, Clock, Users, Sun, Moon, Sparkles } from 'lucide-react';
 import { GlassCard, FilterBar, DataTable, Modal } from '@/components/ui';
 import { useTheme, type Theme } from '@/contexts/ThemeContext';
-import lawyersData from '@/data/lawyers.json';
 import type { Lawyer } from '@/types';
 
-const lawyers = lawyersData as Lawyer[];
-
 // Extract unique filter options from data
-function getUnique(key: keyof Lawyer, splitComma = false): string[] {
+function getUnique(data: Lawyer[], key: keyof Lawyer, splitComma = false): string[] {
   const set = new Set<string>();
-  for (const l of lawyers) {
+  for (const l of data) {
     const val = l[key];
     if (!val) continue;
     if (splitComma) {
@@ -25,21 +22,6 @@ function getUnique(key: keyof Lawyer, splitComma = false): string[] {
   }
   return Array.from(set).sort();
 }
-
-const locations = getUnique('primaryLocation');
-const practiceAreas = getUnique('practiceAreas', true);
-const courts = getUnique('court', true);
-const lawyerTypes = getUnique('lawyerType');
-
-const experienceRanges = ['0-5 years', '5-10 years', '10-20 years', '20+ years'];
-
-const filterDefs = [
-  { key: 'location', label: 'Location', options: locations },
-  { key: 'practiceArea', label: 'Practice Area', options: practiceAreas },
-  { key: 'court', label: 'Court Level', options: courts },
-  { key: 'experience', label: 'Experience', options: experienceRanges },
-  { key: 'lawyerType', label: 'Lawyer Type', options: lawyerTypes },
-];
 
 function parseExperience(exp: string): number {
   const match = exp.match(/(\d+)/);
@@ -58,6 +40,7 @@ function matchesExperienceRange(exp: string, range: string): boolean {
 }
 
 export function HomePage() {
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [filters, setFilters] = useState<Record<string, string>>({
     location: 'All',
     practiceArea: 'All',
@@ -67,6 +50,21 @@ export function HomePage() {
   });
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
   const { theme, setTheme } = useTheme();
+
+  // Lazy-load lawyers.json to reduce initial bundle size
+  useEffect(() => {
+    import('@/data/lawyers.json').then(module => setLawyers(module.default as Lawyer[]));
+  }, []);
+
+  const experienceRanges = ['0-5 years', '5-10 years', '10-20 years', '20+ years'];
+
+  const filterDefs = useMemo(() => [
+    { key: 'location', label: 'Location', options: getUnique(lawyers, 'primaryLocation') },
+    { key: 'practiceArea', label: 'Practice Area', options: getUnique(lawyers, 'practiceAreas', true) },
+    { key: 'court', label: 'Court Level', options: getUnique(lawyers, 'court', true) },
+    { key: 'experience', label: 'Experience', options: experienceRanges },
+    { key: 'lawyerType', label: 'Lawyer Type', options: getUnique(lawyers, 'lawyerType') },
+  ], [lawyers]);
 
   const themeIcons: Record<Theme, typeof Sun> = { light: Sun, dark: Moon, gold: Sparkles };
   const themeOrder: Theme[] = ['light', 'dark', 'gold'];

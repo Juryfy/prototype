@@ -4,8 +4,8 @@ import type { User } from '@/types';
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => boolean;
-  register: (name: string, email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -23,7 +23,16 @@ interface StoredUser {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password: string; // SHA-256 hashed
+}
+
+/** Simple hash function using Web Crypto API */
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -49,13 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [user, isAuthenticated]);
 
-  const login = useCallback((email: string, password: string): boolean => {
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     // Check registered users first
     try {
       const stored = localStorage.getItem(USERS_KEY);
       if (stored) {
         const users = JSON.parse(stored) as StoredUser[];
-        const found = users.find(u => u.email === email && u.password === password);
+        const hashedPassword = await hashPassword(password);
+        const found = users.find(u => u.email === email && u.password === hashedPassword);
         if (found) {
           setUser({ id: found.id, name: found.name, email: found.email });
           return true;
@@ -76,12 +86,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false;
   }, []);
 
-  const register = useCallback((name: string, email: string, password: string): void => {
+  const register = useCallback(async (name: string, email: string, password: string): Promise<void> => {
+    const hashedPassword = await hashPassword(password);
     const newUser: StoredUser = {
       id: `user-${Date.now()}`,
       name,
       email,
-      password,
+      password: hashedPassword,
     };
 
     // Store in registered users list

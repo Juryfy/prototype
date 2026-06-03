@@ -24,6 +24,7 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import { ProfilingPage } from '@/pages/ProfilingPage';
 import { FIRPage } from '@/pages/FIRPage';
 import { CourtPage } from '@/pages/CourtPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 
 function App() {
   useEffect(() => {
@@ -59,7 +60,11 @@ function App() {
           <Route path="/profiling" element={<ProfilingPage />} />
           <Route path="/fir" element={<FIRPage />} />
           <Route path="/court" element={<CourtPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
+
+        {/* Catch-all 404 for unmatched routes */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Chatbot />
     </BrowserRouter>

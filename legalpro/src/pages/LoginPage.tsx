@@ -12,7 +12,7 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError('');
 
@@ -27,7 +27,7 @@ export function LoginPage() {
       return;
     }
 
-    const success = login(email, password);
+    const success = await login(email, password);
     if (success) {
       navigate('/dashboard');
     } else {

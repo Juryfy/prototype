@@ -51,10 +51,19 @@ export function RegisterPage() {
     return Object.keys(errs).length === 0;
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!validate()) return;
-    register(name, email, password);
+    await register(name, email, password);
+    // Save bar council number to user profile
+    if (barCouncil) {
+      const authData = localStorage.getItem('juryfy_auth');
+      if (authData) {
+        const parsed = JSON.parse(authData);
+        parsed.user.barCouncilNo = barCouncil;
+        localStorage.setItem('juryfy_auth', JSON.stringify(parsed));
+      }
+    }
     navigate('/dashboard');
   }
 
