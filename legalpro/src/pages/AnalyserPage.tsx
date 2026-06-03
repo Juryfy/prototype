@@ -523,16 +523,16 @@ export function AnalyserPage() {
             <button
               onClick={() => setActiveSlide(Math.max(0, activeSlide - 1))}
               disabled={activeSlide === 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-bg-elevated border border-border shadow-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-accent-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all -ml-4"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-accent-primary text-white shadow-xl flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => setActiveSlide(Math.min(analysisResults.length - 1, activeSlide + 1))}
               disabled={activeSlide === analysisResults.length - 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-bg-elevated border border-border shadow-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-accent-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all -mr-4"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-accent-primary text-white shadow-xl flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
 
             {/* Content grid */}
