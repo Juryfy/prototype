@@ -461,44 +461,45 @@ export function AnalyserPage() {
             </button>
           </GlassCard>
 
-          {/* Export slider */}
+          {/* Export floating popover */}
           {hasAnyResult && (
-            <GlassCard className="!p-0 overflow-hidden">
+            <div className="relative">
               <button
                 onClick={() => setShowExport(!showExport)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-bg-elevated/50 transition-colors"
+                className="gradient-btn w-full py-2.5 text-center font-medium text-white text-sm flex items-center justify-center gap-2"
               >
-                <h3 className="text-sm font-semibold text-text-primary">Export</h3>
-                {showExport ? (
-                  <ChevronUp className="w-4 h-4 text-text-secondary" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-text-secondary" />
-                )}
+                <Download className="w-4 h-4" />
+                Export
               </button>
-              <div
-                className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                  showExport ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="px-4 pb-4 space-y-2">
-                  <button onClick={() => handleExport('Download PDF Report')} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-bg-elevated text-text-secondary hover:text-text-primary hover:bg-bg-elevated/80 transition-colors">
-                    <Download className="w-4 h-4" /> Download PDF
-                  </button>
-                  <button onClick={() => handleExport('Export to Word')} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-bg-elevated text-text-secondary hover:text-text-primary hover:bg-bg-elevated/80 transition-colors">
-                    <FileText className="w-4 h-4" /> Export Word
-                  </button>
-                  <button onClick={() => handleExport('Save to Case File')} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-bg-elevated text-text-secondary hover:text-text-primary hover:bg-bg-elevated/80 transition-colors">
-                    <Save className="w-4 h-4" /> Save
-                  </button>
-                  <button onClick={() => handleExport('Email Report')} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-bg-elevated text-text-secondary hover:text-text-primary hover:bg-bg-elevated/80 transition-colors">
-                    <Mail className="w-4 h-4" /> Email
-                  </button>
-                  <button onClick={() => handleExport('Print Analysis')} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-bg-elevated text-text-secondary hover:text-text-primary hover:bg-bg-elevated/80 transition-colors">
-                    <Printer className="w-4 h-4" /> Print
-                  </button>
-                </div>
-              </div>
-            </GlassCard>
+
+              {/* Popover bubble — opens upward */}
+              {showExport && (
+                <>
+                  {/* Backdrop to close on click outside */}
+                  <div className="fixed inset-0 z-40" onClick={() => setShowExport(false)} />
+                  
+                  <div className="absolute bottom-full mb-2 left-0 right-0 z-50 glass-card p-2 shadow-2xl animate-[slideIn_0.2s_ease-out]">
+                    <div className="space-y-1">
+                      <button onClick={() => { handleExport('Download PDF Report'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Download className="w-4 h-4" /> Download PDF
+                      </button>
+                      <button onClick={() => { handleExport('Export to Word'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <FileText className="w-4 h-4" /> Export Word
+                      </button>
+                      <button onClick={() => { handleExport('Save to Case File'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Save className="w-4 h-4" /> Save
+                      </button>
+                      <button onClick={() => { handleExport('Email Report'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Mail className="w-4 h-4" /> Email
+                      </button>
+                      <button onClick={() => { handleExport('Print Analysis'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Printer className="w-4 h-4" /> Print
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           )}
         </div>
 
