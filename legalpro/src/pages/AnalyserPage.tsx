@@ -10,8 +10,6 @@ import {
   Search,
   Loader2,
   Upload,
-  ChevronDown,
-  ChevronUp,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
