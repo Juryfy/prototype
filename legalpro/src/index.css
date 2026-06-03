@@ -335,3 +335,27 @@ summary {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* ── Carousel Slide Animation ── */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}

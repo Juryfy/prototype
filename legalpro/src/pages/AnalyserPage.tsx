@@ -537,9 +537,13 @@ export function AnalyserPage() {
             </button>
 
             {/* Content grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
+            <div
+              key={activeSlide}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden animate-[slideIn_0.3s_ease-out]"
+              style={{ animation: 'slideIn 0.3s ease-out' }}
+            >
               {/* Left half - Case Type, Sections, Docs */}
-              <div className="space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
+              <div className="space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
                 {displayData && (
                   <>
                     {/* Case Type & Jurisdiction */}
@@ -602,7 +606,7 @@ export function AnalyserPage() {
               </div>
 
               {/* Right half - Similar Cases, Outcome, Points */}
-              <div className="space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
+              <div className="space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
                 {displayData && (
                   <>
                     {/* Similar Historical Cases */}
@@ -738,7 +742,7 @@ export function AnalyserPage() {
         ) : (
           <>
             {/* Standard single-result layout: MIDDLE COLUMN (~37%) */}
-            <div className="md:col-span-4 space-y-4 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+            <div className="md:col-span-4 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
               {isAnalyzing ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
@@ -811,7 +815,7 @@ export function AnalyserPage() {
             </div>
 
             {/* RIGHT COLUMN (~38%) */}
-            <div className="md:col-span-5 space-y-4 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+            <div className="md:col-span-5 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
               {isAnalyzing ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
