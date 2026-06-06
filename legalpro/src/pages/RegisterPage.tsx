@@ -64,7 +64,7 @@ export function RegisterPage() {
         localStorage.setItem('juryfy_auth', JSON.stringify(parsed));
       }
     }
-    navigate('/dashboard');
+    navigate('/app/dashboard');
   }
 
   return (
@@ -181,7 +181,7 @@ export function RegisterPage() {
           {/* Footer link */}
           <p className="text-text-secondary text-sm text-center mt-5">
             Already have an account?{' '}
-            <Link to="/login" className="text-accent-hover hover:underline">
+            <Link to="/app/login" className="text-accent-hover hover:underline">
               Sign in
             </Link>
           </p>

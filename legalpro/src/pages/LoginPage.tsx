@@ -29,7 +29,7 @@ export function LoginPage() {
 
     const success = await login(email, password);
     if (success) {
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } else {
       setError('Invalid email or password.');
     }
@@ -97,7 +97,7 @@ export function LoginPage() {
           {/* Footer links */}
           <p className="text-text-secondary text-sm text-center mt-5">
             Don't have an account?{' '}
-            <Link to="/register" className="text-accent-hover hover:underline">
+            <Link to="/app/register" className="text-accent-hover hover:underline">
               Create one
             </Link>
           </p>

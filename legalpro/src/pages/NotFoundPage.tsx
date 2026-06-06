@@ -11,7 +11,7 @@ export function NotFoundPage() {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <Link
-          to="/dashboard"
+          to="/app/dashboard"
           className="gradient-btn inline-block px-6 py-3 text-white font-medium rounded-xl"
         >
           Back to Dashboard

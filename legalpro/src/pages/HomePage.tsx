@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router';
 import { MapPin, Briefcase, Building2, Clock, Users, Sun, Moon, Sparkles } from 'lucide-react';
 import { GlassCard, FilterBar, DataTable, Modal } from '@/components/ui';
 import { useTheme, type Theme } from '@/contexts/ThemeContext';
 import type { Lawyer } from '@/types';
+import lawyersData from '@/data/lawyers.json';
 
 // Extract unique filter options from data
 function getUnique(data: Lawyer[], key: keyof Lawyer, splitComma = false): string[] {
@@ -40,7 +41,7 @@ function matchesExperienceRange(exp: string, range: string): boolean {
 }
 
 export function HomePage() {
-  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [lawyers] = useState<Lawyer[]>(lawyersData as Lawyer[]);
   const [filters, setFilters] = useState<Record<string, string>>({
     location: 'All',
     practiceArea: 'All',
@@ -50,11 +51,6 @@ export function HomePage() {
   });
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
   const { theme, setTheme } = useTheme();
-
-  // Lazy-load lawyers.json to reduce initial bundle size
-  useEffect(() => {
-    import('@/data/lawyers.json').then(module => setLawyers(module.default as Lawyer[]));
-  }, []);
 
   const experienceRanges = ['0-5 years', '5-10 years', '10-20 years', '20+ years'];
 
@@ -155,7 +151,7 @@ export function HomePage() {
             <ThemeIcon className="w-5 h-5" />
           </button>
           <Link
-            to="/login"
+            to="/app/login"
             className={loginBtnClass}
           >
             Log In
@@ -176,7 +172,7 @@ export function HomePage() {
           <div className="p-3 md:p-4 border-b border-border">
             <FilterBar filters={filterDefs} values={filters} onChange={handleFilterChange} />
             <p className="text-xs text-text-muted mt-2">
-              Showing {filteredLawyers.length} of {lawyers.length} lawyers
+              {lawyers.length === 0 ? 'No lawyers found.' : `Showing ${filteredLawyers.length} of ${lawyers.length} lawyers`}
             </p>
           </div>
           <DataTable

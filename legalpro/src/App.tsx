@@ -7,6 +7,7 @@ import { Chatbot } from '@/components/Chatbot';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 // Public pages
+import { WebsitePage } from '@/pages/WebsitePage';
 import { HomePage } from '@/pages/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
@@ -33,41 +34,45 @@ function App() {
 
   return (
     <ThemeProvider>
-    <BrowserRouter>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <BrowserRouter>
+        <Routes>
+          {/* Public website */}
+          <Route path="/" element={<WebsitePage />} />
 
-        {/* Protected routes — wrapped in AuthGuard + AppLayout */}
-        <Route
-          element={
-            <AuthGuard>
-              <AppLayout />
-            </AuthGuard>
-          }
-        >
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/cases" element={<CasesPage />} />
-          <Route path="/clients" element={<ClientsPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/analyser" element={<AnalyserPage />} />
-          <Route path="/billing" element={<BillingPage />} />
-          <Route path="/compliance" element={<CompliancePage />} />
-          <Route path="/reports" element={<ReportsPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/profiling" element={<ProfilingPage />} />
-          <Route path="/fir" element={<FIRPage />} />
-          <Route path="/court" element={<CourtPage />} />
+          {/* Public app pages (no auth required) */}
+          <Route path="/app/home" element={<HomePage />} />
+          <Route path="/app/login" element={<LoginPage />} />
+          <Route path="/app/register" element={<RegisterPage />} />
+
+          {/* Protected app routes */}
+          <Route
+            path="/app"
+            element={
+              <AuthGuard>
+                <AppLayout />
+                <Chatbot />
+              </AuthGuard>
+            }
+          >
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="cases" element={<CasesPage />} />
+            <Route path="clients" element={<ClientsPage />} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="analyser" element={<AnalyserPage />} />
+            <Route path="billing" element={<BillingPage />} />
+            <Route path="compliance" element={<CompliancePage />} />
+            <Route path="reports" element={<ReportsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="profiling" element={<ProfilingPage />} />
+            <Route path="fir" element={<FIRPage />} />
+            <Route path="court" element={<CourtPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+
+          {/* Catch-all 404 */}
           <Route path="*" element={<NotFoundPage />} />
-        </Route>
-
-        {/* Catch-all 404 for unmatched routes */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      <Chatbot />
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

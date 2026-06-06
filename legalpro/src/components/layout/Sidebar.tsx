@@ -34,18 +34,18 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Cases', path: '/cases', icon: Briefcase },
-  { label: 'Clients', path: '/clients', icon: Users },
-  { label: 'Calendar', path: '/calendar', icon: Calendar },
-  { label: 'Analyser', path: '/analyser', icon: Brain },
-  { label: 'Billing', path: '/billing', icon: CreditCard },
-  { label: 'Compliance', path: '/compliance', icon: ShieldCheck },
-  { label: 'Reports', path: '/reports', icon: BarChart3 },
-  { label: 'FIR Hub', path: '/fir', icon: FileSearch },
-  { label: 'Profiling', path: '/profiling', icon: UserSearch },
-  { label: 'Court', path: '/court', icon: Gavel },
-  { label: 'Settings', path: '/settings', icon: Settings },
+  { label: 'Dashboard', path: '/app/dashboard', icon: LayoutDashboard },
+  { label: 'Cases', path: '/app/cases', icon: Briefcase },
+  { label: 'Clients', path: '/app/clients', icon: Users },
+  { label: 'Calendar', path: '/app/calendar', icon: Calendar },
+  { label: 'Analyser', path: '/app/analyser', icon: Brain },
+  { label: 'Billing', path: '/app/billing', icon: CreditCard },
+  { label: 'Compliance', path: '/app/compliance', icon: ShieldCheck },
+  { label: 'Reports', path: '/app/reports', icon: BarChart3 },
+  { label: 'FIR Hub', path: '/app/fir', icon: FileSearch },
+  { label: 'Profiling', path: '/app/profiling', icon: UserSearch },
+  { label: 'Court', path: '/app/court', icon: Gavel },
+  { label: 'Settings', path: '/app/settings', icon: Settings },
 ];
 
 const themeOptions: { value: Theme; label: string; icon: LucideIcon }[] = [
@@ -66,7 +66,7 @@ export function Sidebar() {
 
   function handleLogout() {
     logout();
-    navigate('/');
+    navigate('/app/home');
   }
 
   // Close dropdown on outside click
@@ -168,7 +168,7 @@ export function Sidebar() {
         <div className="border-t border-white/10 px-2 py-3 space-y-1">
           {/* Lawyers Near You link */}
           <NavLink
-            to="/"
+            to="/app/profiling"
             onClick={() => setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${getNavLinkClasses(false)} ${collapsed ? 'justify-center' : ''}`}
             title={collapsed ? 'Lawyers Near You' : undefined}
