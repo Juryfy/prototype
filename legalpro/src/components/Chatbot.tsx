@@ -158,6 +158,47 @@ export function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  // Draggable chatbot icon state
+  const [position, setPosition] = useState({ x: window.innerWidth - 80, y: window.innerHeight - 80 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragOffset = useRef({ x: 0, y: 0 });
+  const hasMoved = useRef(false);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setIsDragging(true);
+    hasMoved.current = false;
+    dragOffset.current = { x: e.clientX - position.x, y: e.clientY - position.y };
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    hasMoved.current = true;
+    const newX = Math.max(0, Math.min(window.innerWidth - 56, e.clientX - dragOffset.current.x));
+    const newY = Math.max(0, Math.min(window.innerHeight - 56, e.clientY - dragOffset.current.y));
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    setIsDragging(false);
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    // Only toggle chat if not dragged
+    if (!hasMoved.current) {
+      setIsOpen(!isOpen);
+    }
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -262,26 +303,29 @@ export function Chatbot() {
 
   return (
     <>
-      {/* Floating button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-          isOpen
-            ? 'bg-danger hover:bg-danger/80 rotate-0'
-            : 'bg-accent-primary hover:bg-accent-hover scale-100 hover:scale-110'
-        }`}
+      {/* Floating draggable button — always shows chat icon */}
+      <div
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        className="fixed z-[60] w-14 h-14 rounded-full flex items-center justify-center shadow-lg cursor-grab active:cursor-grabbing select-none touch-none bg-accent-primary hover:bg-accent-hover transition-colors duration-300"
+        style={{ left: position.x, top: position.y }}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        {isOpen ? (
-          <X className="w-6 h-6 text-white" />
-        ) : (
-          <MessageCircle className="w-6 h-6 text-white" />
-        )}
-      </button>
+        <MessageCircle className="w-6 h-6 text-white pointer-events-none" />
+      </div>
 
-      {/* Chat panel */}
+      {/* Chat panel — positioned relative to the icon */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[520px] max-h-[calc(100vh-120px)] glass-card flex flex-col overflow-hidden shadow-2xl">
+        <div
+          className="fixed z-50 w-[380px] max-w-[calc(100vw-48px)] h-[520px] max-h-[calc(100vh-120px)] glass-card flex flex-col overflow-hidden shadow-2xl"
+          style={{
+            left: Math.min(position.x, window.innerWidth - 400),
+            top: position.y > window.innerHeight / 2
+              ? position.y - 530 // Open above if icon is in bottom half
+              : position.y + 64,  // Open below if icon is in top half
+          }}
+        >
           {/* Header */}
           <div className="flex items-center gap-3 p-4 border-b border-border shrink-0">
             <div className="w-9 h-9 rounded-full bg-accent-primary/20 flex items-center justify-center">

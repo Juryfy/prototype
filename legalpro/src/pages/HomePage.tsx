@@ -151,6 +151,12 @@ export function HomePage() {
             <ThemeIcon className="w-5 h-5" />
           </button>
           <Link
+            to="/"
+            className={loginBtnClass}
+          >
+            Home
+          </Link>
+          <Link
             to="/app/login"
             className={loginBtnClass}
           >

@@ -97,7 +97,7 @@ export function Sidebar() {
     }
     switch (theme) {
       case 'gold':
-        return 'text-[#B8A080] hover:text-[#D4A853] hover:bg-[#D4A853]/10';
+        return 'text-[#E0D0B0] hover:text-[#F3DE9A] hover:bg-[#D4A853]/10';
       default:
         return 'text-white/60 hover:text-white hover:bg-white/10';
     }

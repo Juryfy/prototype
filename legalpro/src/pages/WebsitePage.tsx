@@ -1,49 +1,23 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
-import { Sun, Moon, Sparkles } from 'lucide-react';
-import { useTheme, type Theme } from '@/contexts/ThemeContext';
 
 export function WebsitePage() {
-  const { theme, setTheme } = useTheme();
-  const [heroEmail, setHeroEmail] = useState('');
   const [ctaEmail, setCtaEmail] = useState('');
-
-  const themeOptions: { value: Theme; icon: typeof Sun; label: string }[] = [
-    { value: 'light', icon: Sun, label: 'Light' },
-    { value: 'dark', icon: Moon, label: 'Dark' },
-    { value: 'gold', icon: Sparkles, label: 'Gold' },
-  ];
-
-  const nextTheme = () => {
-    const idx = themeOptions.findIndex(t => t.value === theme);
-    const next = themeOptions[(idx + 1) % themeOptions.length];
-    setTheme(next.value);
-  };
-
-  const currentThemeIcon = themeOptions.find(t => t.value === theme)!;
 
   function handleNotify(email: string) {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert('Please enter a valid email address.');
       return;
     }
-    // Store locally
     const existing = JSON.parse(localStorage.getItem('juryfy_waitlist') || '[]');
     existing.push({ email, date: new Date().toISOString() });
     localStorage.setItem('juryfy_waitlist', JSON.stringify(existing));
 
-    // Send notification email via mailto
     const subject = encodeURIComponent('Juryfy AI - New Waitlist Signup');
     const body = encodeURIComponent(`New waitlist signup:\n\nEmail: ${email}\nDate: ${new Date().toLocaleString()}`);
     window.open(`mailto:juryfyai@gmail.com?subject=${subject}&body=${body}`, '_blank');
 
     alert('Thank you! We will notify you when Juryfy AI launches.');
-  }
-
-  function handleHeroSubmit(e: FormEvent) {
-    e.preventDefault();
-    handleNotify(heroEmail);
-    setHeroEmail('');
   }
 
   function handleCtaSubmit(e: FormEvent) {
@@ -53,204 +27,210 @@ export function WebsitePage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-[Inter,sans-serif]">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-bg-primary/90 backdrop-blur-md border-b border-border">
+    <div className="min-h-screen font-[Inter,sans-serif]" style={{ backgroundColor: '#f5f1e8', color: '#3c3c3c' }}>
+      {/* ═══════════════════════════════════════════════════════════════
+          NAVIGATION
+      ═══════════════════════════════════════════════════════════════ */}
+      <nav className="sticky top-0 z-50 backdrop-blur-md border-b" style={{ backgroundColor: 'rgba(245, 241, 232, 0.95)', borderColor: '#e8e0d4' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-10 h-10" />
-            <span className="text-lg font-bold text-text-primary">Juryfy AI Solutions</span>
+            <span className="text-lg font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Theme toggle */}
-            <button
-              onClick={nextTheme}
-              className="p-2 rounded-lg border border-border hover:bg-bg-elevated transition-colors"
-              title={`Theme: ${currentThemeIcon.label}`}
-            >
-              <currentThemeIcon.icon className="w-4 h-4 text-text-secondary" />
-            </button>
-            <Link
-              to="/app/home"
-              className="gradient-btn px-5 py-2 text-white text-sm font-medium"
-            >
-              Try Platform
-            </Link>
-          </div>
+          <Link
+            to="/app/home"
+            className="px-5 py-2 text-sm font-medium rounded-md border-2 transition-colors hover:text-white"
+            style={{ borderColor: '#00416a', color: '#00416a' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#00416a'; e.currentTarget.style.color = '#ffffff'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#00416a'; }}
+          >
+            Try Platform
+          </Link>
         </div>
       </nav>
 
-      {/* Section 1: Hero */}
-      <section className="bg-bg-primary py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-start">
-          {/* Left */}
-          <div>
-            <span className="inline-block px-3 py-1 text-xs font-bold tracking-wider text-accent-primary bg-accent-primary/10 rounded-full mb-4">
-              COMING SOON
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight text-text-primary mb-4">
-              Legal intelligence.<br />Finally connected.
-            </h1>
-            <p className="text-lg text-text-secondary leading-relaxed mb-8">
-              Juryfy AI is building a single AI-powered layer for legal research, drafting, case tracking, analysis, and smarter legal workflows.
-            </p>
-          </div>
+      {/* ═══════════════════════════════════════════════════════════════
+          HERO SECTION
+      ═══════════════════════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 text-center">
+          {/* Coming Soon Badge — stylish with gradient border and glow */}
+          <span
+            className="inline-block px-6 py-2 text-sm font-semibold tracking-widest uppercase rounded-full mb-8"
+            style={{
+              background: 'linear-gradient(135deg, rgba(0,65,106,0.08), rgba(0,65,106,0.03))',
+              border: '1.5px solid #00416a',
+              color: '#00416a',
+              letterSpacing: '0.15em',
+              boxShadow: '0 2px 12px rgba(0,65,106,0.1)',
+            }}
+          >
+            Coming Soon
+          </span>
 
-          {/* Right */}
-          <div>
-            <span className="inline-block px-3 py-1 text-xs font-bold tracking-wider text-orange-600 bg-orange-50 rounded-full mb-4">
-              WHY NOW
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
-              Too much legal work still lives in disconnected tools.
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-8">
-              Built for advocates, firms, students, and legal seekers who need speed, clarity, and better legal decisions.
-            </p>
-            <form onSubmit={handleHeroSubmit} className="flex gap-2">
-              <input
-                type="email"
-                value={heroEmail}
-                onChange={(e) => setHeroEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-accent-primary text-white text-sm font-medium rounded-lg hover:bg-accent-hover transition-colors whitespace-nowrap"
-              >
-                Notify Me
-              </button>
-            </form>
-          </div>
+          {/* Main Heading — bold, single line, no wrap */}
+          <h1
+            className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-5 whitespace-nowrap"
+            style={{ color: '#00416a' }}
+          >
+            Legal Intelligence Finally Connected
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base md:text-lg max-w-3xl mx-auto mb-8 leading-relaxed" style={{ color: '#3c3c3c', letterSpacing: '0.02em' }}>
+            Juryfy AI Is Building A Single AI-Powered Layer For Legal Research, Drafting, Case Tracking, Analysis, And Smarter Legal Workflows.
+          </p>
+
+          {/* Problem Statement */}
+          <h2 className="text-lg md:text-xl font-bold mb-2" style={{ color: '#00416a', letterSpacing: '0.02em' }}>
+            Too Much Legal Work Still Lives In Disconnected Tools
+          </h2>
+          <p className="text-sm md:text-base max-w-2xl mx-auto mb-6" style={{ color: '#3c3c3c', letterSpacing: '0.02em' }}>
+            Built For Advocates, Firms, Students, And Legal Seekers Who Need Speed, Clarity, And Better Legal Decisions
+          </p>
+        </div>
+
+        {/* Hero Banner Image — full width */}
+        <div className="w-full overflow-hidden">
+          <img
+            src="/images/image1.png"
+            alt="Indian Legal System - Supreme Court, Justice and Legal Technology"
+            className="w-full h-auto object-cover"
+          />
         </div>
       </section>
 
-      {/* Section 2: A Nation Waiting in Line for Justice */}
-      <section className="bg-bg-elevated py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 2: A Nation Waiting In Line For Justice
+      ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
           {/* Left: Image */}
-          <div className="rounded-2xl overflow-hidden">
-            <img src="/images/nation-waiting.png" alt="A Nation Waiting in Line for Justice" className="w-full h-auto" />
+          <div>
+            <img src="/images/image7.png" alt="A Nation Waiting In Line For Justice" className="w-full h-auto " />
           </div>
 
           {/* Right: Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">
-              A Nation Waiting in Line for Justice
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
+              A Nation Waiting In Line For Justice
             </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              India's judicial system is drowning under the weight of{' '}
-              <span className="text-4xl font-bold text-accent-primary">5.49</span>{' '}
-              <span className="font-semibold text-accent-primary">crore pending cases</span>. At the current disposal rate, it would take over{' '}
-              <span className="text-4xl font-bold text-accent-primary">300</span>{' '}
-              <span className="font-semibold text-accent-primary">years to clear</span> the backlog, with the average case duration stretching to{' '}
-              <span className="text-4xl font-bold text-accent-primary">13.5</span>{' '}
-              <span className="font-semibold text-accent-primary">years</span>.
+            <p className="leading-relaxed mb-5" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              {"India's Judicial System Is Drowning Under The Weight Of "}
+              <span className="font-bold" style={{ color: '#00416a' }}>5.49 Crore Pending Cases</span>
+              {". At The Current Disposal Rate, It Would Take Over "}
+              <span className="font-bold" style={{ color: '#00416a' }}>300 Years To Clear</span>
+              {" The Backlog, With The Average Case Duration Stretching To "}
+              <span className="font-bold" style={{ color: '#00416a' }}>13.5 Years</span>.
             </p>
-            <p className="text-text-secondary leading-relaxed">
-              Delayed justice isn't just a systemic failure — it's a daily reality for millions of citizens waiting in uncertainty. Families are torn apart, livelihoods are destroyed, and the promise of constitutional rights remains unfulfilled for those who need it most.
+            <p className="leading-relaxed" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              {"Delayed Justice Isn't Just A Systemic Failure — It's A Daily Reality For Millions Of Citizens Waiting In Uncertainty. Families Are Torn Apart, Livelihoods Are Destroyed, And The Promise Of Constitutional Rights Remains Unfulfilled For Those Who Need It Most."}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Section 3: Lives on Hold, Behind Bars */}
-      <section className="bg-bg-primary py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Two images */}
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
-            <div className="rounded-2xl overflow-hidden">
-              <img src="/images/lives-on-hold-left.png" alt="Overcrowded prisons" className="w-full h-auto" />
-            </div>
-            <div className="rounded-2xl overflow-hidden">
-              <img src="/images/lives-on-hold-right.png" alt="Family waiting" className="w-full h-auto" />
-            </div>
-          </div>
-
-          {/* Content — full width below both images */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 3: Lives On Hold, Behind Bars
+      ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
+          {/* Left: Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">
-              Lives on Hold, Behind Bars
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
+              Lives On Hold, Behind Bars
             </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              <span className="text-4xl font-bold text-red-600">77%</span>{' '}
-              <span className="font-semibold text-red-600">of prison inmates are undertrials</span> — people who haven't been convicted but are waiting for their day in court. India's prisons operate at{' '}
-              <span className="text-4xl font-bold text-red-600">120.5%</span>{' '}
-              <span className="font-semibold text-red-600">of capacity</span>.
+            <p className="leading-relaxed mb-5" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              <span className="font-bold" style={{ color: '#00416a', textDecoration: 'underline' }}>77% Of Prison Inmates Are Undertrials</span>
+              {" — People Who Haven't Been Convicted But Are Waiting For Their Day In Court. India's Prisons Operate At "}
+              <span className="font-bold" style={{ color: '#b91c1c' }}>120.5% Of Capacity</span>.
             </p>
-            <p className="text-text-secondary leading-relaxed">
-              The presumption of innocence means nothing when the system keeps you locked up for years before trial. These aren't convicted criminals — they're citizens whose lives are frozen in legal limbo, unable to work, support their families, or move forward.
+            <p className="leading-relaxed" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              {"The Presumption Of Innocence Means Nothing When The System Keeps You Locked Up For Years Before Trial. These Aren't Convicted Criminals — They're Citizens Whose Lives Are Frozen In Legal Limbo, Unable To Work, Support Their Families, Or Move Forward."}
             </p>
+          </div>
+
+          {/* Right: Image */}
+          <div>
+            <img src="/images/image4.png" alt="Lives On Hold, Behind Bars" className="w-full h-auto " />
           </div>
         </div>
       </section>
 
-      {/* Section 4: Taxpayer Money Locked Inside Prisons */}
-      <section className="bg-bg-elevated py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 4: Taxpayer Money Locked Inside Prisons
+      ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
           {/* Left: Image */}
-          <div className="rounded-2xl overflow-hidden">
-            <img src="/images/taxpayer-money.png" alt="Taxpayer Money Locked Inside Prisons" className="w-full h-auto" />
+          <div>
+            <img src="/images/image5.png" alt="Taxpayer Money Locked Inside Prisons" className="w-full h-auto " />
           </div>
 
           {/* Right: Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               Taxpayer Money Locked Inside Prisons
             </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              India's annual prison budget is{' '}
-              <span className="text-3xl font-bold text-amber-600">₹10,035.6 crore</span>. With 73.5% of inmates being undertrials, that's approximately{' '}
-              <span className="text-3xl font-bold text-amber-600">₹6,493 crore</span>{' '}
-              spent on people who haven't been proven guilty — versus only{' '}
-              <span className="text-3xl font-bold text-amber-600">₹2,341.6 crore</span>{' '}
-              for actual convicts.
+            <p className="leading-relaxed mb-5" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              {"India's Annual Prison Budget Is "}
+              <span className="font-bold" style={{ color: '#b91c1c' }}>₹10,035.6 Crore</span>
+              {". With "}
+              <span className="font-bold" style={{ color: '#00416a' }}>73.5%</span>
+              {" Of Inmates Being Undertrials, That's Approximately "}
+              <span className="font-bold" style={{ color: '#b91c1c' }}>₹6,493 Crore</span>
+              {" Spent On People Who Haven't Been Proven Guilty — Versus Only "}
+              <span className="font-bold" style={{ color: '#b91c1c' }}>₹2,341.6 Crore</span>
+              {" For Actual Convicts."}
             </p>
-            <p className="text-text-secondary leading-relaxed">
-              Every day a case is delayed, taxpayers foot the bill. The burden isn't just on the imprisoned — it's on every citizen who funds a system that warehouses the unconvicted instead of delivering swift justice.
+            <p className="leading-relaxed" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              {"Every Day A Case Is Delayed, Taxpayers Foot The Bill. The Burden Isn't Just On The Imprisoned — It's On Every Citizen Who Funds A System That Warehouses The Unconvicted Instead Of Delivering Swift Justice."}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Section 5: Indian Lawyers Are Overloaded */}
-      <section className="bg-bg-primary py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
-          {/* Left: Image */}
-          <div className="rounded-2xl overflow-hidden">
-            <img src="/images/lawyers-overloaded.png" alt="Indian Lawyers Are Overloaded" className="w-full h-auto" />
-          </div>
-
-          {/* Right: Content */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 5: Indian Lawyers Are Overloaded, Not Empowered
+      ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
+          {/* Left: Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               Indian Lawyers Are Overloaded, Not Empowered
             </h2>
-            <p className="text-text-secondary leading-relaxed">
-              Advocates spend more time managing paperwork, tracking dates, and searching through scattered legal databases than actually practising law. Fragmented workflows, manual case tracking, disconnected research tools, and zero automation mean that even the most skilled lawyers are fighting the system before they fight for their clients.
+            <p className="leading-relaxed" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              Advocates Spend More Time Managing Paperwork, Tracking Dates, And Searching Through Scattered Legal Databases Than Actually Practising Law. Fragmented Workflows, Manual Case Tracking, Disconnected Research Tools, And Zero Automation Mean That Even The Most Skilled Lawyers Are Fighting The System Before They Fight For Their Clients.
             </p>
+          </div>
+
+          {/* Right: Image */}
+          <div>
+            <img src="/images/image6.png" alt="Indian Lawyers Are Overloaded" className="w-full h-auto " />
           </div>
         </div>
       </section>
 
-      {/* Section 6: One Lawyer, Many Superpowers */}
-      <section className="bg-bg-elevated py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-start">
-          {/* Left: Image */}
-          <div className="rounded-2xl overflow-hidden">
-            <img src="/images/one-lawyer-superpowers.png" alt="One Lawyer, Many Superpowers" className="w-full h-auto" />
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 6: One Lawyer, Many Superpowers
+      ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
+          {/* Left: Image — larger, fills space */}
+          <div>
+            <img src="/images/image2.png" alt="One Lawyer, Many Superpowers" className="w-full h-auto " />
           </div>
 
           {/* Right: Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              One Lawyer, Many Superpowers – Powered by JuryfyAI
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#00416a' }}>
+              One Lawyer, Many Superpowers – Powered By JuryfyAI
             </h2>
-            <p className="text-text-secondary leading-relaxed mb-6">
-              Juryfy AI brings together everything a legal professional needs into one integrated, intelligent platform — eliminating the chaos of juggling multiple tools and manual processes.
+            <p className="leading-relaxed mb-6" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
+              Juryfy AI Brings Together Everything A Legal Professional Needs Into One Integrated, Intelligent Platform — Eliminating The Chaos Of Juggling Multiple Tools And Manual Processes.
             </p>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3">
               {[
                 'AI Legal Chatbot',
                 'Case Management',
@@ -263,71 +243,91 @@ export function WebsitePage() {
                 'Agentic AI Workflow',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-accent-primary shrink-0" />
-                  <span className="text-text-secondary font-medium">{item}</span>
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#00416a' }} />
+                  <span className="font-bold" style={{ color: '#00416a' }}>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-          <p className="text-center text-lg text-text-secondary font-medium bg-bg-primary rounded-xl py-6 px-8 shadow-sm border border-border">
-            JuryfyAI is coming soon to empower lawyers with all their essential capabilities in one intelligent workspace.
+
+        {/* Bottom banner */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <p
+            className="text-center text-base md:text-lg font-medium rounded-xl py-5 px-8 border shadow-sm whitespace-nowrap"
+            style={{ backgroundColor: '#ffffff', borderColor: '#d4d0c8', color: '#3c3c3c' }}
+          >
+            JuryfyAI Is Coming Soon To Empower Lawyers With All Their Essential Capabilities In One Intelligent Workspace.
           </p>
         </div>
       </section>
 
-      {/* Section 7: Join the Journey (CTA) */}
-      <section className="bg-bg-primary py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-start">
-          {/* Left */}
-          <div>
-            <span className="inline-block px-3 py-1 text-xs font-bold tracking-wider text-accent-primary bg-accent-primary/10 rounded-full mb-4">
-              JOIN THE JOURNEY
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              Be among the first to experience Juryfy AI.
-            </h2>
-            <p className="text-text-secondary leading-relaxed">
-              We're building the future of legal technology in India. Our platform is currently in development, and we're opening early access to legal professionals, institutions, researchers, and founders who want to shape the product alongside us. Join the waitlist and be the first to know when we launch.
-            </p>
+      {/* ═══════════════════════════════════════════════════════════════
+          FOOTER / CTA — Dark Navy
+      ═══════════════════════════════════════════════════════════════ */}
+      <footer className="py-16 md:py-20" style={{ backgroundColor: '#003d5c' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Logo */}
+          <div className="flex items-center gap-3 mb-14">
+            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-10 h-10" />
+            <span className="text-lg font-bold text-white tracking-wide">JURYFY AI SOLUTIONS</span>
           </div>
 
-          {/* Right */}
-          <div className="bg-bg-elevated rounded-2xl p-8 border border-border">
-            <span className="inline-block px-3 py-1 text-xs font-bold tracking-wider text-orange-600 bg-orange-50 rounded-full mb-4">
-              REQUEST LAUNCH ACCESS
-            </span>
-            <form onSubmit={handleCtaSubmit} className="flex gap-2 mb-4">
-              <input
-                type="email"
-                value={ctaEmail}
-                onChange={(e) => setCtaEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-accent-primary text-white text-sm font-medium rounded-lg hover:bg-accent-hover transition-colors whitespace-nowrap"
+          {/* Two columns */}
+          <div className="grid md:grid-cols-2 gap-16 items-start">
+            {/* Left: Join the Journey */}
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 text-xs font-bold tracking-wider rounded-md border mb-8"
+                style={{ borderColor: '#ffffff', color: '#ffffff' }}
               >
-                NOTIFY ME
-              </button>
-            </form>
-            <p className="text-xs text-text-muted uppercase tracking-wide">
-              Suitable for legal professionals, founders, institutions, researchers...
+                JOIN THE JOURNEY
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-snug">
+                A Nation Waiting In Line For Justice
+              </h2>
+              <p className="leading-relaxed text-sm" style={{ color: '#94a3b8' }}>
+                {"We're Building The Future Of Legal Technology In India. Our Platform Is Currently In Development, And We're Opening Early Access To Legal Professionals, Institutions, Researchers, And Founders Who Want To Shape The Product Alongside Us. Join The Waitlist And Be The First To Know When We Launch."}
+              </p>
+            </div>
+
+            {/* Right: Request Launch Access */}
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 text-xs font-bold tracking-wider rounded-md border mb-8"
+                style={{ borderColor: '#ffffff', color: '#ffffff' }}
+              >
+                REQUEST LAUNCH ACCESS
+              </span>
+              <form onSubmit={handleCtaSubmit} className="flex gap-3 mb-3">
+                <input
+                  type="email"
+                  value={ctaEmail}
+                  onChange={(e) => setCtaEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-64 px-4 py-2.5 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+                  style={{ borderColor: '#cbd5e0', backgroundColor: '#ffffff', color: '#3c3c3c' }}
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap border hover:bg-white/10"
+                  style={{ borderColor: '#ffffff', color: '#ffffff', backgroundColor: 'transparent' }}
+                >
+                  Notify Me
+                </button>
+              </form>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+                Suitable For Legal Professionals, Founders, Institutions, Researchers...
+              </p>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="mt-16 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
+            <p className="text-center text-sm" style={{ color: '#94a3b8' }}>
+              &copy; 2026 Juryfy AI Solutions. All Rights Reserved.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-bg-primary text-text-muted py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-8 h-8" />
-            <span className="text-sm text-text-secondary font-medium">Juryfy AI Solutions</span>
-          </div>
-          <p className="text-sm">&copy; {new Date().getFullYear()} Juryfy AI Solutions. All rights reserved.</p>
         </div>
       </footer>
     </div>
