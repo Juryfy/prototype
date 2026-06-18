@@ -18,6 +18,14 @@
   --border-color: #E9ECEF;
   --sidebar-bg: #172B4D;
   --gradient: linear-gradient(135deg, #11CDEF, #1171EF);
+  --pie-winning-start: #11CDEF;
+  --pie-winning-mid: #0DAFCF;
+  --pie-winning-end: #1171EF;
+  --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #e8e8e8 35%, #c0c0c0 70%, #f0f0f0 100%);
+  --btn-text: #ffffff;
+  --bar-winning-color: #11CDEF;
+  --bar-losing-color: #C0C0C0;
+  --bar-track: #E9ECEF;
 }
 
 [data-theme="dark"] {
@@ -35,6 +43,14 @@
   --border-color: #1E293B;
   --sidebar-bg: rgba(17, 24, 39, 0.8);
   --gradient: linear-gradient(135deg, #6366F1, #818CF8);
+  --pie-winning-start: #6366F1;
+  --pie-winning-mid: #818CF8;
+  --pie-winning-end: #4F46E5;
+  --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #d6d6d6 35%, #9a9a9a 70%, #f2f2f2 100%);
+  --btn-text: #ffffff;
+  --bar-winning-color: #6366F1;
+  --bar-losing-color: #64748B;
+  --bar-track: #1E293B;
 }
 
 [data-theme="gold"] {
@@ -52,6 +68,14 @@
   --border-color: #2D3A4A;
   --sidebar-bg: #0D1320;
   --gradient: linear-gradient(135deg, #D4A853, #B8860B, #8B6914);
+  --pie-winning-start: #d4af37;
+  --pie-winning-mid: #fff2b0;
+  --pie-winning-end: #b8860b;
+  --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #d6d6d6 35%, #9a9a9a 70%, #f2f2f2 100%);
+  --btn-text: #000000;
+  --bar-winning-color: #D4A853;
+  --bar-losing-color: #A0A0A0;
+  --bar-track: #243044;
 }
 
 @theme {
@@ -156,7 +180,7 @@ body {
 
 .gradient-btn {
   color: white;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: all 0.2s;
 }
 
@@ -171,23 +195,25 @@ body {
 }
 
 [data-theme="gold"] .gradient-btn {
-  background: linear-gradient(180deg, #F0D078 0%, #D4A853 30%, #B8860B 70%, #8B6914 100%);
+  background: linear-gradient(180deg, #f8e8a0 0%, #e8c44d 25%, #d4a43a 50%, #c7963a 75%, #b8860b 100%);
   box-shadow: 
-    0 6px 12px rgba(139, 105, 20, 0.5),
-    0 3px 6px rgba(0, 0, 0, 0.3),
-    inset 0 2px 3px rgba(255, 235, 150, 0.4),
-    inset 0 -2px 3px rgba(100, 60, 0, 0.3);
-  border: 1px solid rgba(212, 168, 83, 0.3);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    0 4px 8px rgba(139, 105, 20, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 2px 3px rgba(255, 246, 208, 0.5),
+    inset 0 -1px 2px rgba(139, 105, 20, 0.3);
+  border: 2px solid #9f6c1d;
+  color: #2a1a00;
+  text-shadow: none;
 }
 
 [data-theme="gold"] .gradient-btn:hover {
-  background: linear-gradient(180deg, #FFE08A 0%, #E8C068 30%, #D4A853 70%, #A07820 100%);
+  background: linear-gradient(180deg, #fff6d0 0%, #f0d470 25%, #e0b84a 50%, #d4a43a 75%, #c49030 100%);
   box-shadow: 
-    0 8px 16px rgba(139, 105, 20, 0.6),
-    0 4px 8px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(255, 235, 150, 0.5),
-    inset 0 -2px 3px rgba(100, 60, 0, 0.2);
+    0 6px 14px rgba(139, 105, 20, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 246, 208, 0.6),
+    inset 0 -1px 2px rgba(139, 105, 20, 0.2);
+  border: 2px solid #b8860b;
   filter: none;
 }
 
@@ -310,9 +336,10 @@ summary {
 /* ── Gold Theme: Metallic Accent Buttons ── */
 
 [data-theme="gold"] .bg-accent-primary {
-  background: linear-gradient(180deg, #F0D078, #D4A853, #A07820) !important;
-  box-shadow: 0 3px 6px rgba(139, 105, 20, 0.4), inset 0 1px 2px rgba(255, 235, 150, 0.3);
-  border: 1px solid rgba(184, 134, 11, 0.4);
+  background: linear-gradient(180deg, #f8e8a0, #e8c44d, #c7963a) !important;
+  box-shadow: 0 3px 6px rgba(139, 105, 20, 0.4), inset 0 1px 2px rgba(255, 246, 208, 0.4);
+  border: 2px solid #9f6c1d;
+  color: #2a1a00;
 }
 
 [data-theme="gold"] .bg-accent-primary\/20 {
@@ -328,12 +355,71 @@ summary {
   box-shadow: inset 0 1px 1px rgba(255, 235, 150, 0.1);
 }
 
+/* Gold theme: High relevance pill — bright gold gradient */
+[data-theme="gold"] .badge-high {
+  background: linear-gradient(180deg, #f8e8a0 0%, #e8c44d 30%, #d4a43a 70%, #b8860b 100%);
+  color: #2a1a00;
+  border: 1.5px solid #9f6c1d;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(139, 105, 20, 0.3), inset 0 1px 2px rgba(255, 246, 208, 0.4);
+}
+
+/* Gold theme: Medium relevance / Create pill — copper/bronze gradient */
+[data-theme="gold"] .badge-medium {
+  background: linear-gradient(180deg, #f0c8a0 0%, #d4956a 30%, #c07840 70%, #a0603a 100%);
+  color: #2a1000;
+  border: 1.5px solid #8b5a2b;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(139, 90, 43, 0.3), inset 0 1px 2px rgba(255, 220, 180, 0.3);
+}
+
+/* Light theme: relevance badges */
+[data-theme="light"] .badge-high {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1.5px solid #fca5a5;
+  border-radius: 6px;
+}
+
+[data-theme="light"] .badge-medium {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1.5px solid #93c5fd;
+  border-radius: 6px;
+}
+
+/* Dark theme: relevance badges */
+[data-theme="dark"] .badge-high {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .badge-medium {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1.5px solid rgba(99, 102, 241, 0.4);
+  border-radius: 6px;
+}
+
 /* Gold theme: gradient-text uses gold metallic */
 [data-theme="gold"] .gradient-text {
   background: linear-gradient(135deg, #F0D078, #D4A853, #B8860B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Gold theme: section headings get gold color */
+[data-theme="gold"] .text-text-primary {
+  color: #E8C068;
+}
+
+/* Gold theme: secondary text stays lighter */
+[data-theme="gold"] h3.text-text-primary,
+[data-theme="gold"] h4.text-text-primary {
+  color: #F0D078;
 }
 
 /* ── Carousel Slide Animation ── */

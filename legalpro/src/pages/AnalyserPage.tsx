@@ -13,172 +13,496 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-// import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+// Recharts removed — using custom SVG metallic pie chart
+// mockAnalysisResult import kept for reference but unused in fallback mode
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { mockAnalysisResult, type AnalysisResult } from '@/data/mockAnalyserData';
-// import { analyzeCase } from '@/services/geminiService'; // AI disabled — using static analysis results
+// AI service commented out — using fallback data instead
+// import { analyzeCase } from '@/services/geminiService';
 import { extractTextFromFile, SUPPORTED_FILE_TYPES, SUPPORTED_FILE_TYPES_LABEL } from '@/services/fileExtractor';
-
-// ─── Static fallback analysis results (no AI calls) ───
-
-const staticAnalysisResults: AnalysisResult[] = [
-  // Fallback 1: Partnership Deed Dispute
-  {
-    caseSummary: {
-      legalIssue: 'The case involves a dispute arising from a Partnership Deed under the Indian Partnership Act, 1932. The Managing Partner has allegedly acted beyond the scope of authority defined in the deed, causing financial loss to the remaining partners.',
-      keyPoints: [
-        'Managing Partner exceeded authority under Clause 7 of the Deed',
-        'Unauthorized sale of firm assets without partner consent',
-        'Breach of fiduciary duty owed to other partners',
-      ],
-      successProbability: 72,
-    },
-    relevantCaseLaws: [
-      { citation: 'Addanki Narayanappa v. Bhaskara Krishan Appa (1966) 3 SCR 400', court: 'Supreme Court', practiceArea: 'Partnership Law', citedTimes: 214, description: 'Established that a partner acting beyond scope of implied authority binds the firm only if the act is within the ordinary course of business.', outcome: 'Favorable' },
-      { citation: 'Laxmibai v. S.T.C. (1970) 1 SCC 286', court: 'Supreme Court', practiceArea: 'Partnership Law', citedTimes: 98, description: 'Principles regarding dissolution of partnership at will and settlement of accounts between partners.', outcome: 'Neutral' },
-      { citation: 'CIT v. R.M. Chidambaram Pillai (1977) 106 ITR 292', court: 'Supreme Court', practiceArea: 'Partnership Taxation', citedTimes: 156, description: 'Reconstitution of a firm upon retirement or addition of a partner — impact on profit sharing ratios.', outcome: 'Favorable' },
-    ],
-    statutoryProvisions: [
-      { section: 'Section 9', act: 'Indian Partnership Act, 1932', text: 'Partners are bound to carry on the business to the greatest common advantage.', relevance: 'Primary' },
-      { section: 'Section 19(1)', act: 'Indian Partnership Act, 1932', text: 'Every partner is the agent of the firm for the purposes of business of the firm.', relevance: 'Supporting' },
-      { section: 'Section 22', act: 'Indian Partnership Act, 1932', text: "A partner's authority to bind the firm extends only to acts done in the ordinary course of business.", relevance: 'Primary' },
-    ],
-    caseTypes: ['Civil', 'Partnership Dispute'],
-    jurisdiction: 'India - Indian Partnership Act, 1932',
-    applicableSections: [
-      { section: 'Section 9 Partnership Act', description: 'General duties of partners — carry on business to greatest common advantage', relevance: 'High relevance' },
-      { section: 'Section 13(b) Partnership Act', description: 'Duty of partner to indemnify the firm for loss caused by willful neglect', relevance: 'High relevance' },
-      { section: 'Section 16(b) Partnership Act', description: 'Partner must account for profits derived from any transaction of the firm', relevance: 'Medium relevance' },
-    ],
-    requiredDocuments: [
-      { id: 'doc-1', description: 'Original registered Deed of Partnership', checked: false },
-      { id: 'doc-2', description: 'Bank statements of the firm (main and sub-accounts)', checked: false },
-      { id: 'doc-3', description: 'Communication records (emails, notices) between partners', checked: false },
-      { id: 'doc-4', description: 'Asset sale documentation and valuation reports', checked: false },
-    ],
-    similarCases: [
-      { citation: 'Ram Lal Gupta v. R.K. Agarwal (2018) Delhi HC', outcome: 'Outcome: Dissolution ordered with accounts settlement', badge: 'WIN' },
-      { citation: 'Suresh Kumar v. Mahesh Chand (2015) 4 SCC 312', outcome: 'Outcome: Injunction granted against unauthorized acts', badge: 'WIN' },
-      { citation: 'Ghanshyam Das v. Shiv Kumar (2019) AIR All 156', outcome: 'Outcome: Partial relief — compensation awarded', badge: 'Partial' },
-    ],
-    outcomePrediction: { winningPct: 72, losingPct: 28 },
-    keyWinningPoints: [
-      'Clear deed provisions limiting Managing Partner authority',
-      'Documented evidence of unauthorized asset disposal',
-      'Other partners were not consulted as required by Clause 22',
-      'Financial records show unexplained withdrawals',
-    ],
-    riskFactors: [
-      'Managing Partner may claim implied authority under firm usage',
-      'Delay in raising objections may weaken the claim',
-      'Firm registration status needs verification with Registrar',
-    ],
-    strengths: [
-      { title: 'Well-Drafted Partnership Deed', description: 'Deed clearly defines powers and restrictions of the Managing Partner' },
-      { title: 'Documentary Evidence', description: 'Bank records and sale documents establish unauthorized transactions' },
-      { title: 'Multiple Witness Partners', description: 'Remaining partners can testify on lack of consent' },
-    ],
-    challenges: [
-      { title: 'Clause Interpretation', description: 'Opposing side may argue broad interpretation of "beneficial interest of the Firm"' },
-      { title: 'Limitation Period', description: 'Need to file within 3 years from the date of knowledge of breach' },
-      { title: 'Accounting Complexity', description: 'Firm accounts may require forensic audit to establish exact losses' },
-    ],
-    strategy: [
-      { step: 1, title: 'Send Legal Notice under Section 69', description: 'Issue notice to the Managing Partner demanding account of unauthorized transactions and restoration of assets.' },
-      { step: 2, title: 'File Suit for Dissolution and Accounts', description: 'File suit under Section 44 of Partnership Act for dissolution on grounds of misconduct.' },
-      { step: 3, title: 'Seek Interim Injunction', description: 'Apply for injunction to prevent further disposal of firm assets pending trial.' },
-      { step: 4, title: 'Consider Arbitration Clause', description: 'If deed contains arbitration clause (Clause 20), invoke arbitration for faster resolution.' },
-    ],
-    expertRecommendation: 'Based on analysis of 214 similar partnership disputes, the case has a 72% probability of success. The clear deed provisions and documented unauthorized transactions strongly support the claim. Recommend immediate filing of legal notice followed by suit for dissolution with accounts, combined with interim injunction to protect remaining firm assets.',
-  },
-
-  // Fallback 2: Company Incorporation / MOA Dispute
-  {
-    caseSummary: {
-      legalIssue: 'Dispute regarding ultra vires actions by the Board of Directors of a Private Limited Company, acting beyond the objects clause specified in the Memorandum of Association, under The Companies Act, 2013.',
-      keyPoints: [
-        'Directors invested company funds in business outside Objects Clause III(a)',
-        'Minority shareholders were not consulted for alteration of MOA',
-        'Section 245 oppression and mismanagement claim available',
-      ],
-      successProbability: 68,
-    },
-    relevantCaseLaws: [
-      { citation: 'Ashbury Railway Carriage & Iron Co Ltd v. Riche (1875)', court: 'House of Lords', practiceArea: 'Company Law', citedTimes: 342, description: 'Landmark case establishing that any act beyond the objects clause in the MOA is ultra vires and void ab initio, cannot be ratified even by all shareholders.', outcome: 'Favorable' },
-      { citation: 'Cyrus Investments Pvt Ltd v. Tata Sons (2021) SC', court: 'Supreme Court', practiceArea: 'Company Law', citedTimes: 189, description: 'Supreme Court ruling on oppression and mismanagement — Board authority versus minority shareholder rights.', outcome: 'Neutral' },
-      { citation: 'Needle Industries v. Needle Industries (1981) 3 SCC 333', court: 'Supreme Court', practiceArea: 'Company Law', citedTimes: 267, description: 'Principles governing Section 397-398 (now Sections 241-242) petitions for oppression and mismanagement.', outcome: 'Favorable' },
-    ],
-    statutoryProvisions: [
-      { section: 'Section 4', act: 'Companies Act, 2013', text: 'The memorandum shall state the objects of the company and matters considered necessary in furtherance thereof.', relevance: 'Primary' },
-      { section: 'Section 245', act: 'Companies Act, 2013', text: 'Class action suits — members may file application if affairs are being conducted in a manner prejudicial to their interests.', relevance: 'Primary' },
-      { section: 'Section 241', act: 'Companies Act, 2013', text: 'Application to Tribunal for relief in cases of oppression — affairs conducted in a manner prejudicial to public interest or members.', relevance: 'Supporting' },
-    ],
-    caseTypes: ['Civil', 'Corporate Dispute'],
-    jurisdiction: 'India - Companies Act, 2013 / NCLT',
-    applicableSections: [
-      { section: 'Section 4 Companies Act', description: 'Memorandum of Association — objects clause and ultra vires doctrine', relevance: 'High relevance' },
-      { section: 'Section 241 Companies Act', description: 'Application to Tribunal for oppression and mismanagement', relevance: 'High relevance' },
-      { section: 'Section 245 Companies Act', description: 'Class action suits by members or depositors', relevance: 'Medium relevance' },
-    ],
-    requiredDocuments: [
-      { id: 'doc-1', description: 'Certified copy of Memorandum and Articles of Association', checked: false },
-      { id: 'doc-2', description: 'Board resolutions authorizing the disputed investments', checked: false },
-      { id: 'doc-3', description: 'Annual returns and financial statements (last 3 years)', checked: false },
-      { id: 'doc-4', description: 'Share certificates and share transfer records', checked: false },
-    ],
-    similarCases: [
-      { citation: 'Shanti Prasad Jain v. Kalinga Tubes (1965) 2 SCR 720', outcome: 'Outcome: Ultra vires acts declared void', badge: 'WIN' },
-      { citation: 'Rajendran v. Shanmugham (2017) NCLT Chennai', outcome: 'Outcome: Oppression found, director removed', badge: 'WIN' },
-      { citation: 'Moser Baer India Ltd (2022) NCLAT', outcome: 'Outcome: Petition dismissed — business judgment rule', badge: 'LOSS' },
-    ],
-    outcomePrediction: { winningPct: 68, losingPct: 32 },
-    keyWinningPoints: [
-      'Clear objects clause limits company activities to specified businesses only',
-      'Board did not pass special resolution for alteration of MOA before diversification',
-      'Minority shareholders were not given notice of the proposed change',
-      'Financial loss to company is quantifiable from audit records',
-    ],
-    riskFactors: [
-      'Directors may argue objects clause III(b) covers ancillary activities',
-      'Business judgment rule may shield directors from liability',
-      'Need to establish locus standi — minimum shareholding threshold under Section 244',
-    ],
-    strengths: [
-      { title: 'Clear Objects Clause Violation', description: 'MOA objects clause III(a) does not include the type of business the funds were invested in' },
-      { title: 'No Special Resolution Passed', description: 'Company records show no alteration of objects clause through proper procedure' },
-      { title: 'Financial Prejudice Proven', description: 'Audited accounts demonstrate loss from ultra vires investment' },
-    ],
-    challenges: [
-      { title: 'Broad "Furtherance" Sub-Clause', description: 'Objects clause III(b) contains wide-ranging incidental powers that may cover the disputed activity' },
-      { title: 'Delay in Filing', description: 'Need to file within reasonable time — delay may attract acquiescence argument' },
-      { title: 'Costs of NCLT Proceedings', description: 'Proceedings before National Company Law Tribunal can be lengthy and expensive' },
-    ],
-    strategy: [
-      { step: 1, title: 'File petition under Section 241-242', description: 'File petition before NCLT alleging oppression and mismanagement due to ultra vires acts by the Board.' },
-      { step: 2, title: 'Seek Interim Order under Section 242(4)', description: 'Request interim order restraining directors from further unauthorized investments.' },
-      { step: 3, title: 'Pursue Class Action under Section 245', description: 'If other minority shareholders affected, file class action for broader relief.' },
-      { step: 4, title: 'Demand Statutory Audit', description: 'Request Tribunal to order special audit under Section 233 to quantify losses from ultra vires transactions.' },
-    ],
-    expertRecommendation: 'Based on analysis of corporate dispute precedents, this case has a 68% probability of success before NCLT. The ultra vires doctrine remains strong in Indian company law despite liberalization. Recommend filing Section 241-242 petition combined with interim relief application to preserve company assets while proceedings are ongoing.',
-  },
-
-  // Fallback 3: Default (existing mockAnalysisResult — property dispute)
-  mockAnalysisResult,
-];
-
-let staticAnalysisIndex = 0;
-function getNextStaticResult(): AnalysisResult {
-  const result = staticAnalysisResults[staticAnalysisIndex % staticAnalysisResults.length];
-  staticAnalysisIndex++;
-  return result;
-}
 import { PageHeader, GlassCard, Modal } from '@/components/ui';
 import { useTheme } from '@/contexts/ThemeContext';
 
+// ─── FALLBACK DATA SET 1: Property Dispute Case ───
+const FALLBACK_DATA_1: AnalysisResult = {
+  caseSummary: {
+    legalIssue:
+      'The case involves a property dispute under Section 9 of the Specific Relief Act, 1963. The plaintiff seeks specific performance of a contract for sale of immovable property where the seller has refused to execute the sale deed despite receiving 80% of the consideration amount.',
+    keyPoints: [
+      'Sale agreement executed with Rs. 40 lakhs paid as advance',
+      'Seller refusing to execute sale deed citing market value appreciation',
+      'Plaintiff in continuous possession of the property since 2021',
+      'Time is not of the essence in property contracts under Indian law',
+    ],
+    successProbability: 78,
+  },
+  relevantCaseLaws: [
+    {
+      citation: 'Saralamani Kandappan v. S. Rajalakshmi (2011) 12 SCC 18',
+      court: 'Supreme Court',
+      practiceArea: 'Specific Relief',
+      citedTimes: 127,
+      description:
+        'Landmark judgment on specific performance of contracts relating to immovable property. Established that readiness and willingness must be pleaded and proved.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'Nirmala Anand v. Advent Corporation (2002) 8 SCC 146',
+      court: 'Supreme Court',
+      practiceArea: 'Contract Law',
+      citedTimes: 89,
+      description:
+        'Established principles for granting specific performance when the plaintiff has performed substantial part of the contract.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'K.S. Vidyanadam v. Vairavan (1997) 3 SCC 1',
+      court: 'Supreme Court',
+      practiceArea: 'Property Law',
+      citedTimes: 156,
+      description:
+        'Principles regarding partial performance and possession of property under sale agreement. Time is not of essence in property contracts.',
+      outcome: 'Neutral',
+    },
+  ],
+  statutoryProvisions: [
+    {
+      section: 'Section 9',
+      act: 'Specific Relief Act, 1963',
+      text: 'Except as otherwise provided in this Chapter, specific performance of a contract may, in the discretion of the court, be enforced...',
+      relevance: 'Primary',
+    },
+    {
+      section: 'Section 16',
+      act: 'Specific Relief Act, 1963',
+      text: 'Personal bars to relief: Specific performance of a contract cannot be enforced in favour of a person who would not be entitled to recover compensation...',
+      relevance: 'Supporting',
+    },
+  ],
+  caseTypes: ['Civil', 'Property Dispute'],
+  jurisdiction: 'India - Civil Court',
+  applicableSections: [
+    { section: 'Section 9 SRA', description: 'Specific performance of contract for immovable property', relevance: 'High relevance' },
+    { section: 'Section 16 SRA', description: 'Personal bars to specific performance relief', relevance: 'Medium relevance' },
+    { section: 'Section 53A TPA', description: 'Part performance doctrine for property transfers', relevance: 'High relevance' },
+  ],
+  requiredDocuments: [
+    { id: 'doc-1', description: 'Original Sale Agreement with signatures', checked: true },
+    { id: 'doc-2', description: 'Payment receipts and bank transfer records', checked: true },
+    { id: 'doc-3', description: 'Possession letter or electricity/water bills in plaintiff name', checked: false },
+    { id: 'doc-4', description: 'Legal notice sent to defendant', checked: false },
+  ],
+  similarCases: [
+    { citation: 'Deepika Singh v. Central Administrative Tribunal (2022) 3 SCC 1', outcome: 'Outcome: Specific performance granted', badge: 'WIN' },
+    { citation: 'Rajesh Kumar v. State of UP (2020) AIR SC 2345', outcome: 'Outcome: Partial relief with compensation', badge: 'Partial' },
+    { citation: 'Anil Mehta v. Suresh Properties (2021) 5 SCC 890', outcome: 'Outcome: Decree in favor of plaintiff', badge: 'WIN' },
+  ],
+  outcomePrediction: { winningPct: 78, losingPct: 22 },
+  keyWinningPoints: [
+    'Substantial payment of 80% consideration already made',
+    'Continuous possession since 2021 establishes part performance',
+    'Recent Supreme Court judgments favor specific performance over compensation',
+    'Clear documentary evidence of agreement and payments',
+  ],
+  riskFactors: [
+    'Limitation period of 3 years from breach date',
+    'Defendant may allege plaintiff breached payment timeline',
+    'Market value appreciation may affect court discretion',
+  ],
+  strengths: [
+    { title: 'Strong Documentary Evidence', description: 'Sale agreement, receipts, and possession documents available' },
+    { title: 'Readiness & Willingness Proven', description: 'Plaintiff has demonstrated continuous readiness to perform' },
+    { title: 'Favorable Recent Precedents', description: 'Supreme Court rulings support similar claims' },
+    { title: 'Part Performance', description: 'Substantial payment made and possession transferred' },
+  ],
+  challenges: [
+    { title: 'Limitation Period Concerns', description: 'Need to establish cause of action within 3 years' },
+    { title: "Opposing Party's Counter Claims", description: 'Defendant may argue breach by plaintiff' },
+    { title: 'Market Value Changes', description: "Significant appreciation may affect court's discretion" },
+  ],
+  strategy: [
+    { step: 1, title: 'File Suit for Specific Performance', description: 'Immediately file suit under Section 9 of Specific Relief Act with strong documentary evidence.' },
+    { step: 2, title: 'Apply for Interim Injunction', description: 'Seek court order preventing defendant from alienating the property to third parties.' },
+    { step: 3, title: 'Strengthen Documentation', description: 'Gather additional evidence of readiness, payment records, and possession documents.' },
+    { step: 4, title: 'Explore Mediation', description: 'Pursue mediation alongside litigation for faster resolution and optimal outcomes.' },
+  ],
+  expertRecommendation:
+    'Based on analysis of 127 similar property dispute cases, the recommended approach offers a 78% success probability. The combination of substantial payment, possession, and favorable precedents strongly supports a decree for specific performance. Consider engaging expert witnesses on property valuation.',
+};
+
+// ─── FALLBACK DATA SET 2: Criminal Fraud Case ───
+const FALLBACK_DATA_2: AnalysisResult = {
+  caseSummary: {
+    legalIssue:
+      'The case involves a cyber fraud and financial cheating complaint where the accused used forged documents and impersonation to misappropriate Rs. 25 lakhs from the complainant through a fake real estate investment scheme operated via online platforms.',
+    keyPoints: [
+      'Rs. 25 lakhs transferred through UPI and bank transfers to accused accounts',
+      'Fake property documents and forged NOCs were presented to the complainant',
+      'Accused operated through multiple shell companies and fake identities online',
+      'Digital trail available through IP logs, transaction records, and WhatsApp chats',
+    ],
+    successProbability: 65,
+  },
+  relevantCaseLaws: [
+    {
+      citation: 'State of Maharashtra v. Vijay Mohan Jadhav (2019) 5 SCC 244',
+      court: 'Supreme Court',
+      practiceArea: 'Cyber Crime',
+      citedTimes: 98,
+      description:
+        'Established standards for electronic evidence admissibility under Section 65B of Indian Evidence Act in cyber fraud cases.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'Suhas Katti v. State of Tamil Nadu (2004)',
+      court: 'Chennai High Court',
+      practiceArea: 'IT Act',
+      citedTimes: 203,
+      description:
+        'First conviction under IT Act provisions for online fraud. Set precedent for prosecuting cyber criminals using digital evidence.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'Shreya Singhal v. Union of India (2015) 5 SCC 1',
+      court: 'Supreme Court',
+      practiceArea: 'Constitutional/IT Law',
+      citedTimes: 340,
+      description:
+        'Defined scope of cyber offenses and online intermediary liability. Important for establishing jurisdiction in online fraud cases.',
+      outcome: 'Neutral',
+    },
+  ],
+  statutoryProvisions: [
+    {
+      section: 'Section 420',
+      act: 'Indian Penal Code',
+      text: 'Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person... shall be punished with imprisonment up to 7 years and fine.',
+      relevance: 'Primary',
+    },
+    {
+      section: 'Section 66D',
+      act: 'Information Technology Act, 2000',
+      text: 'Whoever, by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment up to 3 years and fine up to one lakh rupees.',
+      relevance: 'Primary',
+    },
+    {
+      section: 'Section 468',
+      act: 'Indian Penal Code',
+      text: 'Whoever commits forgery, intending that the document forged shall be used for the purpose of cheating, shall be punished with imprisonment up to 7 years and fine.',
+      relevance: 'Supporting',
+    },
+  ],
+  caseTypes: ['Criminal', 'Cyber Crime', 'Financial Fraud'],
+  jurisdiction: 'India - BNS/IPC & IT Act',
+  applicableSections: [
+    { section: 'Section 420 IPC', description: 'Cheating and dishonestly inducing delivery of property', relevance: 'High relevance' },
+    { section: 'Section 406 IPC', description: 'Criminal breach of trust', relevance: 'High relevance' },
+    { section: 'IT Act Section 66D', description: 'Cheating by personation using computer resource', relevance: 'High relevance' },
+    { section: 'Section 468 IPC', description: 'Forgery for purpose of cheating', relevance: 'Medium relevance' },
+  ],
+  requiredDocuments: [
+    { id: 'doc-1', description: 'FIR copy and police complaint', checked: true },
+    { id: 'doc-2', description: 'Bank statements showing fraudulent transactions', checked: true },
+    { id: 'doc-3', description: 'WhatsApp/email communication screenshots (certified)', checked: false },
+    { id: 'doc-4', description: 'Section 65B certificate for electronic evidence', checked: false },
+    { id: 'doc-5', description: 'Forged documents received from accused', checked: false },
+  ],
+  similarCases: [
+    { citation: 'State v. Rahul Sharma (2023) Delhi HC Crl. A. 456', outcome: 'Outcome: Convicted under 420 IPC & 66D IT Act', badge: 'WIN' },
+    { citation: 'Lata Goyal v. State of NCT Delhi (2019) 8 SCC 456', outcome: 'Outcome: Acquitted due to insufficient digital evidence', badge: 'LOSS' },
+    { citation: 'Pradeep Investments v. Cyber Cell (2022) Bom HC WP 1234', outcome: 'Outcome: Partial recovery ordered', badge: 'Partial' },
+  ],
+  outcomePrediction: { winningPct: 65, losingPct: 35 },
+  keyWinningPoints: [
+    'Clear digital trail of financial transactions to accused',
+    'Forged documents are strong evidence of criminal intent',
+    'Multiple victims strengthen pattern of fraud allegation',
+    'IP logs and device data can link accused to fake identities',
+  ],
+  riskFactors: [
+    'Electronic evidence must strictly comply with Section 65B requirements',
+    'Accused may claim the transactions were legitimate business dealings',
+    'Recovery of misappropriated funds is uncertain even with conviction',
+    'Cross-jurisdictional challenges if accused operated from multiple states',
+  ],
+  strengths: [
+    { title: 'Clear Financial Trail', description: 'Bank records and UPI logs conclusively show fund movement to accused' },
+    { title: 'Documentary Fraud Evidence', description: 'Forged NOCs and fake property papers can be verified as fraudulent' },
+    { title: 'Digital Footprint', description: 'WhatsApp chats, emails, and IP logs establish accused identity' },
+    { title: 'Multiple Complainants', description: 'Pattern of similar fraud strengthens prosecution case' },
+  ],
+  challenges: [
+    { title: 'Section 65B Compliance', description: 'All electronic evidence must have proper certificates for admissibility' },
+    { title: 'Accused Identity Verification', description: 'Need to conclusively link online identities to physical accused' },
+    { title: 'Fund Recovery', description: 'Money may have been laundered through multiple accounts' },
+    { title: 'Jurisdictional Issues', description: 'Online crimes may span multiple state jurisdictions' },
+  ],
+  strategy: [
+    { step: 1, title: 'File FIR with Cyber Cell', description: 'Lodge complaint with specialized cyber crime police station with all digital evidence.' },
+    { step: 2, title: 'Secure Electronic Evidence', description: 'Obtain Section 65B certificates for all digital communications and transaction records.' },
+    { step: 3, title: 'Apply for Freezing Order', description: 'Seek court order to freeze accused bank accounts to prevent further dissipation of funds.' },
+    { step: 4, title: 'Coordinate with Bank', description: 'File complaint with banks for reversal of fraudulent transactions under RBI guidelines.' },
+  ],
+  expertRecommendation:
+    'Based on analysis of 98 similar cyber fraud cases, this case has a 65% success probability for conviction. The digital evidence trail is strong but requires strict Section 65B compliance. Recommend immediate FIR with cyber cell and simultaneous bank complaint for fund recovery. Engaging a forensic IT expert will significantly strengthen the prosecution.',
+};
+
+// Toggle between fallback datasets — uses a simple alternating flag
+let fallbackToggle = false;
+function getNextFallbackData(): AnalysisResult {
+  fallbackToggle = !fallbackToggle;
+  return fallbackToggle ? FALLBACK_DATA_1 : FALLBACK_DATA_2;
+}
+
+// ─── SVG Metallic Button (gold theme) ───
+function MetallicButton({ label, variant, onClick, theme }: { label: string; variant: 'gold' | 'bronze'; onClick?: () => void; theme: 'light' | 'dark' | 'gold' }) {
+  // For non-gold themes, render a normal styled button
+  if (theme !== 'gold') {
+    const cls = variant === 'gold'
+      ? 'badge-high'
+      : 'badge-medium';
+    return (
+      <button onClick={onClick} className={`px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium shrink-0 ml-2 ${cls}`}>
+        {label}
+      </button>
+    );
+  }
+
+  // Gold theme: render SVG metallic button
+  const gradId = `metalBtn_${variant}_${label.replace(/\s/g, '')}`;
+  const stops = variant === 'gold'
+    ? [
+        { offset: '0%', color: '#fff6d0' },
+        { offset: '12%', color: '#f8e7a2' },
+        { offset: '28%', color: '#e6c26a' },
+        { offset: '52%', color: '#c7963a' },
+        { offset: '78%', color: '#f0d688' },
+        { offset: '100%', color: '#9f6c1d' },
+      ]
+    : [
+        { offset: '0%', color: '#f5d4b3' },
+        { offset: '15%', color: '#e8b88a' },
+        { offset: '35%', color: '#cd8e5a' },
+        { offset: '55%', color: '#b87333' },
+        { offset: '78%', color: '#daa06d' },
+        { offset: '100%', color: '#8b4513' },
+      ];
+  const borderColor = variant === 'gold' ? '#9f6c1d' : '#8b4513';
+
+  // Estimate width based on label length
+  const charWidth = 6.5;
+  const padding = 16;
+  const width = Math.max(label.length * charWidth + padding * 2, 60);
+  const height = 22;
+  const rx = 5;
+
+  return (
+    <button onClick={onClick} className="shrink-0 ml-2 cursor-pointer hover:opacity-85 transition-opacity">
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="block">
+        <defs>
+          <radialGradient id={gradId} cx="30%" cy="20%" r="90%">
+            {stops.map((s, i) => (
+              <stop key={i} offset={s.offset} stopColor={s.color} />
+            ))}
+          </radialGradient>
+          <radialGradient id={`${gradId}_shine`} cx="35%" cy="15%" r="60%">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+          </radialGradient>
+        </defs>
+        <rect x="1" y="1" width={width - 2} height={height - 2} rx={rx} fill={`url(#${gradId})`} stroke={borderColor} strokeWidth="1.5" />
+        <rect x="1" y="1" width={width - 2} height={height - 2} rx={rx} fill={`url(#${gradId}_shine)`} opacity="0.45" />
+        <text x={width / 2} y={height / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#2a1a00">
+          {label}
+        </text>
+      </svg>
+    </button>
+  );
+}
+
+// ─── Custom Metallic Pie Chart SVG ───
+// Theme-specific gradient configs
+const PIE_THEME_CONFIG = {
+  gold: {
+    // Losing slice — gold metallic
+    sectorGradient: {
+      cx: '30%', cy: '25%', r: '90%',
+      stops: [
+        { offset: '0%', color: '#fff6d0' },
+        { offset: '12%', color: '#f8e7a2' },
+        { offset: '28%', color: '#e6c26a' },
+        { offset: '52%', color: '#c7963a' },
+        { offset: '78%', color: '#f0d688' },
+        { offset: '100%', color: '#9f6c1d' },
+      ],
+    },
+    // Winning slice — silver metallic
+    baseGradient: {
+      cx: '65%', cy: '35%', r: '90%',
+      stops: [
+        { offset: '0%', color: '#ffffff' },
+        { offset: '20%', color: '#eeeeee' },
+        { offset: '40%', color: '#c9c9c9' },
+        { offset: '60%', color: '#f8f8f8' },
+        { offset: '82%', color: '#b7b7b7' },
+        { offset: '100%', color: '#8a8a8a' },
+      ],
+    },
+    shine: { cx: '28%', cy: '22%', r: '70%' },
+    separatorColor: '#2a2a2a',
+    rimColor: 'rgba(255,255,255,0.25)',
+    labelColor: '#111',
+  },
+  dark: {
+    // Losing slice — red metallic
+    sectorGradient: {
+      cx: '35%', cy: '28%', r: '88%',
+      stops: [
+        { offset: '0%', color: '#fca5a5' },
+        { offset: '20%', color: '#f87171' },
+        { offset: '45%', color: '#ef4444' },
+        { offset: '70%', color: '#dc2626' },
+        { offset: '90%', color: '#b91c1c' },
+        { offset: '100%', color: '#7f1d1d' },
+      ],
+    },
+    // Winning slice — green metallic
+    baseGradient: {
+      cx: '50%', cy: '35%', r: '90%',
+      stops: [
+        { offset: '0%', color: '#86efac' },
+        { offset: '20%', color: '#4ade80' },
+        { offset: '45%', color: '#22c55e' },
+        { offset: '65%', color: '#16a34a' },
+        { offset: '85%', color: '#15803d' },
+        { offset: '100%', color: '#166534' },
+      ],
+    },
+    shine: { cx: '30%', cy: '25%', r: '65%' },
+    separatorColor: '#111827',
+    rimColor: 'rgba(255,255,255,0.1)',
+    labelColor: '#ffffff',
+  },
+  light: {
+    // Losing slice — red
+    sectorGradient: {
+      cx: '40%', cy: '28%', r: '88%',
+      stops: [
+        { offset: '0%', color: '#fca5a5' },
+        { offset: '20%', color: '#f87171' },
+        { offset: '45%', color: '#ef4444' },
+        { offset: '70%', color: '#dc2626' },
+        { offset: '90%', color: '#b91c1c' },
+        { offset: '100%', color: '#7f1d1d' },
+      ],
+    },
+    // Winning slice — green
+    baseGradient: {
+      cx: '50%', cy: '35%', r: '90%',
+      stops: [
+        { offset: '0%', color: '#86efac' },
+        { offset: '20%', color: '#4ade80' },
+        { offset: '45%', color: '#22c55e' },
+        { offset: '65%', color: '#16a34a' },
+        { offset: '85%', color: '#15803d' },
+        { offset: '100%', color: '#166534' },
+      ],
+    },
+    shine: { cx: '30%', cy: '20%', r: '70%' },
+    separatorColor: '#374151',
+    rimColor: 'rgba(0,0,0,0.08)',
+    labelColor: '#1f2937',
+  },
+};
+
+function MetallicPieChart({ winningPct, losingPct, theme }: { winningPct: number; losingPct: number; theme: 'light' | 'dark' | 'gold' }) {
+  const config = PIE_THEME_CONFIG[theme];
+  const cx = 150, cy = 150, r = 120;
+
+  // Calculate the gold/sector slice (losing %)
+  // Start from 12 o'clock (top), sweep clockwise
+  const angleDeg = (losingPct / 100) * 360;
+  const angleRad = (angleDeg) * (Math.PI / 180);
+
+  // End point of the arc (starting from top, going clockwise)
+  // Top of circle is (cx, cy - r). Clockwise from top means positive angle from -Y axis
+  const endX = cx + r * Math.sin(angleRad);
+  const endY = cy - r * Math.cos(angleRad);
+
+  // Large arc flag: if sector > 180 degrees, use large arc
+  const largeArc = angleDeg > 180 ? 1 : 0;
+
+  // SVG arc: from top point, clockwise (sweep=1) to endpoint
+  const sectorPath = `M${cx} ${cy} L${cx} ${cy - r} A${r} ${r} 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`;
+
+  // Label positions — midpoint angle of each sector
+  const losingMidAngle = (angleDeg / 2) * (Math.PI / 180);
+  const losingLabelX = cx + r * 0.5 * Math.sin(losingMidAngle);
+  const losingLabelY = cy - r * 0.5 * Math.cos(losingMidAngle);
+
+  const winningMidAngle = (angleDeg + (360 - angleDeg) / 2) * (Math.PI / 180);
+  const winningLabelX = cx + r * 0.5 * Math.sin(winningMidAngle);
+  const winningLabelY = cy - r * 0.5 * Math.cos(winningMidAngle);
+
+  return (
+    <svg viewBox="0 0 300 300" className="w-full h-full">
+      <defs>
+        {/* Base (winning) gradient */}
+        <radialGradient id="pieBase" cx={config.baseGradient.cx} cy={config.baseGradient.cy} r={config.baseGradient.r}>
+          {config.baseGradient.stops.map((s, i) => (
+            <stop key={i} offset={s.offset} stopColor={s.color} />
+          ))}
+        </radialGradient>
+        {/* Sector (losing) gradient */}
+        <radialGradient id="pieSector" cx={config.sectorGradient.cx} cy={config.sectorGradient.cy} r={config.sectorGradient.r}>
+          {config.sectorGradient.stops.map((s, i) => (
+            <stop key={i} offset={s.offset} stopColor={s.color} />
+          ))}
+        </radialGradient>
+        {/* Metallic shine overlay */}
+        <radialGradient id="pieShine" cx={config.shine.cx} cy={config.shine.cy} r={config.shine.r}>
+          <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+          <stop offset="25%" stopColor="rgba(255,255,255,0.4)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </radialGradient>
+        {/* Bevel shadow */}
+        <filter id="pieBevel">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.25" />
+        </filter>
+      </defs>
+
+      {/* Base circle (winning %) */}
+      <circle cx={cx} cy={cy} r={r} fill="url(#pieBase)" filter="url(#pieBevel)" />
+
+      {/* Sector slice (losing %) */}
+      <path d={sectorPath} fill="url(#pieSector)" />
+
+      {/* Separator lines */}
+      <line x1={cx} y1={cy} x2={cx} y2={cy - r} stroke={config.separatorColor} strokeWidth="2" />
+      <line x1={cx} y1={cy} x2={endX.toFixed(1)} y2={endY.toFixed(1)} stroke={config.separatorColor} strokeWidth="2" />
+
+      {/* Metallic highlight */}
+      <circle cx={cx} cy={cy} r={r} fill="url(#pieShine)" opacity="0.55" />
+
+      {/* Subtle rim */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={config.rimColor} strokeWidth="2" />
+
+      {/* Labels */}
+      <text x={losingLabelX} y={losingLabelY} textAnchor="middle" dominantBaseline="central" fontSize="28" fontWeight="700" fill={config.labelColor}>
+        {losingPct}%
+      </text>
+      <text x={winningLabelX} y={winningLabelY} textAnchor="middle" dominantBaseline="central" fontSize="28" fontWeight="700" fill={config.labelColor}>
+        {winningPct}%
+      </text>
+    </svg>
+  );
+}
+
 const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 
-/** Normalize raw parsed JSON into a valid AnalysisResult with defaults (used when AI is enabled) */
+/** Normalize raw parsed JSON into a valid AnalysisResult with defaults (kept for future AI re-enablement) */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
+function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   const normalized: AnalysisResult = {
     caseSummary: {
       legalIssue: (parsed.caseSummary as Record<string, unknown>)?.legalIssue as string || 'Analysis completed.',
@@ -221,12 +545,13 @@ export function normalizeResult(parsed: Record<string, unknown>): AnalysisResult
 }
 
 export function AnalyserPage() {
-  useTheme();
+  const { theme } = useTheme();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [caseText, setCaseText] = useState('');
   const [activeInputTab, setActiveInputTab] = useState<string>('Text Entry');
   const [recommendations, setRecommendations] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
 
@@ -302,7 +627,8 @@ export function AnalyserPage() {
   };
 
   const handleAnalyze = async () => {
-    // If multiple files uploaded, use static results for each
+    // AI code commented out — always using fallback data
+    // If multiple files uploaded, assign alternating fallback data to each
     if (extractedTexts.length > 1) {
       setIsAnalyzing(true);
       setAnalysisError(null);
@@ -313,12 +639,12 @@ export function AnalyserPage() {
         const { name, text } = extractedTexts[i];
         if (!text.trim() || text.length < 50) continue;
         setAnalyzeProgress(`Analyzing file ${i + 1} of ${extractedTexts.length}: ${name}`);
+        // Simulate short delay for UX
+        await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Simulate analysis delay for realistic UX
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Use static fallback result (rotating through available results)
-        results.push({ fileName: name, result: getNextStaticResult() });
+        // Use alternating fallback data instead of AI call
+        const fallbackResult = getNextFallbackData();
+        results.push({ fileName: name, result: fallbackResult });
       }
 
       setAnalysisResults(results);
@@ -328,46 +654,52 @@ export function AnalyserPage() {
       return;
     }
 
-    // Single text analysis
-    if (!caseText.trim()) return;
-
-    const trimmedText = caseText.trim();
-    if (trimmedText.length < 50) {
-      setAnalysisError('Please provide detailed case information (at least 50 characters). You can type/paste case details or upload a legal document (PDF, DOCX, etc.).');
-      setAnalysisResult(null);
-      return;
-    }
-
-    const legalKeywords = ['case', 'court', 'section', 'act', 'law', 'dispute', 'plaintiff', 'defendant', 'accused', 'complainant', 'petition', 'appeal', 'judgment', 'order', 'contract', 'property', 'criminal', 'civil', 'fir', 'bail', 'divorce', 'custody', 'compensation', 'damages', 'fraud', 'cheating', 'theft', 'murder', 'assault', 'negligence', 'breach', 'agreement', 'tenant', 'landlord', 'employer', 'employee', 'insurance', 'claim', 'arbitration', 'tribunal', 'ipc', 'crpc', 'cpc', 'bns', 'bnss', 'constitution', 'article', 'writ', 'habeas', 'mandamus', 'vs', 'versus', 'partnership', 'partner', 'firm', 'company', 'director', 'shareholder', 'memorandum', 'deed'];
-    const lowerText = trimmedText.toLowerCase();
-    const hasLegalContent = legalKeywords.some(keyword => lowerText.includes(keyword));
-
-    if (!hasLegalContent && trimmedText.split(/\s+/).length < 20) {
-      setAnalysisError('The text does not appear to contain legal case information. Please provide case details, upload a legal document, or paste relevant case text for analysis.');
-      setAnalysisResult(null);
-      return;
-    }
+    // Single text analysis — use fallback data directly
+    if (!caseText.trim() && extractedTexts.length === 0) return;
 
     setIsAnalyzing(true);
     setAnalysisError(null);
 
-    // Simulate analysis delay for realistic UX
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate analysis delay for UX
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
-    // Use static fallback result — select based on content keywords
-    let selectedResult: AnalysisResult;
-    if (lowerText.includes('partnership') || lowerText.includes('partner') || lowerText.includes('deed of partnership') || lowerText.includes('firm')) {
-      selectedResult = staticAnalysisResults[0]; // Partnership dispute
-    } else if (lowerText.includes('company') || lowerText.includes('memorandum') || lowerText.includes('director') || lowerText.includes('shareholder') || lowerText.includes('articles')) {
-      selectedResult = staticAnalysisResults[1]; // Company/MOA dispute
-    } else {
-      selectedResult = getNextStaticResult(); // Rotate through all
-    }
-
-    setAnalysisResult(selectedResult);
-    setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: selectedResult }]);
+    // Always use fallback data (alternates between FALLBACK_DATA_1 and FALLBACK_DATA_2)
+    const fallbackResult = getNextFallbackData();
+    setAnalysisResult(fallbackResult);
+    setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: fallbackResult }]);
     setActiveSlide(0);
     setIsAnalyzing(false);
+
+    /* --- ORIGINAL AI CODE (commented out) ---
+    const trimmedText = caseText.trim();
+    if (trimmedText.length < 50) {
+      setAnalysisError('Please provide detailed case information (at least 50 characters).');
+      setAnalysisResult(null);
+      return;
+    }
+    const legalKeywords = ['case', 'court', 'section', 'act', 'law', 'dispute', 'plaintiff', 'defendant', 'accused', 'complainant', 'petition', 'appeal', 'judgment', 'order', 'contract', 'property', 'criminal', 'civil', 'fir', 'bail', 'divorce', 'custody', 'compensation', 'damages', 'fraud', 'cheating', 'theft', 'murder', 'assault', 'negligence', 'breach', 'agreement', 'tenant', 'landlord', 'employer', 'employee', 'insurance', 'claim', 'arbitration', 'tribunal', 'ipc', 'crpc', 'cpc', 'bns', 'bnss', 'constitution', 'article', 'writ', 'habeas', 'mandamus', 'vs', 'versus'];
+    const lowerText = trimmedText.toLowerCase();
+    const hasLegalContent = legalKeywords.some(keyword => lowerText.includes(keyword));
+    if (!hasLegalContent && trimmedText.split(/\s+/).length < 20) {
+      setAnalysisError('The text does not appear to contain legal case information.');
+      setAnalysisResult(null);
+      return;
+    }
+    try {
+      const rawResponse = await analyzeCase(caseText, recommendations);
+      const cleanedResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const parsed = JSON.parse(cleanedResponse);
+      const normalized = normalizeResult(parsed);
+      setAnalysisResult(normalized);
+      setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: normalized }]);
+      setActiveSlide(0);
+    } catch (error) {
+      setAnalysisError(error instanceof Error ? error.message : 'Analysis failed.');
+      setAnalysisResult(mockAnalysisResult);
+    } finally {
+      setIsAnalyzing(false);
+    }
+    --- END ORIGINAL AI CODE --- */
   };
 
   const handleExport = (type: string) => {
@@ -449,42 +781,6 @@ export function AnalyserPage() {
     } else if (type === 'Email Report') {
       const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '• ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '• ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '✓ ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '⚠ ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
       window.open(`mailto:?subject=Case Analysis Report&body=${encodeURIComponent(analysisText.substring(0, 2000))}`);
-    } else if (type === 'Export to Excel' || type === 'Export to CSV') {
-      const separator = type === 'Export to CSV' ? ',' : '\t';
-      const ext = type === 'Export to CSV' ? 'csv' : 'xls';
-      const mime = type === 'Export to CSV' ? 'text/csv' : 'application/vnd.ms-excel';
-      const rows = [
-        ['Field', 'Value'],
-        ['Case Type', data.caseTypes.join(', ')],
-        ['Jurisdiction', data.jurisdiction],
-        ['Success Probability', `${data.caseSummary.successProbability}%`],
-        ['Winning %', `${data.outcomePrediction.winningPct}%`],
-        ['Losing %', `${data.outcomePrediction.losingPct}%`],
-        [''],
-        ['Applicable Sections', ''],
-        ...data.applicableSections.map(s => [s.section, s.description]),
-        [''],
-        ['Key Winning Points', ''],
-        ...data.keyWinningPoints.map(p => ['', p]),
-        [''],
-        ['Risk Factors', ''],
-        ...data.riskFactors.map(r => ['', r]),
-        [''],
-        ['Similar Cases', 'Outcome'],
-        ...data.similarCases.map(sc => [sc.citation, `${sc.outcome} (${sc.badge})`]),
-        [''],
-        ['Expert Recommendation', data.expertRecommendation],
-      ];
-      const content = rows.map(row => row.join(separator)).join('\n');
-      const blob = new Blob([content], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `case-analysis-report.${ext}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
     }
   };
 
@@ -494,492 +790,575 @@ export function AnalyserPage() {
   const hasAnyResult = isCarousel || !!analysisResult;
 
   return (
-    <div className="space-y-6" data-theme="gold">
+    <div className="space-y-4">
       <PageHeader title="Analyser" icon={Brain} />
 
-      {/* Hero Section */}
-      <div className="text-center py-4">
-        <h2 className="text-3xl font-bold gradient-text mb-2">Legal Case Analyser</h2>
+      {/* Hero title */}
+      <div className="text-center py-2">
+        <h2 className="text-3xl font-bold gradient-text mb-1">Legal Case Analyser</h2>
         <p className="text-text-secondary text-sm max-w-2xl mx-auto">
           Submit your case details and get AI-powered insights to assess your chances of success
         </p>
       </div>
 
-      {/* INPUT CARD */}
-      <GlassCard className="!p-6 bg-bg-elevated/50">
-        <h3 className="text-lg font-semibold text-text-primary mb-4">Case Input</h3>
-
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {INPUT_TABS.map((tab) => {
-            const icon = tab === 'Text Entry' ? '📄' : tab === 'Copy-Paste' ? '📋' : '✉️';
-            return (
-              <button
-                key={tab}
-                onClick={() => {
-                  setActiveInputTab(tab);
-                  if (tab !== 'Upload Doc') {
-                    setExtractedTexts([]);
-                    setUploadedFiles([]);
-                    setFileInfos([]);
-                  }
-                }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeInputTab === tab
-                    ? 'font-semibold'
-                    : 'bg-transparent border border-border text-text-secondary hover:text-text-primary hover:border-[#D4A74A]/50'
-                }`}
-                style={activeInputTab === tab ? {
-                  background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #a8a8a8 0%, #d4d4d4 30%, #f0f0f0 55%, #b0b0b0 80%, #8a8a8a 100%)',
-                  boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.25), 0 8px 18px rgba(0,0,0,0.4)',
-                  border: '1px solid rgba(120,120,120,0.9)',
-                  color: '#000000',
-                } : undefined}
-              >
-                {icon} {tab}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* File upload or text area */}
-        {activeInputTab === 'Upload Doc' ? (
-          <div className="mb-4">
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-border rounded-xl cursor-pointer bg-bg-elevated hover:bg-bg-elevated/80 transition-colors">
-              <div className="flex flex-col items-center justify-center py-4">
-                {isExtracting ? (
-                  <>
-                    <Loader2 className="w-8 h-8 text-accent-primary animate-spin mb-2" />
-                    <p className="text-sm text-text-secondary">Extracting text...</p>
-                  </>
-                ) : uploadedFiles.length > 0 ? (
-                  <>
-                    <FileText className="w-8 h-8 text-success mb-2" />
-                    <p className="text-sm font-medium text-text-primary">
-                      {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''} uploaded
-                    </p>
-                    <p className="text-xs text-text-secondary mt-1">Click to change</p>
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-8 h-8 text-text-muted mb-2" />
-                    <p className="text-sm text-text-secondary">
-                      <span className="font-medium text-accent-primary">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-xs text-text-muted mt-1">{SUPPORTED_FILE_TYPES_LABEL}</p>
-                  </>
-                )}
-              </div>
-              <input
-                type="file"
-                className="hidden"
-                accept={SUPPORTED_FILE_TYPES}
-                multiple
-                onChange={handleFileUpload}
-              />
-            </label>
-
-            {/* Uploaded files list */}
-            {fileInfos.length > 0 && (
-              <div className="mt-3 space-y-1.5 max-h-40 overflow-y-auto">
-                {fileInfos.map((info, i) => (
-                  <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
-                    <div className="flex items-center gap-2 min-w-0 flex-1">
-                      <FileText className="w-4 h-4 text-accent-primary shrink-0" />
-                      <span className="text-sm text-text-primary truncate">{info.name}</span>
-                    </div>
-                    <span className="text-xs text-text-muted shrink-0 ml-2">
-                      {info.pages}p • {info.wordCount.toLocaleString()}w
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <textarea
-            value={caseText}
-            onChange={(e) => setCaseText(e.target.value)}
-            placeholder="Type or paste your case details here..."
-            className="w-full h-40 bg-white/10 border border-accent-primary/30 rounded-xl p-4 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
-          />
-        )}
-
-        {/* Recommendations */}
-        <label className="block text-sm font-semibold text-text-primary mb-2">
-          User Recommendations/Consideration:
-        </label>
-        <textarea
-          value={recommendations}
-          onChange={(e) => setRecommendations(e.target.value)}
-          placeholder="Any specific points or considerations for the analysis..."
-          className="w-full h-24 bg-white/10 border border-accent-primary/30 rounded-xl p-4 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-6"
-        />
-
-        {/* Analyze button */}
-        <div className="flex justify-center">
-          <button
-            onClick={handleAnalyze}
-            disabled={isAnalyzing || (!caseText.trim() && extractedTexts.length === 0)}
-            className="w-full max-w-md py-4 text-center font-bold text-black text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-xl"
-            style={{
-              background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #5a3a06 0%, #c89b2c 30%, #ffe08a 55%, #b8860b 80%, #5a3a05 100%)',
-              boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.6)',
-              border: '1px solid rgba(90,60,10,0.9)',
-              color: '#1a1a1a',
-              textShadow: '0 1px 0 rgba(255,255,255,0.3)',
-            }}
-          >
-            {isAnalyzing ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                {analyzeProgress || 'Analyzing...'}
-              </>
-            ) : (
-              <>
-                <Brain className="w-5 h-5" />
-                Analyze Case{extractedTexts.length > 1 ? ` (${extractedTexts.length} files)` : ''}
-              </>
-            )}
-          </button>
-        </div>
-      </GlassCard>
-
-      {/* Error Banner */}
-      {analysisError && !analysisError.includes('AI') && (
-        <div className="px-4 py-3 bg-warning/10 border border-warning/30 rounded-xl text-sm text-warning">
-          ⚠️ {analysisError}
-        </div>
-      )}
-
-      {/* Success Banner */}
+      {/* Error / Success indicator */}
       {hasAnyResult && (
-        <div className="px-4 py-3 bg-success/10 border border-success/30 rounded-xl text-sm text-success">
-          ✓ Analysis complete — AI-powered legal intelligence
+        <div className="px-4 py-2 bg-success/10 border border-success/30 rounded-xl text-sm text-success">
+          ✓ Analysis complete (Demo Mode — showing sample data)
           {isCarousel && ` — ${analysisResults.length} files analyzed`}
         </div>
       )}
 
-      {/* Loading State */}
-      {isAnalyzing && (
-        <div className="flex flex-col items-center justify-center py-16 gap-4">
-          <Loader2 className="w-12 h-12 text-accent-primary animate-spin" />
-          <p className="text-text-secondary text-sm">{analyzeProgress || 'Analyzing case...'}</p>
-        </div>
-      )}
+      {/* 3-Column Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        {/* LEFT COLUMN - Input Panel (~25%) */}
+        <div className="md:col-span-3 space-y-4">
+          <GlassCard className="!p-4">
+            <h3 className="text-sm font-semibold text-text-primary mb-3">More Inputs to Your Case</h3>
 
-      {/* RESULTS SECTION */}
-      {!isAnalyzing && hasAnyResult && displayData && (
-        <div
-          className="space-y-6"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Carousel Navigation (when multiple files) */}
-          {isCarousel && (
-            <div className="flex items-center justify-between px-2">
-              <button
-                onClick={() => setActiveSlide(Math.max(0, activeSlide - 1))}
-                disabled={activeSlide === 0}
-                className="w-10 h-10 rounded-full bg-accent-primary text-white shadow-lg flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <div className="flex flex-col items-center gap-2">
-                <h3 className="text-sm font-semibold text-text-primary truncate max-w-xs">
-                  📄 {analysisResults[activeSlide]?.fileName}
-                </h3>
-                <div className="flex gap-2">
-                  {analysisResults.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveSlide(i)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${
-                        i === activeSlide
-                          ? 'bg-accent-primary scale-125'
-                          : 'bg-bg-elevated border border-border hover:bg-text-muted'
-                      }`}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-text-muted">{activeSlide + 1} / {analysisResults.length}</span>
-              </div>
-              <button
-                onClick={() => setActiveSlide(Math.min(analysisResults.length - 1, activeSlide + 1))}
-                disabled={activeSlide === analysisResults.length - 1}
-                className="w-10 h-10 rounded-full bg-accent-primary text-white shadow-lg flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-          )}
-
-          {/* Prediction Card */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">Outcome Prediction</h3>
-            <div className="flex flex-col items-center gap-6">
-              {/* CSS Metallic Pie Chart — 3 layer approach */}
-              <div className="relative w-[260px] h-[260px]">
-                {/* Layer 1: Silver base (full circle) */}
-                <div
-                  className="absolute w-[260px] h-[260px] rounded-full"
-                  style={{ background: 'radial-gradient(circle at 30% 30%, #ffffff 0%, #d6d6d6 35%, #9a9a9a 70%, #f2f2f2 100%)' }}
-                />
-                {/* Layer 2: Gold overlay (winning % wedge) */}
-                <div
-                  className="absolute w-[260px] h-[260px] rounded-full"
-                  style={{ background: `conic-gradient(from 0deg, #d4af37 0%, #fff2b0 ${displayData.outcomePrediction.winningPct * 0.66}%, #b8860b ${displayData.outcomePrediction.winningPct}%, transparent ${displayData.outcomePrediction.winningPct}%)` }}
-                />
-                {/* Percentage labels — black text */}
-                <div className="absolute bottom-[22%] right-[15%] text-xl font-bold" style={{ color: '#1a1a1a', textShadow: '0 1px 2px rgba(255,255,255,0.3)' }}>
-                  {displayData.outcomePrediction.winningPct}%
-                </div>
-                <div className="absolute top-[25%] left-[12%] text-xl font-bold" style={{ color: '#1a1a1a', textShadow: '0 1px 2px rgba(255,255,255,0.3)' }}>
-                  {displayData.outcomePrediction.losingPct}%
-                </div>
-              </div>
-
-              {/* Win/Loss Progress Bars */}
-              <div className="w-full max-w-lg space-y-3">
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium" style={{ color: '#D4A853' }}>Winning</span>
-                    <span className="text-sm font-bold" style={{ color: '#D4A853' }}>{displayData.outcomePrediction.winningPct}%</span>
-                  </div>
-                  <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: '#243044' }}>
-                    <div className="h-full rounded-full transition-all duration-500" style={{ width: `${displayData.outcomePrediction.winningPct}%`, backgroundColor: '#D4A853' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium" style={{ color: '#A0A0A0' }}>Losing</span>
-                    <span className="text-sm font-bold" style={{ color: '#A0A0A0' }}>{displayData.outcomePrediction.losingPct}%</span>
-                  </div>
-                  <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: '#243044' }}>
-                    <div className="h-full rounded-full transition-all duration-500" style={{ width: `${displayData.outcomePrediction.losingPct}%`, backgroundColor: '#A0A0A0' }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Case Type Badges + Jurisdiction */}
-              <div className="w-full flex flex-col items-center gap-2 pt-4 border-t border-border">
-                <div className="flex flex-wrap justify-center gap-2">
-                  {displayData.caseTypes.map((ct) => (
-                    <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                      className="px-4 py-1.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold"
-                      style={{
-                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #5a3a06 0%, #c89b2c 30%, #ffe08a 55%, #b8860b 80%, #5a3a05 100%)',
-                        boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.6)',
-                        border: '1px solid rgba(90,60,10,0.9)',
-                        color: '#000000',
-                      }}>
-                      {ct}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
-              </div>
-            </div>
-          </GlassCard>
-
-          {/* Key Insights - 2 Column Grid */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">Key Insights</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Key Winning Points */}
-              <div>
-                <h4 className="text-sm font-bold text-success mb-3">Key Winning Points</h4>
-                <ul className="space-y-2">
-                  {displayData.keyWinningPoints.map((point, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-                      <span className="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {/* Risk Factors */}
-              <div>
-                <h4 className="text-sm font-bold text-danger mb-3">Risk Factors</h4>
-                <ul className="space-y-2">
-                  {displayData.riskFactors.map((risk, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-                      <span className="w-2 h-2 rounded-full bg-danger mt-1.5 shrink-0" />
-                      {risk}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </GlassCard>
-
-          {/* Applicable Legal Sections Card */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">Applicable Legal Sections</h3>
-            <div className="space-y-2">
-              {displayData.applicableSections.map((sec, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-bg-elevated rounded-lg">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-text-primary">{sec.section}</h4>
-                    <p className="text-xs text-text-secondary truncate">{sec.description}</p>
-                  </div>
-                  <button onClick={() => setSectionModal(sec.section)}
-                    className="px-3 py-1.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shrink-0 ml-3"
-                    style={{
-                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #5a3a06 0%, #c89b2c 30%, #ffe08a 55%, #b8860b 80%, #5a3a05 100%)',
-                      boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.6)',
-                      border: '1px solid rgba(90,60,10,0.9)',
-                      color: '#000000',
-                    }}>
-                    {sec.relevance}
+            {/* Tabs */}
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {INPUT_TABS.map((tab) => {
+                const icon = tab === 'Text Entry' ? '📄' : tab === 'Copy-Paste' ? '📋' : '✉️';
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => {
+                      setActiveInputTab(tab);
+                      // Clear bulk upload state when switching away from Upload Doc
+                      if (tab !== 'Upload Doc') {
+                        setExtractedTexts([]);
+                        setUploadedFiles([]);
+                        setFileInfos([]);
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
+                      activeInputTab === tab
+                        ? 'bg-accent-primary/20 border-accent-primary text-accent-primary'
+                        : 'bg-transparent border-border text-text-secondary hover:text-text-primary hover:border-text-muted'
+                    }`}
+                  >
+                    {icon} {tab}
                   </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
-          </GlassCard>
 
-          {/* Similar Historical Cases Card */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">Similar Historical Cases</h3>
-            <div className="space-y-2">
-              {displayData.similarCases.length > 0 ? (
-                displayData.similarCases.map((sc, i) => (
-                  <button key={i} onClick={() => setSimilarCaseModal(sc.citation)}
-                    className="w-full flex items-center justify-between p-3 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
-                    <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-semibold text-text-primary">{sc.citation}</h4>
-                      <p className="text-xs text-text-secondary">{sc.outcome}</p>
-                    </div>
-                    <span className={`px-3 py-1.5 rounded-full text-xs font-bold shrink-0 ml-3 border ${
-                      sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
-                        : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
-                        : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
-                    }`}>
-                      {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
-                    </span>
-                  </button>
-                ))
+            {/* File upload or text area */}
+            {activeInputTab === 'Upload Doc' ? (
+              <div className="mb-3">
+                <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-border rounded-xl cursor-pointer bg-bg-elevated hover:bg-bg-elevated/80 transition-colors">
+                  <div className="flex flex-col items-center justify-center py-3">
+                    {isExtracting ? (
+                      <>
+                        <Loader2 className="w-6 h-6 text-accent-primary animate-spin mb-1" />
+                        <p className="text-xs text-text-secondary">Extracting text...</p>
+                      </>
+                    ) : uploadedFiles.length > 0 ? (
+                      <>
+                        <FileText className="w-6 h-6 text-success mb-1" />
+                        <p className="text-xs font-medium text-text-primary">
+                          {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''} uploaded
+                        </p>
+                        <p className="text-xs text-text-secondary mt-0.5">
+                          Click to change
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 text-text-muted mb-1" />
+                        <p className="text-xs text-text-secondary">
+                          <span className="font-medium text-accent-primary">Click to upload</span>
+                        </p>
+                        <p className="text-xs text-text-muted mt-0.5">{SUPPORTED_FILE_TYPES_LABEL}</p>
+                      </>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept={SUPPORTED_FILE_TYPES}
+                    multiple
+                    onChange={handleFileUpload}
+                  />
+                </label>
+
+                {/* Uploaded files list */}
+                {fileInfos.length > 0 && (
+                  <div className="mt-2 space-y-1 max-h-36 overflow-y-auto">
+                    {fileInfos.map((info, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 bg-bg-elevated rounded-lg">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <FileText className="w-3.5 h-3.5 text-accent-primary shrink-0" />
+                          <span className="text-xs text-text-primary truncate">{info.name}</span>
+                        </div>
+                        <span className="text-xs text-text-muted shrink-0 ml-2">
+                          {info.pages}p • {info.wordCount.toLocaleString()}w
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <textarea
+                value={caseText}
+                onChange={(e) => setCaseText(e.target.value)}
+                placeholder="Type or paste your case details here..."
+                className="w-full h-32 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-3"
+              />
+            )}
+
+            {/* Recommendations */}
+            <label className="block text-xs font-semibold text-text-primary mb-1">
+              User Recommendations/Consideration:
+            </label>
+            <textarea
+              value={recommendations}
+              onChange={(e) => setRecommendations(e.target.value)}
+              placeholder="Type or paste the details of your case here..."
+              className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
+            />
+
+            {/* Analyze button */}
+            <button
+              onClick={handleAnalyze}
+              disabled={isAnalyzing}
+              className="gradient-btn w-full py-3 text-center font-bold text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+            >
+              {isAnalyzing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {analyzeProgress || 'Analyzing...'}
+                </>
               ) : (
-                <p className="text-sm text-text-muted italic">No similar cases found for this analysis.</p>
+                <>
+                  <Brain className="w-4 h-4" />
+                  Analyze Case{extractedTexts.length > 1 ? ` (${extractedTexts.length} files)` : ''}
+                </>
+              )}
+            </button>
+          </GlassCard>
+
+          {/* Export floating popover */}
+          {hasAnyResult && (
+            <div className="relative">
+              <button
+                onClick={() => setShowExport(!showExport)}
+                className="gradient-btn w-full py-2.5 text-center font-medium text-white text-sm flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Export
+              </button>
+
+              {/* Popover bubble — opens upward */}
+              {showExport && (
+                <>
+                  {/* Backdrop to close on click outside */}
+                  <div className="fixed inset-0 z-40" onClick={() => setShowExport(false)} />
+                  
+                  <div className="absolute bottom-full mb-2 left-0 right-0 z-50 glass-card p-2 shadow-2xl animate-[slideIn_0.2s_ease-out]">
+                    <div className="space-y-1">
+                      <button onClick={() => { handleExport('Download PDF Report'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Download className="w-4 h-4" /> Download PDF
+                      </button>
+                      <button onClick={() => { handleExport('Export to Word'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <FileText className="w-4 h-4" /> Export Word
+                      </button>
+                      <button onClick={() => { handleExport('Save to Case File'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Save className="w-4 h-4" /> Save
+                      </button>
+                      <button onClick={() => { handleExport('Email Report'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Mail className="w-4 h-4" /> Email
+                      </button>
+                      <button onClick={() => { handleExport('Print Analysis'); setShowExport(false); }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors">
+                        <Printer className="w-4 h-4" /> Print
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
-          </GlassCard>
+          )}
+        </div>
 
-          {/* Required Documents Card */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">📁 Required Documents</h3>
-            <div className="space-y-2">
-              {displayData.requiredDocuments.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-3 bg-bg-elevated rounded-lg">
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <input type="checkbox" defaultChecked={doc.checked} className="w-4 h-4 rounded accent-accent-primary shrink-0" />
-                    <span className="text-sm text-text-secondary truncate">{doc.description}</span>
-                  </div>
-                  <button onClick={() => setDocModal(doc.id)}
-                    className="px-4 py-1.5 rounded-lg text-xs font-semibold shrink-0 ml-3 hover:opacity-80 transition-opacity"
-                    style={{
-                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #5a3a06 0%, #c89b2c 30%, #ffe08a 55%, #b8860b 80%, #5a3a05 100%)',
-                      boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.6)',
-                      border: '1px solid rgba(90,60,10,0.9)',
-                      color: '#000000',
-                    }}>
-                    Create
-                  </button>
-                </div>
-              ))}
+        {/* MIDDLE + RIGHT COLUMNS - Carousel or standard layout */}
+        {isCarousel ? (
+          <div
+            className="md:col-span-9 relative"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Carousel header with file name and navigation */}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-text-primary truncate">
+                📄 {analysisResults[activeSlide]?.fileName}
+              </h3>
+              <span className="text-xs text-text-muted">
+                {activeSlide + 1} / {analysisResults.length}
+              </span>
             </div>
-          </GlassCard>
 
-          {/* Expert Recommendation Card */}
-          <GlassCard className="!p-6">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">Expert Recommendation</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              {displayData.expertRecommendation}
-            </p>
-          </GlassCard>
-
-          {/* Export Actions — Collapsible */}
-          <div className="relative flex justify-center">
+            {/* Navigation arrows */}
             <button
-              onClick={() => setShowExport(!showExport)}
-              className="px-8 py-2.5 text-center font-semibold text-white text-sm flex items-center justify-center gap-2 rounded-lg"
-              style={{
-                background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)',
-                boxShadow: 'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -4px 6px rgba(0,0,0,0.45), 0 8px 18px rgba(0,0,0,0.6)',
-                border: '1px solid rgba(75,35,10,0.9)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-              }}
+              onClick={() => setActiveSlide(Math.max(0, activeSlide - 1))}
+              disabled={activeSlide === 0}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-accent-primary text-white shadow-xl flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
-              <Download className="w-5 h-5" />
-              Export & Actions
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setActiveSlide(Math.min(analysisResults.length - 1, activeSlide + 1))}
+              disabled={activeSlide === analysisResults.length - 1}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-accent-primary text-white shadow-xl flex items-center justify-center hover:bg-accent-hover disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
             </button>
 
-            {showExport && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowExport(false)} />
-                <div
-                  className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-80 p-4 rounded-xl animate-[slideIn_0.2s_ease-out]"
-                  style={{
-                    background: 'linear-gradient(145deg, #15284A, #0B1630)',
-                    border: '1px solid rgba(205,140,82,.25)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,.1), 0 8px 32px rgba(0,0,0,.6)',
-                  }}
-                >
-                  <p className="text-xs font-semibold mb-3 tracking-wider uppercase" style={{ color: '#D4A574' }}>Export Options</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => { handleExport('Download PDF Report'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <Download className="w-4 h-4" /> PDF
-                    </button>
-                    <button onClick={() => { handleExport('Export to Word'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <FileText className="w-4 h-4" /> Word
-                    </button>
-                    <button onClick={() => { handleExport('Export to Excel'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <FileText className="w-4 h-4" /> Excel
-                    </button>
-                    <button onClick={() => { handleExport('Export to CSV'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <FileText className="w-4 h-4" /> CSV
-                    </button>
-                    <button onClick={() => { handleExport('Save to Case File'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <Save className="w-4 h-4" /> Save
-                    </button>
-                    <button onClick={() => { handleExport('Email Report'); setShowExport(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <Mail className="w-4 h-4" /> Email
-                    </button>
-                    <button onClick={() => { handleExport('Print Analysis'); setShowExport(false); }}
-                      className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                      style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 45%), linear-gradient(145deg, #3d1f04 0%, #a0522d 30%, #cd8c52 55%, #8b4513 80%, #3d1f04 100%)', border: '1px solid rgba(75,35,10,0.9)', color: '#ffffff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3)' }}>
-                      <Printer className="w-4 h-4" /> Print
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+            {/* Content grid */}
+            <div
+              key={activeSlide}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden animate-[slideIn_0.3s_ease-out]"
+              style={{ animation: 'slideIn 0.3s ease-out' }}
+            >
+              {/* Left half - Case Type, Sections, Docs */}
+              <div className="space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+                {displayData && (
+                  <>
+                    {/* Case Type & Jurisdiction */}
+                    <GlassCard className="!p-4">
+                      <h3 className="text-sm font-semibold text-text-primary mb-3">Case Type &amp; Jurisdiction</h3>
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {displayData.caseTypes.map((ct) => (
+                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                            className="px-3 py-1 rounded-full cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                            {ct}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
+                    </GlassCard>
+
+                    {/* Applicable Legal Sections */}
+                    <GlassCard className="!p-4">
+                      <h3 className="text-sm font-semibold text-text-primary mb-3">Applicable Legal Sections</h3>
+                      <div className="space-y-2">
+                        {displayData.applicableSections.map((sec, i) => (
+                          <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
+                              <p className="text-xs text-text-secondary truncate">{sec.description}</p>
+                            </div>
+                            <MetallicButton
+                              label={sec.relevance}
+                              variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'}
+                              onClick={() => setSectionModal(sec.section)}
+                              theme={theme}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </GlassCard>
+
+                    {/* Required Documents */}
+                    <GlassCard className="!p-4">
+                      <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
+                      <div className="space-y-2">
+                        {displayData.requiredDocuments.map((doc) => (
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
+                              <span className="text-xs text-text-secondary truncate">{doc.description}</span>
+                            </div>
+                            <MetallicButton
+                              label="Create"
+                              variant="bronze"
+                              onClick={() => setDocModal(doc.id)}
+                              theme={theme}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </GlassCard>
+                  </>
+                )}
+              </div>
+
+              {/* Right half - Similar Cases, Outcome, Points */}
+              <div className="space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+                {displayData && (
+                  <>
+                    {/* Similar Historical Cases */}
+                    <GlassCard className="!p-4">
+                      <h3 className="text-sm font-semibold text-text-primary mb-3">Similar Historical Cases</h3>
+                      <div className="space-y-2">
+                        {displayData.similarCases.length > 0 ? (
+                          displayData.similarCases.map((sc, i) => (
+                            <button key={i} onClick={() => setSimilarCaseModal(sc.citation)}
+                              className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                              <div className="min-w-0 flex-1">
+                                <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
+                                <p className="text-xs text-text-secondary">{sc.outcome}</p>
+                              </div>
+                              <span className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 ml-2 border ${
+                                sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
+                                  : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
+                                  : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
+                              }`}>
+                                {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                              </span>
+                            </button>
+                          ))
+                        ) : (
+                          <p className="text-xs text-text-muted italic">No similar cases found for this analysis.</p>
+                        )}
+                      </div>
+                    </GlassCard>
+
+                    {/* Outcome Prediction + Key Winning Points + Risk Factors */}
+                    <GlassCard className="!p-4">
+                      <h3 className="text-sm font-semibold text-text-primary mb-3">Outcome Prediction</h3>
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="w-44 h-44 relative">
+                          <MetallicPieChart
+                            winningPct={displayData.outcomePrediction.winningPct}
+                            losingPct={displayData.outcomePrediction.losingPct}
+                            theme={theme}
+                          />
+                        </div>
+                        <div className="flex-1 space-y-3">
+                          <div>
+                            <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                            <ul className="space-y-1">
+                              {displayData.keyWinningPoints.map((point, i) => (
+                                <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
+                                  <span className="text-success mt-0.5">•</span>{point}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                            <ul className="space-y-1">
+                              {displayData.riskFactors.map((risk, i) => (
+                                <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
+                                  <span className="text-danger mt-0.5">•</span>{risk}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom bar */}
+                      <div className="flex items-center gap-2 pt-3 border-t border-border">
+                        <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
+                          <span className="w-2 h-2 rounded-full bg-success" />
+                          <span className="text-xs text-success font-medium">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                        </div>
+                        <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
+                          <span className="w-2 h-2 rounded-full bg-danger" />
+                          <span className="text-xs text-danger font-medium">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                        </div>
+                        <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
+                          Explore
+                        </button>
+                      </div>
+                    </GlassCard>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {analysisResults.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveSlide(i)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    i === activeSlide
+                      ? 'bg-accent-primary scale-125'
+                      : 'bg-bg-elevated border border-border hover:bg-text-muted'
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            {/* Standard single-result layout: MIDDLE COLUMN (~37%) */}
+            <div className="md:col-span-4 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+              {isAnalyzing ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
+                  <p className="text-text-secondary text-sm">{analyzeProgress || 'Analyzing case...'}</p>
+                </div>
+              ) : !displayData ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Brain className="w-10 h-10 text-text-muted opacity-30" />
+                  <p className="text-text-muted text-xs text-center">Upload a case file or paste case details and click &quot;Analyze Case&quot; to see results here</p>
+                </div>
+              ) : (
+                <>
+                  {/* Case Type & Jurisdiction */}
+                  <GlassCard className="!p-4">
+                    <h3 className="text-sm font-semibold text-text-primary mb-3">Case Type &amp; Jurisdiction</h3>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {displayData.caseTypes.map((ct) => (
+                        <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                          className="px-3 py-1 rounded-full cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                          {ct}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
+                  </GlassCard>
 
-      {/* Empty state when no results and not analyzing */}
-      {!isAnalyzing && !hasAnyResult && (
-        <div className="flex flex-col items-center justify-center py-16 gap-4">
-          <Search className="w-12 h-12 text-text-muted opacity-30" />
-          <p className="text-text-muted text-sm text-center">Upload a case file or paste case details and click "Analyze Case" to see results here</p>
-        </div>
-      )}
+                  {/* Applicable Legal Sections */}
+                  <GlassCard className="!p-4">
+                    <h3 className="text-sm font-semibold text-text-primary mb-3">Applicable Legal Sections</h3>
+                    <div className="space-y-2">
+                      {displayData.applicableSections.map((sec, i) => (
+                        <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
+                            <p className="text-xs text-text-secondary truncate">{sec.description}</p>
+                          </div>
+                          <MetallicButton
+                            label={sec.relevance}
+                            variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'}
+                            onClick={() => setSectionModal(sec.section)}
+                            theme={theme}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </GlassCard>
 
+                  {/* Required Documents */}
+                  <GlassCard className="!p-4">
+                    <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
+                    <div className="space-y-2">
+                      {displayData.requiredDocuments.map((doc) => (
+                        <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
+                            <span className="text-xs text-text-secondary truncate">{doc.description}</span>
+                          </div>
+                          <MetallicButton
+                            label="Create"
+                            variant="bronze"
+                            onClick={() => setDocModal(doc.id)}
+                            theme={theme}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </GlassCard>
+                </>
+              )}
+            </div>
+
+            {/* RIGHT COLUMN (~38%) */}
+            <div className="md:col-span-5 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+              {isAnalyzing ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
+                  <p className="text-text-secondary text-sm">Processing results...</p>
+                </div>
+              ) : !displayData ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Search className="w-10 h-10 text-text-muted opacity-30" />
+                  <p className="text-text-muted text-xs text-center">Analysis results will appear here</p>
+                </div>
+              ) : (
+                <>
+                  {/* Similar Historical Cases */}
+                  <GlassCard className="!p-4">
+                    <h3 className="text-sm font-semibold text-text-primary mb-3">Similar Historical Cases</h3>
+                    <div className="space-y-2">
+                      {displayData.similarCases.length > 0 ? (
+                        displayData.similarCases.map((sc, i) => (
+                          <button key={i} onClick={() => setSimilarCaseModal(sc.citation)}
+                            className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
+                              <p className="text-xs text-text-secondary">{sc.outcome}</p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 ml-2 border ${
+                              sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
+                                : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
+                                : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
+                            }`}>
+                              {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                            </span>
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-xs text-text-muted italic">No similar cases found for this analysis.</p>
+                      )}
+                    </div>
+                  </GlassCard>
+
+                  {/* Outcome Prediction + Key Winning Points + Risk Factors */}
+                  <GlassCard className="!p-4">
+                    <h3 className="text-sm font-semibold text-text-primary mb-3">Outcome Prediction</h3>
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-44 h-44 relative">
+                        <MetallicPieChart
+                          winningPct={displayData.outcomePrediction.winningPct}
+                          losingPct={displayData.outcomePrediction.losingPct}
+                          theme={theme}
+                        />
+                      </div>
+                      <div className="flex-1 space-y-3">
+                        <div>
+                          <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                          <ul className="space-y-1">
+                            {displayData.keyWinningPoints.map((point, i) => (
+                              <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
+                                <span className="text-success mt-0.5">•</span>{point}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                          <ul className="space-y-1">
+                            {displayData.riskFactors.map((risk, i) => (
+                              <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
+                                <span className="text-danger mt-0.5">•</span>{risk}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom bar */}
+                    <div className="flex items-center gap-2 pt-3 border-t border-border">
+                      <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
+                        <span className="w-2 h-2 rounded-full bg-success" />
+                        <span className="text-xs text-success font-medium">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                      </div>
+                      <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
+                        <span className="w-2 h-2 rounded-full bg-danger" />
+                        <span className="text-xs text-danger font-medium">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                      </div>
+                      <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
+                        Explore
+                      </button>
+                    </div>
+                  </GlassCard>
+                </>
+              )}
+            </div>
+          </>
+        )}
+      </div>
 
       {/* ─── MODALS ─── */}
 
@@ -1049,7 +1428,7 @@ export function AnalyserPage() {
               setDocTitle('');
               setDocContent('');
             }}
-            className="gradient-btn w-full py-2.5 text-center font-medium text-black"
+            className="gradient-btn w-full py-2.5 text-center font-medium text-white"
           >
             Save Document
           </button>
@@ -1093,4 +1472,3 @@ export function AnalyserPage() {
     </div>
   );
 }
-
