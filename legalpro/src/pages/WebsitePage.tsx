@@ -266,7 +266,7 @@ export function WebsitePage() {
           FOOTER / CTA — Dark Navy
       ═══════════════════════════════════════════════════════════════ */}
       <footer className="py-16 md:py-20" style={{ backgroundColor: '#003d5c' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-14">
             <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-10 h-10" />
@@ -274,7 +274,7 @@ export function WebsitePage() {
           </div>
 
           {/* Two columns */}
-          <div className="grid md:grid-cols-2 gap-16 items-start">
+          <div className="grid md:grid-cols-2 gap-32 items-start">
             {/* Left: Join the Journey */}
             <div>
               <span
@@ -292,7 +292,7 @@ export function WebsitePage() {
             </div>
 
             {/* Right: Request Launch Access */}
-            <div>
+            <div className="text-left md:ml-auto">
               <span
                 className="inline-block px-4 py-1.5 text-xs font-bold tracking-wider rounded-md border mb-8"
                 style={{ borderColor: '#ffffff', color: '#ffffff' }}
@@ -305,7 +305,7 @@ export function WebsitePage() {
                   value={ctaEmail}
                   onChange={(e) => setCtaEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-64 px-4 py-2.5 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+                  className="w-64 px-4 py-2.5 border rounded-md text-sm text-left focus:outline-none focus:ring-2 focus:ring-white/30"
                   style={{ borderColor: '#cbd5e0', backgroundColor: '#ffffff', color: '#3c3c3c' }}
                 />
                 <button
