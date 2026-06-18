@@ -107,6 +107,14 @@ body {
   min-height: 100vh;
 }
 
+/* ── Force white text inside inputs/textareas on dark backgrounds ── */
+[data-theme="gold"] textarea,
+[data-theme="gold"] input[type="text"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] input[type="text"] {
+  color: #ffffff !important;
+}
+
 /* ── Card Utilities ── */
 
 .glass-card {
@@ -412,14 +420,16 @@ summary {
 }
 
 /* Gold theme: section headings get gold color */
-[data-theme="gold"] .text-text-primary {
-  color: #E8C068;
+[data-theme="gold"] .glass-card > h3,
+[data-theme="gold"] .glass-card > div > h3,
+[data-theme="gold"] .glass-card > div > h4 {
+  color: #F0D078;
 }
 
-/* Gold theme: secondary text stays lighter */
-[data-theme="gold"] h3.text-text-primary,
-[data-theme="gold"] h4.text-text-primary {
-  color: #F0D078;
+/* Gold theme: ensure textarea/input text stays white */
+[data-theme="gold"] textarea,
+[data-theme="gold"] input[type="text"] {
+  color: #ffffff !important;
 }
 
 /* ── Carousel Slide Animation ── */

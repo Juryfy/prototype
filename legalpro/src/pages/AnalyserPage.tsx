@@ -291,9 +291,9 @@ function MetallicButton({ label, variant, onClick, theme }: { label: string; var
 
   // Estimate width based on label length
   const charWidth = 6.5;
-  const padding = 16;
-  const width = Math.max(label.length * charWidth + padding * 2, 60);
-  const height = 22;
+  const padding = 12;
+  const width = Math.max(label.length * charWidth + padding * 2, 55);
+  const height = 24;
   const rx = 5;
 
   return (
@@ -312,7 +312,7 @@ function MetallicButton({ label, variant, onClick, theme }: { label: string; var
         </defs>
         <rect x="1" y="1" width={width - 2} height={height - 2} rx={rx} fill={`url(#${gradId})`} stroke={borderColor} strokeWidth="1.5" />
         <rect x="1" y="1" width={width - 2} height={height - 2} rx={rx} fill={`url(#${gradId}_shine)`} opacity="0.45" />
-        <text x={width / 2} y={height / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#2a1a00">
+        <text x={width / 2} y={height / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="700" fill="#1a0f00">
           {label}
         </text>
       </svg>
@@ -905,7 +905,7 @@ export function AnalyserPage() {
                 value={caseText}
                 onChange={(e) => setCaseText(e.target.value)}
                 placeholder="Type or paste your case details here..."
-                className="w-full h-32 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-3"
+                className="w-full h-32 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-white placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-3"
               />
             )}
 
@@ -917,7 +917,7 @@ export function AnalyserPage() {
               value={recommendations}
               onChange={(e) => setRecommendations(e.target.value)}
               placeholder="Type or paste the details of your case here..."
-              className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
+              className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-white placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
             />
 
             {/* Analyze button */}
@@ -1032,7 +1032,7 @@ export function AnalyserPage() {
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {displayData.caseTypes.map((ct) => (
                           <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-3 py-1 rounded-full cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                            className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
                             {ct}
                           </button>
                         ))}
@@ -1048,7 +1048,7 @@ export function AnalyserPage() {
                           <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
-                              <p className="text-xs text-text-secondary truncate">{sec.description}</p>
+                              <p className="text-xs text-text-secondary">{sec.description}</p>
                             </div>
                             <MetallicButton
                               label={sec.relevance}
@@ -1069,7 +1069,7 @@ export function AnalyserPage() {
                           <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                             <div className="flex items-center gap-2 flex-1 min-w-0">
                               <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
-                              <span className="text-xs text-text-secondary truncate">{doc.description}</span>
+                              <span className="text-xs text-text-secondary">{doc.description}</span>
                             </div>
                             <MetallicButton
                               label="Create"
@@ -1101,7 +1101,7 @@ export function AnalyserPage() {
                                 <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                                 <p className="text-xs text-text-secondary">{sc.outcome}</p>
                               </div>
-                              <span className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 ml-2 border ${
+                              <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${
                                 sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
                                   : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
                                   : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
@@ -1155,11 +1155,11 @@ export function AnalyserPage() {
                       <div className="flex items-center gap-2 pt-3 border-t border-border">
                         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
                           <span className="w-2 h-2 rounded-full bg-success" />
-                          <span className="text-xs text-success font-medium">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                          <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
                         </div>
                         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
                           <span className="w-2 h-2 rounded-full bg-danger" />
-                          <span className="text-xs text-danger font-medium">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                          <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                         </div>
                         <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
                           Explore
@@ -1209,7 +1209,7 @@ export function AnalyserPage() {
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {displayData.caseTypes.map((ct) => (
                         <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-3 py-1 rounded-full cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                          className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
                           {ct}
                         </button>
                       ))}
@@ -1225,7 +1225,7 @@ export function AnalyserPage() {
                         <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                           <div className="flex-1 min-w-0">
                             <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
-                            <p className="text-xs text-text-secondary truncate">{sec.description}</p>
+                            <p className="text-xs text-text-secondary">{sec.description}</p>
                           </div>
                           <MetallicButton
                             label={sec.relevance}
@@ -1246,7 +1246,7 @@ export function AnalyserPage() {
                         <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
-                            <span className="text-xs text-text-secondary truncate">{doc.description}</span>
+                            <span className="text-xs text-text-secondary">{doc.description}</span>
                           </div>
                           <MetallicButton
                             label="Create"
@@ -1288,7 +1288,7 @@ export function AnalyserPage() {
                               <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 ml-2 border ${
+                            <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${
                               sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
                                 : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
                                 : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
@@ -1342,11 +1342,11 @@ export function AnalyserPage() {
                     <div className="flex items-center gap-2 pt-3 border-t border-border">
                       <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
                         <span className="w-2 h-2 rounded-full bg-success" />
-                        <span className="text-xs text-success font-medium">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                        <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
                       </div>
                       <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
                         <span className="w-2 h-2 rounded-full bg-danger" />
-                        <span className="text-xs text-danger font-medium">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                        <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                       </div>
                       <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
                         Explore
