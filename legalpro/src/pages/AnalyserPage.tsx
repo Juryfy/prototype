@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+// import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { mockAnalysisResult, type AnalysisResult } from '@/data/mockAnalyserData';
 // import { analyzeCase } from '@/services/geminiService'; // AI disabled — using static analysis results
 import { extractTextFromFile, SUPPORTED_FILE_TYPES, SUPPORTED_FILE_TYPES_LABEL } from '@/services/fileExtractor';
@@ -178,7 +178,7 @@ const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 
 /** Normalize raw parsed JSON into a valid AnalysisResult with defaults (used when AI is enabled) */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
+function _normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   const normalized: AnalysisResult = {
     caseSummary: {
       legalIssue: (parsed.caseSummary as Record<string, unknown>)?.legalIssue as string || 'Analysis completed.',
@@ -221,7 +221,7 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
 }
 
 export function AnalyserPage() {
-  const { theme } = useTheme();
+  useTheme();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [caseText, setCaseText] = useState('');
   const [activeInputTab, setActiveInputTab] = useState<string>('Text Entry');

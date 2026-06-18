@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { MessageCircle, Send, Bot, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { chatWithGemini } from '@/services/geminiService';
 import firData from '@/data/firRecords.json';
