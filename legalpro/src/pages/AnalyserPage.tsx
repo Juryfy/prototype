@@ -178,7 +178,7 @@ const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 
 /** Normalize raw parsed JSON into a valid AnalysisResult with defaults (used when AI is enabled) */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function _normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
+export function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   const normalized: AnalysisResult = {
     caseSummary: {
       legalIssue: (parsed.caseSummary as Record<string, unknown>)?.legalIssue as string || 'Analysis completed.',
