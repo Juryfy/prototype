@@ -15,8 +15,7 @@ import {
 } from 'lucide-react';
 // Recharts removed — using custom SVG metallic pie chart
 // mockAnalysisResult import kept for reference but unused in fallback mode
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { mockAnalysisResult, type AnalysisResult } from '@/data/mockAnalyserData';
+import { type AnalysisResult } from '@/data/mockAnalyserData';
 // AI service commented out — using fallback data instead
 // import { analyzeCase } from '@/services/geminiService';
 import { extractTextFromFile, SUPPORTED_FILE_TYPES, SUPPORTED_FILE_TYPES_LABEL } from '@/services/fileExtractor';
@@ -500,8 +499,7 @@ function MetallicPieChart({ winningPct, losingPct, theme }: { winningPct: number
 
 const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 
-/** Normalize raw parsed JSON into a valid AnalysisResult with defaults (kept for future AI re-enablement) */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* normalizeResult — kept for future AI re-enablement
 function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   const normalized: AnalysisResult = {
     caseSummary: {
@@ -535,14 +533,13 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
     strategy: (parsed.strategy as AnalysisResult['strategy']) || [],
     expertRecommendation: (parsed.expertRecommendation as string) || 'Please consult with a qualified advocate for specific legal advice.',
   };
-
-  // Ensure winning + losing = 100
   const total = normalized.outcomePrediction.winningPct + normalized.outcomePrediction.losingPct;
   if (total !== 100) {
     normalized.outcomePrediction.losingPct = 100 - normalized.outcomePrediction.winningPct;
   }
   return normalized;
 }
+*/
 
 export function AnalyserPage() {
   const { theme } = useTheme();
@@ -551,8 +548,7 @@ export function AnalyserPage() {
   const [activeInputTab, setActiveInputTab] = useState<string>('Text Entry');
   const [recommendations, setRecommendations] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [, setAnalysisError] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
 
   // Bulk upload states
