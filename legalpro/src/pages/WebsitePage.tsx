@@ -32,10 +32,10 @@ export function WebsitePage() {
           NAVIGATION
       ═══════════════════════════════════════════════════════════════ */}
       <nav className="sticky top-0 z-50 backdrop-blur-md border-b" style={{ backgroundColor: 'rgba(245, 241, 232, 0.95)', borderColor: '#e8e0d4' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
-            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-10 h-10" />
-            <span className="text-lg font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-4">
+          <div className="flex items-center gap-4">
+            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-20 h-20 md:w-32 md:h-32" />
+            <span className="text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
           <Link
             to="/app/home"
@@ -107,7 +107,7 @@ export function WebsitePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-6 items-center">
           {/* Left: Image */}
           <div>
-            <img src="/images/image7.png" alt="A Nation Waiting In Line For Justice" className="w-full h-auto " />
+            <img src="/images/image3.png" alt="A Nation Waiting In Line For Justice" className="w-full h-auto " />
           </div>
 
           {/* Right: Content */}
@@ -267,26 +267,21 @@ export function WebsitePage() {
       ═══════════════════════════════════════════════════════════════ */}
       <footer className="py-16 md:py-20" style={{ backgroundColor: '#003d5c' }}>
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-14">
-            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-10 h-10" />
-            <span className="text-lg font-bold text-white tracking-wide">JURYFY AI SOLUTIONS</span>
-          </div>
 
           {/* Two columns */}
           <div className="grid md:grid-cols-2 gap-32 items-start">
             {/* Left: Join the Journey */}
             <div>
               <span
-                className="inline-block px-4 py-1.5 text-xs font-bold tracking-wider rounded-md border mb-8"
+                className="inline-block px-5 py-2 text-sm font-bold tracking-wider rounded-md border mb-8"
                 style={{ borderColor: '#ffffff', color: '#ffffff' }}
               >
                 JOIN THE JOURNEY
               </span>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-snug">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-snug">
                 A Nation Waiting In Line For Justice
               </h2>
-              <p className="leading-relaxed text-sm" style={{ color: '#94a3b8' }}>
+              <p className="leading-relaxed text-base md:text-lg" style={{ color: '#94a3b8' }}>
                 {"We're Building The Future Of Legal Technology In India. Our Platform Is Currently In Development, And We're Opening Early Access To Legal Professionals, Institutions, Researchers, And Founders Who Want To Shape The Product Alongside Us. Join The Waitlist And Be The First To Know When We Launch."}
               </p>
             </div>
@@ -294,29 +289,29 @@ export function WebsitePage() {
             {/* Right: Request Launch Access */}
             <div className="text-left md:ml-auto">
               <span
-                className="inline-block px-4 py-1.5 text-xs font-bold tracking-wider rounded-md border mb-8"
+                className="inline-block px-5 py-2 text-sm font-bold tracking-wider rounded-md border mb-8"
                 style={{ borderColor: '#ffffff', color: '#ffffff' }}
               >
                 REQUEST LAUNCH ACCESS
               </span>
-              <form onSubmit={handleCtaSubmit} className="flex gap-3 mb-3">
+              <form onSubmit={handleCtaSubmit} className="flex gap-3 mb-4">
                 <input
                   type="email"
                   value={ctaEmail}
                   onChange={(e) => setCtaEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-64 px-4 py-2.5 border rounded-md text-sm text-left focus:outline-none focus:ring-2 focus:ring-white/30"
+                  className="w-72 px-4 py-3 border rounded-md text-base text-left focus:outline-none focus:ring-2 focus:ring-white/30"
                   style={{ borderColor: '#cbd5e0', backgroundColor: '#ffffff', color: '#3c3c3c' }}
                 />
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap border hover:bg-white/10"
+                  className="px-7 py-3 text-base font-medium rounded-md transition-colors whitespace-nowrap border hover:bg-white/10"
                   style={{ borderColor: '#ffffff', color: '#ffffff', backgroundColor: 'transparent' }}
                 >
                   Notify Me
                 </button>
               </form>
-              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+              <p style={{ color: '#94a3b8', fontSize: '1rem' }}>
                 Suitable For Legal Professionals, Founders, Institutions, Researchers...
               </p>
             </div>

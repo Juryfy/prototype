@@ -129,19 +129,19 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary">
-      {/* Header — single row: logo+name | title+subtitle | login */}
-      <header className="flex items-center justify-between px-4 py-3 md:px-8 gap-4">
-        <div className="flex items-center gap-3 shrink-0">
-          <img src="/logo.png" alt="Juryfy" className="w-14 h-14 md:w-[72px] md:h-[72px] brightness-150 contrast-125 drop-shadow-[0_0_6px_rgba(99,102,241,0.4)]" />
-          <span className="text-2xl md:text-3xl font-bold gradient-text">Juryfy</span>
+      {/* Header — 3 columns: logo+name | title centered | buttons */}
+      <header className="grid grid-cols-[1fr_2fr_1fr] items-center px-8 py-6 md:px-12 md:py-8 gap-4">
+        <div className="flex items-center gap-4 shrink-0">
+          <img src="/logo.png" alt="Juryfy" className="w-20 h-20 md:w-32 md:h-32 brightness-150 contrast-125 drop-shadow-[0_0_6px_rgba(99,102,241,0.4)]" />
+          <span className="text-lg md:text-2xl font-bold gradient-text tracking-wide uppercase">Juryfy AI Solutions</span>
         </div>
-        <div className="flex-1 text-center hidden sm:block">
-          <h1 className="text-xl md:text-3xl font-bold gradient-text">Find Trusted Lawyers Near You</h1>
-          <p className="text-text-secondary text-sm md:text-base">
+        <div className="text-center hidden sm:block">
+          <h1 className="text-xl md:text-3xl font-bold gradient-text leading-snug">Find Trusted Lawyers Near You</h1>
+          <p className="text-text-secondary text-sm md:text-base mt-2 leading-relaxed">
             From criminal to corporate, quickly find nearby India lawyers who fit needs, and start private chat to explain case.
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center justify-end gap-2">
           <button
             onClick={cycleTheme}
             className={`p-2 rounded-lg transition-all ${theme === 'gold' ? 'gradient-btn' : 'bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white'}`}
