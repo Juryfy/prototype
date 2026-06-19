@@ -34,7 +34,7 @@ export function WebsitePage() {
       <nav className="sticky top-0 z-50 backdrop-blur-md border-b" style={{ backgroundColor: 'rgba(245, 241, 232, 0.95)', borderColor: '#e8e0d4' }}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-4">
           <div className="flex items-center gap-4">
-            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-20 h-20 md:w-32 md:h-32" />
+            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-24 h-24 md:w-40 md:h-40" />
             <span className="text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
           <Link
