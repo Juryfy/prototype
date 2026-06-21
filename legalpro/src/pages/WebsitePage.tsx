@@ -68,9 +68,9 @@ export function WebsitePage() {
             Coming Soon
           </span>
 
-          {/* Main Heading — bold, single line, no wrap */}
+          {/* Main Heading — bold, centered, single line */}
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-5 whitespace-nowrap"
+            className="text-3xl md:text-5xl lg:text-5xl font-black leading-tight mb-5 whitespace-nowrap"
             style={{ color: '#00416a' }}
           >
             Legal Intelligence Finally Connected
@@ -107,7 +107,7 @@ export function WebsitePage() {
         <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
           {/* Left: Image */}
           <div>
-            <img src="/images/image3.png" alt="A Nation Waiting In Line For Justice" className="w-full h-full object-contain scale-110" />
+            <img src="/images/image3.png" alt="A Nation Waiting In Line For Justice" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
@@ -152,7 +152,7 @@ export function WebsitePage() {
 
           {/* Right: Image */}
           <div>
-            <img src="/images/image4.png" alt="Lives On Hold, Behind Bars" className="w-full h-full object-contain scale-110" />
+            <img src="/images/image4.png" alt="Lives On Hold, Behind Bars" className="w-full h-full object-contain scale-100" />
           </div>
         </div>
       </section>
@@ -164,7 +164,7 @@ export function WebsitePage() {
         <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
           {/* Left: Image */}
           <div>
-            <img src="/images/image5.png" alt="Taxpayer Money Locked Inside Prisons" className="w-full h-full object-contain scale-110" />
+            <img src="/images/image5.png" alt="Taxpayer Money Locked Inside Prisons" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
@@ -207,7 +207,7 @@ export function WebsitePage() {
 
           {/* Right: Image */}
           <div>
-            <img src="/images/image6.png" alt="Indian Lawyers Are Overloaded" className="w-full h-full object-contain scale-110" />
+            <img src="/images/image6.png" alt="Indian Lawyers Are Overloaded" className="w-full h-full object-contain scale-100" />
           </div>
         </div>
       </section>
@@ -219,7 +219,7 @@ export function WebsitePage() {
         <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
           {/* Left: Image — larger, fills space */}
           <div>
-            <img src="/images/image2.png" alt="One Lawyer, Many Superpowers" className="w-full h-full object-contain scale-110" />
+            <img src="/images/image2.png" alt="One Lawyer, Many Superpowers" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
