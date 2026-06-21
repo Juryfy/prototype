@@ -70,8 +70,8 @@ export function WebsitePage() {
 
           {/* Main Heading — bold, centered, single line */}
           <h1
-            className="text-3xl md:text-5xl lg:text-5xl font-black leading-tight mb-5 whitespace-nowrap"
-            style={{ color: '#00416a' }}
+            className="font-black leading-tight mb-5 whitespace-nowrap"
+            style={{ color: '#00416a', fontSize: '64px' }}
           >
             Legal Intelligence Finally Connected
           </h1>
