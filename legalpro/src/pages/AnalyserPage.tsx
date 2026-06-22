@@ -901,7 +901,7 @@ export function AnalyserPage() {
                 value={caseText}
                 onChange={(e) => setCaseText(e.target.value)}
                 placeholder="Type or paste your case details here..."
-                className="w-full h-32 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-white placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-3"
+                className="w-full h-32 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-3"
               />
             )}
 
@@ -913,7 +913,7 @@ export function AnalyserPage() {
               value={recommendations}
               onChange={(e) => setRecommendations(e.target.value)}
               placeholder="Type or paste the details of your case here..."
-              className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-white placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
+              className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
             />
 
             {/* Analyze button */}
@@ -1151,11 +1151,11 @@ export function AnalyserPage() {
                       <div className="flex items-center gap-2 pt-3 border-t border-border">
                         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
                           <span className="w-2 h-2 rounded-full bg-success" />
-                          <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                          <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
                         </div>
                         <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
                           <span className="w-2 h-2 rounded-full bg-danger" />
-                          <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                          <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                         </div>
                         <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
                           Explore
@@ -1338,11 +1338,11 @@ export function AnalyserPage() {
                     <div className="flex items-center gap-2 pt-3 border-t border-border">
                       <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/30">
                         <span className="w-2 h-2 rounded-full bg-success" />
-                        <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
+                        <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.winningPct}% - Winning</span>
                       </div>
                       <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30">
                         <span className="w-2 h-2 rounded-full bg-danger" />
-                        <span className="text-sm text-white font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
+                        <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                       </div>
                       <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
                         Explore

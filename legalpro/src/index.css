@@ -1,56 +1,63 @@
 @import "tailwindcss";
 
+/* ── Global Font Override ── */
+@layer base {
+  html, body, * {
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
+  }
+}
+
 /* ── Theme Variables ── */
 
 [data-theme="light"],
 :root {
-  --bg-primary: #F8F9FA;
-  --bg-card: #FFFFFF;
-  --bg-elevated: #F0F2F5;
-  --accent-primary: #11CDEF;
-  --accent-hover: #0DAFCF;
+  --bg-primary: #f7f6f2;
+  --bg-card: #f9f8f5;
+  --bg-elevated: #f0efeb;
+  --accent-primary: #01696f;
+  --accent-hover: #0c4e54;
   --success: #2DCE89;
   --warning: #FB6340;
   --danger: #F5365C;
-  --text-primary: #172B4D;
-  --text-secondary: #525F7F;
-  --text-muted: #8898AA;
-  --border-color: #E9ECEF;
-  --sidebar-bg: #172B4D;
-  --gradient: linear-gradient(135deg, #11CDEF, #1171EF);
-  --pie-winning-start: #11CDEF;
-  --pie-winning-mid: #0DAFCF;
-  --pie-winning-end: #1171EF;
+  --text-primary: #28251d;
+  --text-secondary: #7a7974;
+  --text-muted: #9e9b95;
+  --border-color: #d4d1ca;
+  --sidebar-bg: #f9f8f5;
+  --gradient: linear-gradient(135deg, #01696f, #0c4e54);
+  --pie-winning-start: #01696f;
+  --pie-winning-mid: #0c4e54;
+  --pie-winning-end: #01696f;
   --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #e8e8e8 35%, #c0c0c0 70%, #f0f0f0 100%);
   --btn-text: #ffffff;
-  --bar-winning-color: #11CDEF;
-  --bar-losing-color: #C0C0C0;
-  --bar-track: #E9ECEF;
+  --bar-winning-color: #01696f;
+  --bar-losing-color: #d4d1ca;
+  --bar-track: #f0efeb;
 }
 
 [data-theme="dark"] {
-  --bg-primary: #0A0E1A;
+  --bg-primary: #0b1220;
   --bg-card: #111827;
-  --bg-elevated: #1E293B;
-  --accent-primary: #6366F1;
-  --accent-hover: #818CF8;
+  --bg-elevated: #1e293b;
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
   --success: #10B981;
   --warning: #F59E0B;
   --danger: #F43F5E;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border-color: #1E293B;
-  --sidebar-bg: rgba(17, 24, 39, 0.8);
-  --gradient: linear-gradient(135deg, #6366F1, #818CF8);
-  --pie-winning-start: #6366F1;
-  --pie-winning-mid: #818CF8;
-  --pie-winning-end: #4F46E5;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #1e293b;
+  --sidebar-bg: #020617;
+  --gradient: linear-gradient(135deg, #3b82f6, #2563eb);
+  --pie-winning-start: #3b82f6;
+  --pie-winning-mid: #2563eb;
+  --pie-winning-end: #1d4ed8;
   --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #d6d6d6 35%, #9a9a9a 70%, #f2f2f2 100%);
   --btn-text: #ffffff;
-  --bar-winning-color: #6366F1;
-  --bar-losing-color: #64748B;
-  --bar-track: #1E293B;
+  --bar-winning-color: #3b82f6;
+  --bar-losing-color: #64748b;
+  --bar-track: #1e293b;
 }
 
 [data-theme="gold"] {
@@ -111,12 +118,16 @@ body {
   min-height: 100vh;
 }
 
-/* ── Force white text inside inputs/textareas on dark backgrounds ── */
+/* ── Force appropriate text color inside inputs/textareas ── */
 [data-theme="gold"] textarea,
 [data-theme="gold"] input[type="text"],
 [data-theme="dark"] textarea,
 [data-theme="dark"] input[type="text"] {
   color: #ffffff !important;
+}
+[data-theme="light"] textarea,
+[data-theme="light"] input[type="text"] {
+  color: #28251d !important;
 }
 
 /* ── Card Utilities ── */
@@ -127,14 +138,14 @@ body {
 }
 
 [data-theme="light"] .glass-card {
-  background: #FFFFFF;
-  border: 1px solid #E9ECEF;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  background: #f9f8f5;
+  border: 1px solid #d4d1ca;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] .glass-card {
-  background: rgba(17, 24, 39, 0.7);
-  border: 1px solid #1E293B;
+  background: #111827;
+  border: 1px solid #1e293b;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
 }
@@ -150,11 +161,11 @@ body {
 }
 
 [data-theme="light"] .glass-card-hover:hover {
-  box-shadow: 0 4px 24px rgba(17, 205, 239, 0.12);
+  box-shadow: 0 4px 24px rgba(1, 105, 111, 0.1);
 }
 
 [data-theme="dark"] .glass-card-hover:hover {
-  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.15);
 }
 
 [data-theme="gold"] .glass-card-hover:hover {
@@ -168,11 +179,12 @@ body {
 }
 
 [data-theme="light"] .glass-sidebar {
-  background: #172B4D;
+  background: #f9f8f5;
+  border-right: 1px solid #d4d1ca;
 }
 
 [data-theme="dark"] .glass-sidebar {
-  background: rgba(17, 24, 39, 0.8);
+  background: #020617;
   backdrop-filter: blur(16px);
 }
 
@@ -197,13 +209,13 @@ body {
 }
 
 [data-theme="light"] .gradient-btn {
-  background: linear-gradient(135deg, #11CDEF, #1171EF);
-  box-shadow: 0 4px 6px rgba(17, 205, 239, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #01696f, #0c4e54);
+  box-shadow: 0 4px 6px rgba(1, 105, 111, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .gradient-btn {
-  background: linear-gradient(135deg, #6366F1, #818CF8);
-  box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="gold"] .gradient-btn {
@@ -387,31 +399,31 @@ summary {
 
 /* Light theme: relevance badges */
 [data-theme="light"] .badge-high {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1.5px solid #fca5a5;
+  background: #e6f4f4;
+  color: #01696f;
+  border: 1.5px solid #01696f;
   border-radius: 6px;
 }
 
 [data-theme="light"] .badge-medium {
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1.5px solid #93c5fd;
+  background: #f0efeb;
+  color: #0c4e54;
+  border: 1.5px solid #d4d1ca;
   border-radius: 6px;
 }
 
 /* Dark theme: relevance badges */
 [data-theme="dark"] .badge-high {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1.5px solid rgba(59, 130, 246, 0.4);
   border-radius: 6px;
 }
 
 [data-theme="dark"] .badge-medium {
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-  border: 1.5px solid rgba(99, 102, 241, 0.4);
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+  border: 1.5px solid rgba(148, 163, 184, 0.4);
   border-radius: 6px;
 }
 

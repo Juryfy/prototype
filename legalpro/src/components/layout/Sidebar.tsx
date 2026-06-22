@@ -91,6 +91,8 @@ export function Sidebar() {
           return 'bg-accent-primary/20 text-accent-primary';
         case 'gold':
           return 'bg-[#D4A853]/20 text-[#D4A853]';
+        case 'light':
+          return 'bg-accent-primary/10 text-accent-primary font-semibold';
         default:
           return 'bg-white/15 text-white';
       }
@@ -98,6 +100,8 @@ export function Sidebar() {
     switch (theme) {
       case 'gold':
         return 'text-[#E0D0B0] hover:text-[#F3DE9A] hover:bg-[#D4A853]/10';
+      case 'light':
+        return 'text-text-secondary hover:text-accent-primary hover:bg-accent-primary/5';
       default:
         return 'text-white/60 hover:text-white hover:bg-white/10';
     }
@@ -136,7 +140,7 @@ export function Sidebar() {
         <div className={`flex items-center gap-3 p-4 border-b border-white/10 ${collapsed ? 'justify-center' : ''}`}>
           <img src="/logo.png" alt="Juryfy" className="w-[72px] h-[72px] shrink-0 brightness-150 contrast-125 drop-shadow-[0_0_8px_rgba(17,205,239,0.4)]" />
           {!collapsed && (
-            <span className="text-2xl font-bold tracking-tight text-white">Juryfy</span>
+            <span className={`text-2xl font-bold tracking-tight ${theme === 'light' ? 'text-text-primary' : 'text-white'}`}>Juryfy</span>
           )}
         </div>
 
@@ -168,7 +172,7 @@ export function Sidebar() {
         <div className="border-t border-white/10 px-2 py-3 space-y-1">
           {/* Lawyers Near You link */}
           <NavLink
-            to="/app/profiling"
+            to="/app/home"
             onClick={() => setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${getNavLinkClasses(false)} ${collapsed ? 'justify-center' : ''}`}
             title={collapsed ? 'Lawyers Near You' : undefined}
@@ -230,7 +234,7 @@ export function Sidebar() {
 
         {/* Collapse toggle (desktop only) */}
         <button
-          className="hidden md:flex items-center justify-center p-3 border-t border-white/10 text-white/40 hover:text-white transition-colors"
+          className={`hidden md:flex items-center justify-center p-3 border-t ${theme === 'light' ? 'border-border text-text-muted hover:text-text-primary' : 'border-white/10 text-white/40 hover:text-white'} transition-colors`}
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
