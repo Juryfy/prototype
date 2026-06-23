@@ -102,9 +102,6 @@ export function LoginPage() {
             </Link>
           </p>
 
-          <p className="text-text-muted text-xs text-center mt-3">
-            Demo: use any email with password "demo123"
-          </p>
 
           <Link
             to="/"
