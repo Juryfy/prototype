@@ -105,6 +105,13 @@ export function LoginPage() {
           <p className="text-text-muted text-xs text-center mt-3">
             Demo: use any email with password "demo123"
           </p>
+
+          <Link
+            to="/"
+            className="block text-text-muted text-xs text-center mt-4 hover:text-accent-primary transition-colors"
+          >
+            ← Back to Home
+          </Link>
         </div>
       </div>
     </div>
