@@ -9,15 +9,36 @@ export function WebsitePage() {
       alert('Please enter a valid email address.');
       return;
     }
+
+    // Store locally
     const existing = JSON.parse(localStorage.getItem('juryfy_waitlist') || '[]');
     existing.push({ email, date: new Date().toISOString() });
     localStorage.setItem('juryfy_waitlist', JSON.stringify(existing));
 
-    const subject = encodeURIComponent('Juryfy AI - New Waitlist Signup');
-    const body = encodeURIComponent(`New waitlist signup:\n\nEmail: ${email}\nDate: ${new Date().toLocaleString()}`);
-    window.open(`mailto:juryfyai@gmail.com?subject=${subject}&body=${body}`, '_blank');
-
-    alert('Thank you! We will notify you when Juryfy AI launches.');
+    // Send via Web3Forms to juryfyai@gmail.com
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: 'd3f775ae-3621-4e92-9a45-042e1fb44a89',
+        subject: 'Juryfy AI - New Waitlist Signup',
+        from_name: 'Juryfy AI Waitlist',
+        to: 'juryfyai@gmail.com',
+        message: `New waitlist signup:\n\nEmail: ${email}\nDate: ${new Date().toLocaleString()}`,
+        email: email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert('Thank you! We will notify you when Juryfy AI launches.');
+        } else {
+          alert('Thank you for signing up! We will notify you soon.');
+        }
+      })
+      .catch(() => {
+        alert('Thank you for signing up! We will notify you soon.');
+      });
   }
 
   function handleCtaSubmit(e: FormEvent) {
@@ -38,7 +59,7 @@ export function WebsitePage() {
             <span className="text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
           <Link
-            to="/app/home"
+            to="/app/login"
             className="px-5 py-2 text-sm font-medium rounded-md border-2 transition-colors hover:text-white"
             style={{ borderColor: '#00416a', color: '#00416a' }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#00416a'; e.currentTarget.style.color = '#ffffff'; }}

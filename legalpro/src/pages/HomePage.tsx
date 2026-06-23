@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router';
-import { MapPin, Briefcase, Building2, Clock, Users, Sun, Moon, Sparkles } from 'lucide-react';
+import { MapPin, Briefcase, Building2, Clock, Users } from 'lucide-react';
 import { GlassCard, FilterBar, DataTable, Modal } from '@/components/ui';
-import { useTheme, type Theme } from '@/contexts/ThemeContext';
 import type { Lawyer } from '@/types';
 import lawyersData from '@/data/lawyers.json';
 
@@ -50,7 +48,6 @@ export function HomePage() {
     lawyerType: 'All',
   });
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
-  const { theme, setTheme } = useTheme();
 
   const experienceRanges = ['0-5 years', '5-10 years', '10-20 years', '20+ years'];
 
@@ -62,24 +59,8 @@ export function HomePage() {
     { key: 'lawyerType', label: 'Lawyer Type', options: getUnique(lawyers, 'lawyerType') },
   ], [lawyers]);
 
-  const themeIcons: Record<Theme, typeof Sun> = { light: Sun, dark: Moon, gold: Sparkles };
-  const themeOrder: Theme[] = ['light', 'dark', 'gold'];
-
-  function cycleTheme() {
-    const idx = themeOrder.indexOf(theme);
-    setTheme(themeOrder[(idx + 1) % themeOrder.length]);
-  }
-
-  const ThemeIcon = themeIcons[theme];
-
-  // Gold theme button classes
-  const btnClass = theme === 'gold'
-    ? 'gradient-btn px-3 py-1.5 text-xs font-medium'
-    : 'px-3 py-1.5 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-xs font-medium transition-colors';
-
-  const loginBtnClass = theme === 'gold'
-    ? 'gradient-btn px-5 py-2 text-sm font-medium'
-    : 'px-5 py-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-sm font-medium transition-colors';
+  // Button classes
+  const btnClass = 'px-3 py-1.5 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white text-xs font-medium transition-colors';
 
   const filteredLawyers = useMemo(() => {
     return lawyers.filter((l) => {
@@ -128,52 +109,17 @@ export function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary">
-      {/* Header — 3 columns: logo+name | title centered | buttons */}
-      <header className="grid grid-cols-[1fr_2fr_1fr] items-center px-8 py-6 md:px-12 md:py-8 gap-4">
-        <div className="flex items-center gap-4 shrink-0">
-          <img src="/logo.png" alt="Juryfy" className="w-20 h-20 md:w-32 md:h-32 brightness-150 contrast-125 drop-shadow-[0_0_6px_rgba(99,102,241,0.4)]" />
-          <span className="text-lg md:text-2xl font-bold gradient-text tracking-wide uppercase">Juryfy AI Solutions</span>
-        </div>
-        <div className="text-center hidden sm:block">
-          <h1 className="text-xl md:text-3xl font-bold gradient-text leading-snug">Find Trusted Lawyers Near You</h1>
-          <p className="text-text-secondary text-sm md:text-base mt-2 leading-relaxed">
-            From criminal to corporate, quickly find nearby India lawyers who fit needs, and start private chat to explain case.
-          </p>
-        </div>
-        <div className="flex items-center justify-end gap-2">
-          <button
-            onClick={cycleTheme}
-            className={`p-2 rounded-lg transition-all ${theme === 'gold' ? 'gradient-btn' : 'bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white'}`}
-            title={`Theme: ${theme} (click to switch)`}
-            aria-label="Switch theme"
-          >
-            <ThemeIcon className="w-5 h-5" />
-          </button>
-          <Link
-            to="/"
-            className={loginBtnClass}
-          >
-            Home
-          </Link>
-          <Link
-            to="/app/login"
-            className={loginBtnClass}
-          >
-            Log In
-          </Link>
-        </div>
-      </header>
-      {/* Mobile title */}
-      <div className="sm:hidden text-center px-4 pb-2">
-        <h1 className="text-lg font-bold gradient-text">Find Trusted Lawyers Near You</h1>
-        <p className="text-text-secondary text-xs">
+    <div className="text-text-primary">
+      {/* Page title */}
+      <div className="mb-6">
+        <h1 className="text-xl md:text-3xl font-bold gradient-text leading-snug">Find Trusted Lawyers Near You</h1>
+        <p className="text-text-secondary text-sm md:text-base mt-2 leading-relaxed">
           From criminal to corporate, quickly find nearby India lawyers who fit needs, and start private chat to explain case.
         </p>
       </div>
 
       {/* Filter + Table */}
-      <section className="px-4 md:px-8 pb-6">
+      <section>
         <GlassCard className="overflow-hidden">
           <div className="p-3 md:p-4 border-b border-border">
             <FilterBar filters={filterDefs} values={filters} onChange={handleFilterChange} />

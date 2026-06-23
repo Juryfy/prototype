@@ -10,7 +10,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/app/home" replace />;
+    return <Navigate to="/app/login" replace />;
   }
 
   return <>{children}</>;

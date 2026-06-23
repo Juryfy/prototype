@@ -66,7 +66,7 @@ export function Sidebar() {
 
   function handleLogout() {
     logout();
-    navigate('/app/home');
+    navigate('/app/login');
   }
 
   // Close dropdown on outside click

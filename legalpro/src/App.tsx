@@ -40,9 +40,11 @@ function App() {
           <Route path="/" element={<WebsitePage />} />
 
           {/* Public app pages (no auth required) */}
-          <Route path="/app/home" element={<HomePage />} />
           <Route path="/app/login" element={<LoginPage />} />
           <Route path="/app/register" element={<RegisterPage />} />
+
+          {/* Lawyers Near You — requires login but uses its own layout */}
+          {/* <Route path="/app/home" element={<AuthGuard><HomePage /></AuthGuard>} /> */}
 
           {/* Protected app routes */}
           <Route
@@ -54,6 +56,7 @@ function App() {
               </AuthGuard>
             }
           >
+            <Route path="home" element={<HomePage />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="cases" element={<CasesPage />} />
             <Route path="clients" element={<ClientsPage />} />
