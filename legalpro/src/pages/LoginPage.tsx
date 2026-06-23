@@ -1,16 +1,32 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Sun, Moon, Sparkles } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme, type Theme } from '@/contexts/ThemeContext';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+
+  const themeOptions: { value: Theme; icon: typeof Sun; label: string }[] = [
+    { value: 'light', icon: Sun, label: 'Light' },
+    { value: 'dark', icon: Moon, label: 'Dark' },
+    { value: 'gold', icon: Sparkles, label: 'Gold' },
+  ];
+
+  function cycleTheme() {
+    const order: Theme[] = ['light', 'dark', 'gold'];
+    const idx = order.indexOf(theme);
+    setTheme(order[(idx + 1) % order.length]);
+  }
+
+  const CurrentIcon = themeOptions.find(t => t.value === theme)!.icon;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -36,7 +52,17 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center px-4">
+    <div className="min-h-screen bg-bg-primary flex items-center justify-center px-4 relative">
+      {/* Theme toggle — top right */}
+      <button
+        onClick={cycleTheme}
+        className="absolute top-4 right-4 p-2 rounded-lg bg-accent-primary/20 text-accent-primary hover:bg-accent-primary hover:text-white transition-all"
+        title={`Theme: ${theme}`}
+        aria-label="Switch theme"
+      >
+        <CurrentIcon className="w-5 h-5" />
+      </button>
+
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="flex items-center justify-center gap-3 mb-8">

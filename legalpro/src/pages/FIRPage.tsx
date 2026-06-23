@@ -140,7 +140,7 @@ export function FIRPage() {
       >
         {selectedFIR && (
           <div className="space-y-4 text-sm">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-text-muted text-xs">Case Number</p>
                 <p className="text-text-primary font-medium">{selectedFIR.caseNumber}</p>

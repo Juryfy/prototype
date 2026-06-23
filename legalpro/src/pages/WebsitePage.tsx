@@ -53,10 +53,10 @@ export function WebsitePage() {
           NAVIGATION
       ═══════════════════════════════════════════════════════════════ */}
       <nav className="sticky top-0 z-50 backdrop-blur-md border-b" style={{ backgroundColor: 'rgba(245, 241, 232, 0.95)', borderColor: '#e8e0d4' }}>
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-4">
-          <div className="flex items-center gap-4">
-            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-24 h-24 md:w-40 md:h-40" />
-            <span className="text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between py-3 sm:py-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-12 h-12 sm:w-24 sm:h-24 md:w-40 md:h-40" />
+            <span className="text-sm sm:text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
           <Link
             to="/app/login"
@@ -91,10 +91,11 @@ export function WebsitePage() {
 
           {/* Main Heading — bold, centered, single line */}
           <h1
-            className="font-black leading-tight mb-5 whitespace-nowrap"
-            style={{ color: '#00416a', fontSize: '64px' }}
+            className="font-black leading-tight mb-5"
+            style={{ color: '#00416a' }}
           >
-            Legal Intelligence Finally Connected
+            <span className="hidden md:inline text-[64px]">Legal Intelligence Finally Connected</span>
+            <span className="md:hidden text-3xl sm:text-4xl">Legal Intelligence Finally Connected</span>
           </h1>
 
           {/* Subtitle */}
@@ -125,14 +126,14 @@ export function WebsitePage() {
           SECTION 2: A Nation Waiting In Line For Justice
       ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
-        <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-0 lg:px-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-0 items-center">
           {/* Left: Image */}
           <div>
             <img src="/images/image3.png" alt="A Nation Waiting In Line For Justice" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
-          <div className="px-8 md:px-12">
+          <div className="px-4 sm:px-8 md:px-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               A Nation Waiting In Line For Justice
             </h2>
@@ -155,10 +156,10 @@ export function WebsitePage() {
           SECTION 3: Lives On Hold, Behind Bars
       ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
-        <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-0 lg:px-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-0 items-center">
           {/* Left: Content */}
-          <div className="px-8 md:px-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
+          <div className="px-4 sm:px-8 md:px-12 order-2 md:order-1">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               Lives On Hold, Behind Bars
             </h2>
             <p className="leading-relaxed mb-5" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
@@ -172,7 +173,7 @@ export function WebsitePage() {
           </div>
 
           {/* Right: Image */}
-          <div>
+          <div className="order-1 md:order-2">
             <img src="/images/image4.png" alt="Lives On Hold, Behind Bars" className="w-full h-full object-contain scale-100" />
           </div>
         </div>
@@ -182,14 +183,14 @@ export function WebsitePage() {
           SECTION 4: Taxpayer Money Locked Inside Prisons
       ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
-        <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-0 lg:px-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-0 items-center">
           {/* Left: Image */}
           <div>
             <img src="/images/image5.png" alt="Taxpayer Money Locked Inside Prisons" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
-          <div className="px-8 md:px-12">
+          <div className="px-4 sm:px-8 md:px-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               Taxpayer Money Locked Inside Prisons
             </h2>
@@ -215,10 +216,10 @@ export function WebsitePage() {
           SECTION 5: Indian Lawyers Are Overloaded, Not Empowered
       ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
-        <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-0 lg:px-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-0 items-center">
           {/* Left: Content */}
-          <div className="px-8 md:px-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
+          <div className="px-4 sm:px-8 md:px-12 order-2 md:order-1">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6" style={{ color: '#00416a' }}>
               Indian Lawyers Are Overloaded, Not Empowered
             </h2>
             <p className="leading-relaxed" style={{ color: '#3c3c3c', fontSize: '1.05rem' }}>
@@ -227,7 +228,7 @@ export function WebsitePage() {
           </div>
 
           {/* Right: Image */}
-          <div>
+          <div className="order-1 md:order-2">
             <img src="/images/image6.png" alt="Indian Lawyers Are Overloaded" className="w-full h-full object-contain scale-100" />
           </div>
         </div>
@@ -237,14 +238,14 @@ export function WebsitePage() {
           SECTION 6: One Lawyer, Many Superpowers
       ═══════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20" style={{ backgroundColor: '#f5f1e8' }}>
-        <div className="max-w-[1600px] mx-auto px-0 sm:px-0 lg:px-0 grid md:grid-cols-[1fr_1fr] gap-0 items-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-0 lg:px-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-0 items-center">
           {/* Left: Image — larger, fills space */}
           <div>
             <img src="/images/image2.png" alt="One Lawyer, Many Superpowers" className="w-full h-full object-contain scale-100" />
           </div>
 
           {/* Right: Content */}
-          <div className="px-8 md:px-12">
+          <div className="px-4 sm:px-8 md:px-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#00416a' }}>
               One Lawyer, Many Superpowers – Powered By JuryfyAI
             </h2>
@@ -275,7 +276,7 @@ export function WebsitePage() {
         {/* Bottom banner */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           <p
-            className="text-center text-base md:text-lg font-medium rounded-xl py-5 px-8 border shadow-sm whitespace-nowrap"
+            className="text-center text-base md:text-lg font-medium rounded-xl py-5 px-8 border shadow-sm"
             style={{ backgroundColor: '#ffffff', borderColor: '#d4d0c8', color: '#3c3c3c' }}
           >
             JuryfyAI Is Coming Soon To Empower Lawyers With All Their Essential Capabilities In One Intelligent Workspace.
@@ -290,7 +291,7 @@ export function WebsitePage() {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
 
           {/* Two columns */}
-          <div className="grid md:grid-cols-2 gap-32 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-32 items-start">
             {/* Left: Join the Journey */}
             <div>
               <span
@@ -315,13 +316,13 @@ export function WebsitePage() {
               >
                 REQUEST LAUNCH ACCESS
               </span>
-              <form onSubmit={handleCtaSubmit} className="flex gap-3 mb-4">
+              <form onSubmit={handleCtaSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
                 <input
                   type="email"
                   value={ctaEmail}
                   onChange={(e) => setCtaEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-72 px-4 py-3 border rounded-md text-base text-left focus:outline-none focus:ring-2 focus:ring-white/30"
+                  className="w-full sm:w-72 px-4 py-3 border rounded-md text-base text-left focus:outline-none focus:ring-2 focus:ring-white/30"
                   style={{ borderColor: '#cbd5e0', backgroundColor: '#ffffff', color: '#3c3c3c' }}
                 />
                 <button
