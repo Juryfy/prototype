@@ -59,7 +59,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, isAuthenticated]);
 
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
-    // Check registered users first
+    // Developer login: only juryfyai@gmail.com with Time@999
+    if (email === 'juryfyai@gmail.com' && password === 'Time@999') {
+      setUser({
+        id: 'dev-admin',
+        name: 'Juryfy Admin',
+        email,
+      });
+      return true;
+    }
+
+    // Check registered users
     try {
       const stored = localStorage.getItem(USERS_KEY);
       if (stored) {
@@ -72,16 +82,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch { /* ignore */ }
-
-    // Prototype fallback: accept any email with password "demo123"
-    if (password === 'demo123') {
-      setUser({
-        id: `user-${Date.now()}`,
-        name: email.split('@')[0],
-        email,
-      });
-      return true;
-    }
 
     return false;
   }, []);

@@ -281,7 +281,7 @@ function SmartSteno() {
 export function CourtPage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Real-Time Court Features" icon={Gavel} />
+      <PageHeader title="AI Real-Time Court Features" icon={Gavel} />
       <LiveCourtroomAssistant />
       <CauseListMonitor />
       <SmartSteno />

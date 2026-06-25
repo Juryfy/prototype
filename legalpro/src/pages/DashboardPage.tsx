@@ -1,5 +1,5 @@
 import { LayoutDashboard, Briefcase, FolderPlus, CheckCircle, TrendingUp } from 'lucide-react';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PageHeader, KPICard, GlassCard, ChartCard } from '@/components/ui';
 import { mockTasks, mockCases, mockInvoices, mockHearings, STORAGE_KEYS } from '@/data/mockData';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -16,13 +16,13 @@ const courtDistributionData = [
 ];
 
 const THEME_CHART_COLORS = {
-  light: ['#11CDEF', '#2DCE89', '#FB6340', '#F5365C'],
+  light: ['#01696f', '#f59e0b', '#6366f1', '#e11d48'],
   dark: ['#6366F1', '#10B981', '#F59E0B', '#F43F5E'],
   gold: ['#D4A853', '#A8A8A8', '#CD7F32', '#6B4E1B'],
 };
 
 const THEME_ACCENT = {
-  light: '#11CDEF',
+  light: '#01696f',
   dark: '#6366F1',
   gold: '#D4A853',
 };
@@ -47,6 +47,110 @@ const practiceAreaData = [
   { name: 'IPR', cases: 4 },
   { name: 'Tax', cases: 2 },
 ];
+
+// ─── 3D Pie Chart Component ───
+
+function darkenColor(hex: string, amount: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.max(0, (num >> 16) - amount);
+  const g = Math.max(0, ((num >> 8) & 0x00ff) - amount);
+  const b = Math.max(0, (num & 0x0000ff) - amount);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+function Pie3DChart({ data, colors }: { data: { name: string; value: number }[]; colors: string[] }) {
+  const cx = 150, cy = 110, rx = 110, ry = 70;
+  const depth = 20;
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+
+  // Build slices
+  const slices: { startAngle: number; endAngle: number; color: string; darkColor: string }[] = [];
+  let currentAngle = -Math.PI / 2; // start from top
+  for (let i = 0; i < data.length; i++) {
+    const sweepAngle = (data[i].value / total) * 2 * Math.PI;
+    slices.push({
+      startAngle: currentAngle,
+      endAngle: currentAngle + sweepAngle,
+      color: colors[i % colors.length],
+      darkColor: darkenColor(colors[i % colors.length], 50),
+    });
+    currentAngle += sweepAngle;
+  }
+
+  function ellipsePoint(angle: number, yOffset = 0) {
+    return {
+      x: cx + rx * Math.cos(angle),
+      y: cy + ry * Math.sin(angle) + yOffset,
+    };
+  }
+
+  function slicePath(startAngle: number, endAngle: number, yOffset: number) {
+    const start = ellipsePoint(startAngle, yOffset);
+    const end = ellipsePoint(endAngle, yOffset);
+    const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+    return `M${cx},${cy + yOffset} L${start.x},${start.y} A${rx},${ry} 0 ${largeArc} 1 ${end.x},${end.y} Z`;
+  }
+
+  function sidePath(startAngle: number, endAngle: number) {
+    // Draw the 3D side (only for slices visible from bottom)
+    const steps = 20;
+    const angleStep = (endAngle - startAngle) / steps;
+    let path = '';
+    
+    const topStart = ellipsePoint(startAngle, 0);
+    const bottomStart = ellipsePoint(startAngle, depth);
+    path += `M${topStart.x},${topStart.y} L${bottomStart.x},${bottomStart.y}`;
+    
+    for (let i = 0; i <= steps; i++) {
+      const angle = startAngle + i * angleStep;
+      const pt = ellipsePoint(angle, depth);
+      path += ` L${pt.x},${pt.y}`;
+    }
+    
+    for (let i = steps; i >= 0; i--) {
+      const angle = startAngle + i * angleStep;
+      const pt = ellipsePoint(angle, 0);
+      path += ` L${pt.x},${pt.y}`;
+    }
+    
+    path += ' Z';
+    return path;
+  }
+
+  return (
+    <div className="flex items-center justify-center" style={{ height: 250 }}>
+      <svg viewBox="0 0 300 240" className="w-full h-full max-w-[300px]">
+        {/* 3D sides (render back-facing slices first) */}
+        {slices.map((slice, i) => {
+          // Only render side for slices that face the viewer (bottom half)
+          const midAngle = (slice.startAngle + slice.endAngle) / 2;
+          if (Math.sin(midAngle) <= -0.3) return null; // skip slices facing away
+          return (
+            <path
+              key={`side-${i}`}
+              d={sidePath(slice.startAngle, slice.endAngle)}
+              fill={slice.darkColor}
+              stroke={slice.darkColor}
+              strokeWidth="0.5"
+            />
+          );
+        })}
+        {/* Top face */}
+        {slices.map((slice, i) => (
+          <path
+            key={`top-${i}`}
+            d={slicePath(slice.startAngle, slice.endAngle, 0)}
+            fill={slice.color}
+            stroke="#ffffff"
+            strokeWidth="1"
+          />
+        ))}
+        {/* Highlight/shine on top */}
+        <ellipse cx={cx - 20} cy={cy - 15} rx={30} ry={20} fill="rgba(255,255,255,0.15)" />
+      </svg>
+    </div>
+  );
+}
 
 // ─── Priority Badge Helper ───
 
@@ -132,28 +236,7 @@ export function DashboardPage() {
       {/* ── 5.2 Charts Row ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         <ChartCard title="Court-Wise Case Distribution" description="Active cases distributed across jurisdictions">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={courtDistributionData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={90}
-                dataKey="value"
-                paddingAngle={2}
-              >
-                {courtDistributionData.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COURT_COLORS[index]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ backgroundColor: tooltip.bg, border: `1px solid ${tooltip.border}`, borderRadius: '8px' }}
-                labelStyle={{ color: tooltip.label }}
-                itemStyle={{ color: tooltip.item }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <Pie3DChart data={courtDistributionData} colors={COURT_COLORS} />
           <div className="flex flex-wrap gap-4 mt-2 justify-center">
             {courtDistributionData.map((entry, i) => (
               <div key={entry.name} className="flex items-center gap-2 text-sm">
@@ -176,8 +259,8 @@ export function DashboardPage() {
                   <stop offset="100%" stopColor="#8B6914" />
                 </linearGradient>
                 <linearGradient id="dashBarLight" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4DD9F0" />
-                  <stop offset="100%" stopColor="#1171EF" />
+                  <stop offset="0%" stopColor="#14b8a6" />
+                  <stop offset="100%" stopColor="#01696f" />
                 </linearGradient>
                 <linearGradient id="dashBarDark" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#A5B4FC" />

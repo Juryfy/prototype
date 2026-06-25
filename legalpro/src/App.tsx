@@ -11,6 +11,7 @@ import { WebsitePage } from '@/pages/WebsitePage';
 import { HomePage } from '@/pages/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
+import { WaitlistPage } from '@/pages/WaitlistPage';
 
 // Protected pages
 import { DashboardPage } from '@/pages/DashboardPage';
@@ -42,6 +43,7 @@ function App() {
           {/* Public app pages (no auth required) */}
           <Route path="/app/login" element={<LoginPage />} />
           <Route path="/app/register" element={<RegisterPage />} />
+          <Route path="/app/waitlist" element={<WaitlistPage />} />
 
           {/* Lawyers Near You — requires login but uses its own layout */}
           {/* <Route path="/app/home" element={<AuthGuard><HomePage /></AuthGuard>} /> */}

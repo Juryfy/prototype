@@ -11,19 +11,19 @@
 
 [data-theme="light"],
 :root {
-  --bg-primary: #f7f6f2;
-  --bg-card: #f9f8f5;
-  --bg-elevated: #f0efeb;
+  --bg-primary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f5f9;
   --accent-primary: #01696f;
   --accent-hover: #0c4e54;
   --success: #2DCE89;
   --warning: #FB6340;
   --danger: #F5365C;
-  --text-primary: #28251d;
-  --text-secondary: #7a7974;
-  --text-muted: #9e9b95;
-  --border-color: #d4d1ca;
-  --sidebar-bg: #f9f8f5;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --sidebar-bg: #ffffff;
   --gradient: linear-gradient(135deg, #01696f, #0c4e54);
   --pie-winning-start: #01696f;
   --pie-winning-mid: #0c4e54;
@@ -31,8 +31,8 @@
   --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #e8e8e8 35%, #c0c0c0 70%, #f0f0f0 100%);
   --btn-text: #ffffff;
   --bar-winning-color: #01696f;
-  --bar-losing-color: #d4d1ca;
-  --bar-track: #f0efeb;
+  --bar-losing-color: #e2e8f0;
+  --bar-track: #f1f5f9;
 }
 
 [data-theme="dark"] {
@@ -138,9 +138,9 @@ body {
 }
 
 [data-theme="light"] .glass-card {
-  background: #f9f8f5;
-  border: 1px solid #d4d1ca;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] .glass-card {
@@ -179,8 +179,8 @@ body {
 }
 
 [data-theme="light"] .glass-sidebar {
-  background: #f9f8f5;
-  border-right: 1px solid #d4d1ca;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
 }
 
 [data-theme="dark"] .glass-sidebar {

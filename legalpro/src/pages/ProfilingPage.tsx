@@ -73,7 +73,7 @@ export function ProfilingPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Intelligent Profiling" icon={UserSearch} />
+      <PageHeader title="AI Intelligent Profiling" icon={UserSearch} />
 
       <div className="px-4 py-2 bg-accent-primary/5 border border-accent-primary/20 rounded-xl text-xs text-text-secondary">
         ℹ️ Data shown is from the prototype dataset. In production, this will connect to real court records and analytics APIs.

@@ -1,44 +1,17 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 export function WebsitePage() {
   const [ctaEmail, setCtaEmail] = useState('');
+  const navigate = useNavigate();
 
   function handleNotify(email: string) {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert('Please enter a valid email address.');
       return;
     }
-
-    // Store locally
-    const existing = JSON.parse(localStorage.getItem('juryfy_waitlist') || '[]');
-    existing.push({ email, date: new Date().toISOString() });
-    localStorage.setItem('juryfy_waitlist', JSON.stringify(existing));
-
-    // Send via Web3Forms to juryfyai@gmail.com
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        access_key: 'd3f775ae-3621-4e92-9a45-042e1fb44a89',
-        subject: 'Juryfy AI - New Waitlist Signup',
-        from_name: 'Juryfy AI Waitlist',
-        to: 'juryfyai@gmail.com',
-        message: `New waitlist signup:\n\nEmail: ${email}\nDate: ${new Date().toLocaleString()}`,
-        email: email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert('Thank you! We will notify you when Juryfy AI launches.');
-        } else {
-          alert('Thank you for signing up! We will notify you soon.');
-        }
-      })
-      .catch(() => {
-        alert('Thank you for signing up! We will notify you soon.');
-      });
+    // Redirect to waitlist page with email pre-filled
+    navigate(`/app/waitlist?email=${encodeURIComponent(email)}`);
   }
 
   function handleCtaSubmit(e: FormEvent) {
@@ -58,15 +31,24 @@ export function WebsitePage() {
             <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-12 h-12 sm:w-24 sm:h-24 md:w-40 md:h-40" />
             <span className="text-sm sm:text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#00416a' }}>JURYFY AI SOLUTIONS</span>
           </div>
-          <Link
-            to="/app/login"
-            className="px-5 py-2 text-sm font-medium rounded-md border-2 transition-colors hover:text-white"
-            style={{ borderColor: '#00416a', color: '#00416a' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#00416a'; e.currentTarget.style.color = '#ffffff'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#00416a'; }}
-          >
-            Try Platform
-          </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              to="/app/waitlist"
+              className="px-3 sm:px-5 py-2 text-xs sm:text-sm font-medium rounded-md border-2 transition-colors hover:text-white"
+              style={{ borderColor: '#00416a', color: '#00416a' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#00416a'; e.currentTarget.style.color = '#ffffff'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#00416a'; }}
+            >
+              Try Platform
+            </Link>
+            <Link
+              to="/app/login"
+              className="px-3 sm:px-5 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors text-white"
+              style={{ backgroundColor: '#00416a' }}
+            >
+              Developer Login
+            </Link>
+          </div>
         </div>
       </nav>
 

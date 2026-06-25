@@ -94,12 +94,32 @@ export function FIRPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="FIR Intelligence Hub" icon={FileSearch} />
+      <PageHeader title="AI FIR Intelligence Hub" icon={FileSearch} />
+
+      {/* KPI summary cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="glass-card p-4 text-center border-l-4 border-l-accent-primary">
+          <p className="text-2xl font-bold text-accent-primary">{firRecords.length}</p>
+          <p className="text-xs text-text-secondary mt-1">Total FIRs</p>
+        </div>
+        <div className="glass-card p-4 text-center border-l-4 border-l-success">
+          <p className="text-2xl font-bold text-success">{firRecords.filter(r => r.status === 'Registered').length}</p>
+          <p className="text-xs text-text-secondary mt-1">Registered</p>
+        </div>
+        <div className="glass-card p-4 text-center border-l-4 border-l-warning">
+          <p className="text-2xl font-bold text-warning">{firRecords.filter(r => r.status === 'Pending').length}</p>
+          <p className="text-xs text-text-secondary mt-1">Pending</p>
+        </div>
+        <div className="glass-card p-4 text-center border-l-4 border-l-text-muted">
+          <p className="text-2xl font-bold text-text-muted">{firRecords.filter(r => r.status === 'Closed').length}</p>
+          <p className="text-xs text-text-secondary mt-1">Closed</p>
+        </div>
+      </div>
 
       <GlassCard>
-        <h2 className="text-xl font-bold text-text-primary mb-1">Local Case Intelligence Hub</h2>
+        <h2 className="text-xl font-bold gradient-text mb-1">Local Case Intelligence Hub</h2>
         <p className="text-sm text-text-secondary mb-5">
-          {firRecords.length} FIR records from police stations across India • Search and filter by area, city, or status
+          AI-powered FIR search across {firRecords.length} records from police stations • Filter by area, city, or status
         </p>
 
         {/* Search + Filter */}

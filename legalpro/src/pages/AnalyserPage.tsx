@@ -383,34 +383,31 @@ const PIE_THEME_CONFIG = {
     labelColor: '#ffffff',
   },
   light: {
-    // Losing slice — red
+    // Losing slice — bright red
     sectorGradient: {
       cx: '40%', cy: '28%', r: '88%',
       stops: [
-        { offset: '0%', color: '#fca5a5' },
-        { offset: '20%', color: '#f87171' },
-        { offset: '45%', color: '#ef4444' },
-        { offset: '70%', color: '#dc2626' },
-        { offset: '90%', color: '#b91c1c' },
-        { offset: '100%', color: '#7f1d1d' },
+        { offset: '0%', color: '#ff6b6b' },
+        { offset: '30%', color: '#ef4444' },
+        { offset: '60%', color: '#dc2626' },
+        { offset: '100%', color: '#b91c1c' },
       ],
     },
-    // Winning slice — green
+    // Winning slice — theme teal green
     baseGradient: {
       cx: '50%', cy: '35%', r: '90%',
       stops: [
-        { offset: '0%', color: '#86efac' },
-        { offset: '20%', color: '#4ade80' },
-        { offset: '45%', color: '#22c55e' },
-        { offset: '65%', color: '#16a34a' },
-        { offset: '85%', color: '#15803d' },
-        { offset: '100%', color: '#166534' },
+        { offset: '0%', color: '#5eead4' },
+        { offset: '25%', color: '#14b8a6' },
+        { offset: '50%', color: '#0d9488' },
+        { offset: '75%', color: '#01696f' },
+        { offset: '100%', color: '#0c4e54' },
       ],
     },
     shine: { cx: '30%', cy: '20%', r: '70%' },
-    separatorColor: '#374151',
+    separatorColor: '#ffffff',
     rimColor: 'rgba(0,0,0,0.08)',
-    labelColor: '#1f2937',
+    labelColor: '#ffffff',
   },
 };
 
@@ -787,11 +784,11 @@ export function AnalyserPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Analyser" icon={Brain} />
+      <PageHeader title="AI Analyser" icon={Brain} />
 
       {/* Hero title */}
       <div className="text-center py-2">
-        <h2 className="text-3xl font-bold gradient-text mb-1">Legal Case Analyser</h2>
+        <h2 className="text-3xl font-bold gradient-text mb-1">AI Legal Case Analyser</h2>
         <p className="text-text-secondary text-sm max-w-2xl mx-auto">
           Submit your case details and get AI-powered insights to assess your chances of success
         </p>
