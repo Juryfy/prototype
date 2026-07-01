@@ -80,7 +80,7 @@ const FALLBACK_DATA_1: AnalysisResult = {
       relevance: 'Supporting',
     },
   ],
-  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Non-Bailable Offence', 'Warrant Case'],
+  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Warrant Case', 'Non-Bailable Offence'],
   jurisdiction: 'India - JMFC Ratnagiri',
   applicableSections: [
     { section: 'Section 378 / BNS 303(1)', description: 'Definition of Theft — Applied in the Hemant Desai Case', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 1 – DEFINITION OF THEFT', oldLaw: 'Section 378, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(1), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Definitional — defines the offence. Does NOT prescribe punishment. Punishment is in Section 379 / BNS 303(2).', caseApplication: 'HOW SECTION 378 / BNS 303(1) APPLIED IN THE HEMANT DESAI CASE', ingredients: [ { name: 'Dishonest Intention', explanation: 'The CCTV footage clearly showed Hemant looking around to check if anyone was watching before picking up the items — classic furtive behaviour that demonstrates a guilty mind. The court found dishonest intent proved beyond reasonable doubt from this conduct alone.' }, { name: 'Moveable Property', explanation: 'Honda Activa scooter (Registration No. MH-8/AT/6350) and Redmi Note 8 Pro mobile phone are both moveable properties — physical objects capable of being lifted and carried away from one place to another.' }, { name: "Out of Another Person's Possession", explanation: "The scooter was in Shoaib Jahagirdar's possession — he owned and regularly used it for his fish supply business. The mobile phone was in Faiyyaz Hubali's possession — he had placed it on the charging socket and was the user of that phone." }, { name: "Without That Person's Consent", explanation: 'Hemant had no permission from either Shoaib or Faiyyaz to take the items. The court comprehensively rejected his defence that "Shoaib asked him to fetch the keys" — finding it unbelievable given that Shoaib immediately went to the police and filed an FIR.' }, { name: 'Moving the Property', explanation: 'Hemant physically picked up the scooter keys and mobile phone from the office table (moving them from the table) and then used the keys to drive the scooter away from the parking spot outside. The property was moved in every sense — all five ingredients fully and conclusively satisfied.' } ] } },
@@ -866,13 +866,15 @@ export function AnalyserPage() {
                     {/* Case Type & Jurisdiction */}
                     <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="flex flex-wrap gap-1.5 mb-2">
-                        {displayData.caseTypes.map((ct) => (
-                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                            {ct}
-                          </button>
-                        ))}
+                      <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                        <div className="flex flex-wrap gap-1.5">
+                          {displayData.caseTypes.map((ct) => (
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                              className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                              {ct}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                       <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                     </GlassCard>
@@ -1058,10 +1060,12 @@ export function AnalyserPage() {
                     </div>
                     {displayData && maximizedSection === 'caseType' && (
                       <div>
-                        <div className="flex flex-wrap gap-1.5 mb-2">
-                          {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
-                          ))}
+                        <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                          <div className="flex flex-wrap gap-1.5">
+                            {displayData.caseTypes.map((ct) => (
+                              <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
+                            ))}
+                          </div>
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                       </div>
@@ -1158,13 +1162,15 @@ export function AnalyserPage() {
                   {/* Case Type & Jurisdiction */}
                   <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="flex flex-wrap gap-1.5 mb-2">
-                      {displayData.caseTypes.map((ct) => (
-                        <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                          {ct}
-                        </button>
-                      ))}
+                    <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        {displayData.caseTypes.map((ct) => (
+                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                            {ct}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                   </GlassCard>
