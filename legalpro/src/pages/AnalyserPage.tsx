@@ -1123,7 +1123,7 @@ export function AnalyserPage() {
                           <span className="w-2 h-2 rounded-full bg-danger" />
                           <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                         </div>
-                        <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
+                        <a href="https://docs.juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                       </div>
                     </GlassCard>
                   </>
@@ -1255,7 +1255,7 @@ export function AnalyserPage() {
                         <div className="flex items-center gap-2">
                           <span className="flex-1 px-3 py-1.5 rounded-lg bg-success/10 text-success text-xs font-medium text-center">● {displayData.outcomePrediction.winningPct}% – Winning</span>
                           <span className="flex-1 px-3 py-1.5 rounded-lg bg-danger/10 text-danger text-xs font-medium text-center">● {displayData.outcomePrediction.losingPct}% – Losing</span>
-                          <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
+                          <a href="https://docs.juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                         </div>
                       </div>
                     )}
@@ -1423,7 +1423,7 @@ export function AnalyserPage() {
                         <span className="w-2 h-2 rounded-full bg-danger" />
                         <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                       </div>
-                      <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
+                      <a href="https://docs.juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                     </div>
                   </GlassCard>
                 </>
