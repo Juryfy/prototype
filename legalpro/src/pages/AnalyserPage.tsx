@@ -215,41 +215,37 @@ const PIE_FLAT_COLORS = {
 
 function MetallicPieChart({ winningPct, losingPct, theme }: { winningPct: number; losingPct: number; theme: 'light' | 'dark' | 'gold' }) {
   const colors = PIE_FLAT_COLORS[theme];
-  const cx = 150, cy = 150, outerR = 120, innerR = 70;
+  const cx = 150, cy = 150, r = 120;
 
   // Losing slice angle (starts from top, clockwise)
   const angleDeg = (losingPct / 100) * 360;
   const angleRad = angleDeg * (Math.PI / 180);
 
-  const outerEndX = cx + outerR * Math.sin(angleRad);
-  const outerEndY = cy - outerR * Math.cos(angleRad);
-  const innerEndX = cx + innerR * Math.sin(angleRad);
-  const innerEndY = cy - innerR * Math.cos(angleRad);
+  const endX = cx + r * Math.sin(angleRad);
+  const endY = cy - r * Math.cos(angleRad);
 
   const largeArc = angleDeg > 180 ? 1 : 0;
 
-  // Losing slice path (donut arc)
+  // Losing slice path (pie wedge from center)
   const losingPath = [
-    `M${cx} ${cy - outerR}`,
-    `A${outerR} ${outerR} 0 ${largeArc} 1 ${outerEndX.toFixed(1)} ${outerEndY.toFixed(1)}`,
-    `L${innerEndX.toFixed(1)} ${innerEndY.toFixed(1)}`,
-    `A${innerR} ${innerR} 0 ${largeArc} 0 ${cx} ${cy - innerR}`,
+    `M${cx} ${cy}`,
+    `L${cx} ${cy - r}`,
+    `A${r} ${r} 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)}`,
     'Z',
   ].join(' ');
 
-  // Winning slice path (remaining donut arc)
+  // Winning slice path (remaining pie wedge)
   const winLargeArc = (360 - angleDeg) > 180 ? 1 : 0;
   const winningPath = [
-    `M${outerEndX.toFixed(1)} ${outerEndY.toFixed(1)}`,
-    `A${outerR} ${outerR} 0 ${winLargeArc} 1 ${cx} ${cy - outerR}`,
-    `L${cx} ${cy - innerR}`,
-    `A${innerR} ${innerR} 0 ${winLargeArc} 0 ${innerEndX.toFixed(1)} ${innerEndY.toFixed(1)}`,
+    `M${cx} ${cy}`,
+    `L${endX.toFixed(1)} ${endY.toFixed(1)}`,
+    `A${r} ${r} 0 ${winLargeArc} 1 ${cx} ${cy - r}`,
     'Z',
   ].join(' ');
 
-  // Label positions
+  // Label positions (2/3 from center to edge)
+  const labelR = r * 0.6;
   const losingMidAngle = (angleDeg / 2) * (Math.PI / 180);
-  const labelR = (outerR + innerR) / 2;
   const losingLabelX = cx + labelR * Math.sin(losingMidAngle);
   const losingLabelY = cy - labelR * Math.cos(losingMidAngle);
 
@@ -873,7 +869,7 @@ export function AnalyserPage() {
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {displayData.caseTypes.map((ct) => (
                           <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">
+                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
                             {ct}
                           </button>
                         ))}
@@ -947,7 +943,7 @@ export function AnalyserPage() {
                                 <p className="text-xs text-text-secondary">{sc.outcome}</p>
                               </div>
                               <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                                className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
+                                className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
                                 {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                               </button>
                             </div>
@@ -961,15 +957,15 @@ export function AnalyserPage() {
                     {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                     <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
-                        <div className="w-44 h-44 relative">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="w-36 h-36 relative shrink-0">
                           <MetallicPieChart
                             winningPct={displayData.outcomePrediction.winningPct}
                             losingPct={displayData.outcomePrediction.losingPct}
                             theme={theme}
                           />
                         </div>
-                        <div className="flex-1 space-y-3">
+                        <div className="flex-1 space-y-3 p-3 rounded-lg analyser-inner-card">
                           <div>
                             <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                             <ul className="space-y-1">
@@ -1064,7 +1060,7 @@ export function AnalyserPage() {
                       <div>
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">{ct}</button>
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
                           ))}
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
@@ -1105,7 +1101,7 @@ export function AnalyserPage() {
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
+                              className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                             </button>
                           </div>
@@ -1114,11 +1110,11 @@ export function AnalyserPage() {
                     )}
                     {displayData && maximizedSection === 'outcome' && (
                       <div>
-                        <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
-                          <div className="w-44 h-44 relative">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-44 h-44 relative shrink-0">
                             <MetallicPieChart winningPct={displayData.outcomePrediction.winningPct} losingPct={displayData.outcomePrediction.losingPct} theme={theme} />
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="flex-1 min-w-0 p-3 rounded-lg analyser-inner-card">
                             <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                             <ul className="space-y-1 mb-3">
                               {displayData.keyWinningPoints.map((p, i) => (
@@ -1165,7 +1161,7 @@ export function AnalyserPage() {
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {displayData.caseTypes.map((ct) => (
                         <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">
+                          className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
                           {ct}
                         </button>
                       ))}
@@ -1244,7 +1240,7 @@ export function AnalyserPage() {
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
+                              className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                             </button>
                           </div>
@@ -1258,15 +1254,15 @@ export function AnalyserPage() {
                   {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                   <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
-                      <div className="w-44 h-44 relative">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-36 h-36 relative shrink-0">
                         <MetallicPieChart
                           winningPct={displayData.outcomePrediction.winningPct}
                           losingPct={displayData.outcomePrediction.losingPct}
                           theme={theme}
                         />
                       </div>
-                      <div className="flex-1 space-y-3">
+                      <div className="flex-1 space-y-3 p-3 rounded-lg analyser-inner-card">
                         <div>
                           <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                           <ul className="space-y-1">
