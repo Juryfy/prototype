@@ -873,7 +873,7 @@ export function AnalyserPage() {
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {displayData.caseTypes.map((ct) => (
                           <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
+                            className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">
                             {ct}
                           </button>
                         ))}
@@ -886,7 +886,7 @@ export function AnalyserPage() {
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.applicableSections.map((sec, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                               <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -912,7 +912,7 @@ export function AnalyserPage() {
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
-                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="flex items-center gap-2 flex-1 min-w-0">
                               
                               <span className="text-xs text-text-secondary truncate">{doc.description}</span>
@@ -941,13 +941,13 @@ export function AnalyserPage() {
                       <div className="space-y-2">
                         {displayData.similarCases.length > 0 ? (
                           displayData.similarCases.map((sc, i) => (
-                            <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                            <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                               <div className="min-w-0 flex-1">
                                 <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                                 <p className="text-xs text-text-secondary">{sc.outcome}</p>
                               </div>
                               <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                                className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
+                                className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
                                 {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                               </button>
                             </div>
@@ -961,7 +961,7 @@ export function AnalyserPage() {
                     {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                     <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                      <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
                         <div className="w-44 h-44 relative">
                           <MetallicPieChart
                             winningPct={displayData.outcomePrediction.winningPct}
@@ -1064,7 +1064,7 @@ export function AnalyserPage() {
                       <div>
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>{ct}</button>
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">{ct}</button>
                           ))}
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
@@ -1073,7 +1073,7 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'sections' && (
                       <div className="space-y-2">
                         {displayData.applicableSections.map((sec, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                               <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -1086,7 +1086,7 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'documents' && (
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
-                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="flex items-center gap-2 flex-1 min-w-0">
                               
                               <span className="text-xs text-text-secondary truncate">{doc.description}</span>
@@ -1099,13 +1099,13 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'similar' && (
                       <div className="space-y-2">
                         {displayData.similarCases.map((sc, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="min-w-0 flex-1">
                               <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
+                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                             </button>
                           </div>
@@ -1114,7 +1114,7 @@ export function AnalyserPage() {
                     )}
                     {displayData && maximizedSection === 'outcome' && (
                       <div>
-                        <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                        <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
                           <div className="w-44 h-44 relative">
                             <MetallicPieChart winningPct={displayData.outcomePrediction.winningPct} losingPct={displayData.outcomePrediction.losingPct} theme={theme} />
                           </div>
@@ -1165,7 +1165,7 @@ export function AnalyserPage() {
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {displayData.caseTypes.map((ct) => (
                         <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
+                          className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold analyser-teal-btn">
                           {ct}
                         </button>
                       ))}
@@ -1178,7 +1178,7 @@ export function AnalyserPage() {
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.applicableSections.map((sec, i) => (
-                        <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                        <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                           <div className="flex-1 min-w-0">
                             <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                             <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -1199,7 +1199,7 @@ export function AnalyserPage() {
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.requiredDocuments.map((doc) => (
-                        <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                        <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             
                             <span className="text-xs text-text-secondary truncate">{doc.description}</span>
@@ -1238,13 +1238,13 @@ export function AnalyserPage() {
                     <div className="space-y-2">
                       {displayData.similarCases.length > 0 ? (
                         displayData.similarCases.map((sc, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
                             <div className="min-w-0 flex-1">
                               <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
-                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
+                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold analyser-teal-btn shrink-0 ml-2">
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
                             </button>
                           </div>
@@ -1258,7 +1258,7 @@ export function AnalyserPage() {
                   {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                   <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
+                    <div className="flex items-start gap-4 mb-4 p-3 rounded-lg analyser-inner-card">
                       <div className="w-44 h-44 relative">
                         <MetallicPieChart
                           winningPct={displayData.outcomePrediction.winningPct}
