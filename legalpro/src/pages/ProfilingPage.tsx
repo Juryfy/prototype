@@ -30,7 +30,7 @@ const counselWinLossData = [
   { name: 'Losses', value: 64 },
   { name: 'Settled', value: 8 },
 ];
-const counselColors = ['#10B981', '#F43F5E', '#F59E0B'];
+const counselColors = ['#008000', '#FF0000', '#ffc400'];
 
 /* ── Pill badge helper ── */
 function Pill({ label, color = 'bg-accent-primary/20 text-accent-hover' }: { label: string; color?: string }) {
@@ -66,8 +66,8 @@ function ProgressBar({ label, value, color = 'bg-accent-primary' }: { label: str
 
 export function ProfilingPage() {
   const { theme } = useTheme();
-  const chartColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#11CDEF';
-  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#8898AA';
+  const chartColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#005657';
+  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#A9A9A9';
   const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#1E293B' : '#FFFFFF';
   const tooltipBorder = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#334155' : '#E9ECEF';
 

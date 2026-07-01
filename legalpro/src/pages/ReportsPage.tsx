@@ -22,10 +22,10 @@ const practiceAreaData = [
 ];
 
 const referralData = [
-  { name: 'Client Referrals', value: 45, color: '#6366F1' },
-  { name: 'Bar Network', value: 30, color: '#10B981' },
-  { name: 'Direct Inquiry', value: 20, color: '#F59E0B' },
-  { name: 'Online', value: 5, color: '#F43F5E' },
+  { name: 'Client Referrals', value: 45, color: '#008000' },
+  { name: 'Bar Network', value: 30, color: '#0000FF' },
+  { name: 'Direct Inquiry', value: 20, color: '#ffc400' },
+  { name: 'Online', value: 5, color: '#FF0000' },
 ];
 
 export function ReportsPage() {

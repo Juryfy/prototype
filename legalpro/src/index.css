@@ -11,28 +11,28 @@
 
 [data-theme="light"],
 :root {
-  --bg-primary: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-elevated: #f1f5f9;
-  --accent-primary: #01696f;
-  --accent-hover: #0c4e54;
-  --success: #2DCE89;
-  --warning: #FB6340;
-  --danger: #F5365C;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --border-color: #e2e8f0;
-  --sidebar-bg: #ffffff;
-  --gradient: linear-gradient(135deg, #01696f, #0c4e54);
-  --pie-winning-start: #01696f;
-  --pie-winning-mid: #0c4e54;
-  --pie-winning-end: #01696f;
+  --bg-primary: #f6f2eb;
+  --bg-card: #eeece1;
+  --bg-elevated: #eeece1;
+  --accent-primary: #005657;
+  --accent-hover: #025357;
+  --success: #008000;
+  --warning: #ffc400;
+  --danger: #FF0000;
+  --text-primary: #28251D;
+  --text-secondary: #212120;
+  --text-muted: #A9A9A9;
+  --border-color: #d4d1ca;
+  --sidebar-bg: #eeece1;
+  --gradient: linear-gradient(135deg, #005657, #025357);
+  --pie-winning-start: #005657;
+  --pie-winning-mid: #025357;
+  --pie-winning-end: #005657;
   --pie-losing-bg: radial-gradient(circle at 30% 30%, #ffffff 0%, #e8e8e8 35%, #c0c0c0 70%, #f0f0f0 100%);
   --btn-text: #ffffff;
-  --bar-winning-color: #01696f;
-  --bar-losing-color: #e2e8f0;
-  --bar-track: #f1f5f9;
+  --bar-winning-color: #005657;
+  --bar-losing-color: #d4d1ca;
+  --bar-track: #eeece1;
 }
 
 [data-theme="dark"] {
@@ -138,9 +138,9 @@ body {
 }
 
 [data-theme="light"] .glass-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  background: #eeece1;
+  border: 1px solid #d4d1ca;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="dark"] .glass-card {
@@ -161,7 +161,7 @@ body {
 }
 
 [data-theme="light"] .glass-card-hover:hover {
-  box-shadow: 0 4px 24px rgba(1, 105, 111, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 86, 87, 0.1);
 }
 
 [data-theme="dark"] .glass-card-hover:hover {
@@ -179,8 +179,8 @@ body {
 }
 
 [data-theme="light"] .glass-sidebar {
-  background: #ffffff;
-  border-right: 1px solid #e2e8f0;
+  background: #eeece1;
+  border-right: 1px solid #d4d1ca;
 }
 
 [data-theme="dark"] .glass-sidebar {
@@ -209,8 +209,8 @@ body {
 }
 
 [data-theme="light"] .gradient-btn {
-  background: linear-gradient(135deg, #01696f, #0c4e54);
-  box-shadow: 0 4px 6px rgba(1, 105, 111, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: #005657;
+  box-shadow: 0 4px 6px rgba(0, 86, 87, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .gradient-btn {

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import jsPDF from 'jspdf';
 import {
   Brain,
@@ -12,6 +12,8 @@ import {
   Upload,
   ChevronLeft,
   ChevronRight,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 // Recharts removed — using custom SVG metallic pie chart
 // mockAnalysisResult import kept for reference but unused in fallback mode
@@ -78,12 +80,13 @@ const FALLBACK_DATA_1: AnalysisResult = {
       relevance: 'Supporting',
     },
   ],
-  caseTypes: ['Civil', 'Property Dispute'],
-  jurisdiction: 'India - Civil Court',
+  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Non-Bailable Offence', 'Warrant Case'],
+  jurisdiction: 'India - JMFC Ratnagiri',
   applicableSections: [
-    { section: 'Section 9 SRA', description: 'Specific performance of contract for immovable property', relevance: 'High relevance' },
-    { section: 'Section 16 SRA', description: 'Personal bars to specific performance relief', relevance: 'Medium relevance' },
-    { section: 'Section 53A TPA', description: 'Part performance doctrine for property transfers', relevance: 'High relevance' },
+    { section: 'Section 378 / BNS 303(1)', description: 'Definition of Theft — Applied in the Hemant Desai Case', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 1 – DEFINITION OF THEFT', oldLaw: 'Section 378, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(1), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Definitional — defines the offence. Does NOT prescribe punishment. Punishment is in Section 379 / BNS 303(2).', caseApplication: 'HOW SECTION 378 / BNS 303(1) APPLIED IN THE HEMANT DESAI CASE', ingredients: [ { name: 'Dishonest Intention', explanation: 'The CCTV footage clearly showed Hemant looking around to check if anyone was watching before picking up the items — classic furtive behaviour that demonstrates a guilty mind. The court found dishonest intent proved beyond reasonable doubt from this conduct alone.' }, { name: 'Moveable Property', explanation: 'Honda Activa scooter (Registration No. MH-8/AT/6350) and Redmi Note 8 Pro mobile phone are both moveable properties — physical objects capable of being lifted and carried away from one place to another.' }, { name: "Out of Another Person's Possession", explanation: "The scooter was in Shoaib Jahagirdar's possession — he owned and regularly used it for his fish supply business. The mobile phone was in Faiyyaz Hubali's possession — he had placed it on the charging socket and was the user of that phone." }, { name: "Without That Person's Consent", explanation: 'Hemant had no permission from either Shoaib or Faiyyaz to take the items. The court comprehensively rejected his defence that "Shoaib asked him to fetch the keys" — finding it unbelievable given that Shoaib immediately went to the police and filed an FIR.' }, { name: 'Moving the Property', explanation: 'Hemant physically picked up the scooter keys and mobile phone from the office table (moving them from the table) and then used the keys to drive the scooter away from the parking spot outside. The property was moved in every sense — all five ingredients fully and conclusively satisfied.' } ] } },
+    { section: 'Section 379 / BNS 303(2)', description: 'Punishment for Theft (Scooter stolen from outside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 2 – PUNISHMENT FOR THEFT (SCOOTER STOLEN FROM OUTSIDE)', oldLaw: 'Section 379, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(2), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — prescribes the punishment for the offence of theft defined under Section 378 / BNS 303(1)', caseApplication: 'HOW SECTION 379 / BNS 303(2) APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai was convicted under Section 379 IPC specifically for stealing the Honda Activa scooter (Registration No. MH-8/AT/6350). The scooter was parked OUTSIDE the office — on the road in front of the shop. Since the vehicle was in an open/public area and not inside any building or enclosed premises, this constituted ordinary theft under Section 379 (not the aggravated Section 380).', 'The court sentenced him to SIMPLE IMPRISONMENT FOR ONE YEAR under Section 379 IPC. The maximum possible under this section is 3 years. The judge chose 1 year, balancing the accused\'s young age and the nature of the offence against his prior criminal history (multiple FIRs registered).'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Imprisonment up to 3 years, Or fine, Or both imprisonment and fine' }] } },
+    { section: 'Section 380 / BNS 305', description: 'Theft in a Dwelling House / Shop (Mobile phone stolen from inside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 3 – THEFT IN A DWELLING HOUSE / SHOP (MOBILE PHONE STOLEN FROM INSIDE)', oldLaw: 'Section 380, Indian Penal Code (IPC), 1860', newLaw: 'Section 305, Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — Aggravated theft — a more serious form of theft carrying a higher punishment when the theft occurs inside a building, shop, or property-custody place', caseApplication: 'HOW SECTION 380 / BNS 305 APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai physically entered the INTERIOR of Shoaib\'s office — SSJ Sea Foods, Mirkarwada, Ratnagiri. This office is a commercial premises and a building used for the custody of property: Shoaib runs his fish supply business from it, stores equipment, vehicles, cash, and his workers\' belongings there. By entering the office and stealing Faiyyaz\'s Redmi Note 8 Pro mobile phone from the charging socket on the office table, Hemant committed theft INSIDE a premises — making it Section 380.', 'The CCTV footage (the key evidence) shows Hemant entering the office, which itself proved the \'inside the building\' element. The court sentenced him to RIGOROUS IMPRISONMENT FOR ONE YEAR under Section 380 IPC — the minimum that a reasonable court would award given the facts.'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Minimum 1 year to Maximum 7 years Rigorous Imprisonment + Fine. BNS adds a mandatory minimum sentence that judges cannot reduce below.' }], subSections: [{ heading: 'WHAT QUALIFIES AS A \'BUILDING USED FOR CUSTODY OF PROPERTY\'?', content: 'Section 380 / BNS 305 applies not only to homes — it covers ANY building, tent, or vessel that is used for storing or keeping property, even if no one lives there permanently. This includes:', bullets: ['Shops and commercial premises — including Shoaib\'s SSJ Sea Foods office (fish supply business)', 'Warehouses, godowns, and storage facilities used to keep goods', 'Offices and business workplaces where equipment, cash, or files are kept', 'Tents at construction sites, event venues, or temporary setups where property is stored', 'Vessels such as ships or boats used to store goods or cargo', 'Factory premises, storerooms, or any enclosed space regularly used to keep moveable property'] }] } },
+    { section: 'Section 65-B / BSA 63', description: 'Electronic Evidence: CCTV Footage Admissibility', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 4 – ELECTRONIC EVIDENCE: CCTV FOOTAGE ADMISSIBILITY', oldLaw: 'Section 65-B, Indian Evidence Act, 1872', newLaw: 'Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023', typeOfProvision: 'Procedural and evidentiary — governs how electronic records (CCTV footage, digital photos, WhatsApp messages, emails, computer printouts) can be made admissible in court', caseApplication: 'HOW THIS APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['The CCTV was owned by Shoaib (the informant) and was installed and maintained by Arman Hodekar. On 19.02.2021, in the presence of the Investigating Officer ASI Ashok Rathod and the panch witness Mohammad Mujid, Arman copied the relevant CCTV footage from the DVR onto a pen drive. He then signed the Section 65-B certificate (Exhibit 21 in court). A colour printout of the CCTV frame showing the accused was also prepared (Article C). During the trial, the pen drive was played in OPEN COURT. Both PW-2 Shoaib (the victim) and PW-4 Arman (the CCTV installer) identified the person visible in the footage as Hemant Pramod Desai. This made the CCTV evidence both legally admissible and factually conclusive. The accused was unable to offer any credible challenge to either the certificate or the identification.'], subSections: [{ heading: 'WHO MUST SIGN THE CERTIFICATE?', content: 'The certificate must be signed by a person in a \'responsible official position\' in relation to the operation of the device. The Supreme Court in Arjun Panditrao Khotkar clarified that this is the person who owns or is responsible for the computer/device — NOT necessarily a government officer or technical expert. In this case, Arman Hodekar (the CCTV installer who maintained the system) was the right person to sign, and the court accepted his certificate as valid.', bullets: [] }] } },
   ],
   requiredDocuments: [
     { id: 'doc-1', description: 'Original Sale Agreement with signatures', checked: true },
@@ -319,175 +322,69 @@ function MetallicButton({ label, variant, onClick, theme }: { label: string; var
   );
 }
 
-// ─── Custom Metallic Pie Chart SVG ───
-// Theme-specific gradient configs
-const PIE_THEME_CONFIG = {
-  gold: {
-    // Losing slice — gold metallic
-    sectorGradient: {
-      cx: '30%', cy: '25%', r: '90%',
-      stops: [
-        { offset: '0%', color: '#fff6d0' },
-        { offset: '12%', color: '#f8e7a2' },
-        { offset: '28%', color: '#e6c26a' },
-        { offset: '52%', color: '#c7963a' },
-        { offset: '78%', color: '#f0d688' },
-        { offset: '100%', color: '#9f6c1d' },
-      ],
-    },
-    // Winning slice — silver metallic
-    baseGradient: {
-      cx: '65%', cy: '35%', r: '90%',
-      stops: [
-        { offset: '0%', color: '#ffffff' },
-        { offset: '20%', color: '#eeeeee' },
-        { offset: '40%', color: '#c9c9c9' },
-        { offset: '60%', color: '#f8f8f8' },
-        { offset: '82%', color: '#b7b7b7' },
-        { offset: '100%', color: '#8a8a8a' },
-      ],
-    },
-    shine: { cx: '28%', cy: '22%', r: '70%' },
-    separatorColor: '#2a2a2a',
-    rimColor: 'rgba(255,255,255,0.25)',
-    labelColor: '#111',
-  },
-  dark: {
-    // Losing slice — red metallic
-    sectorGradient: {
-      cx: '35%', cy: '28%', r: '88%',
-      stops: [
-        { offset: '0%', color: '#fca5a5' },
-        { offset: '20%', color: '#f87171' },
-        { offset: '45%', color: '#ef4444' },
-        { offset: '70%', color: '#dc2626' },
-        { offset: '90%', color: '#b91c1c' },
-        { offset: '100%', color: '#7f1d1d' },
-      ],
-    },
-    // Winning slice — green metallic
-    baseGradient: {
-      cx: '50%', cy: '35%', r: '90%',
-      stops: [
-        { offset: '0%', color: '#86efac' },
-        { offset: '20%', color: '#4ade80' },
-        { offset: '45%', color: '#22c55e' },
-        { offset: '65%', color: '#16a34a' },
-        { offset: '85%', color: '#15803d' },
-        { offset: '100%', color: '#166534' },
-      ],
-    },
-    shine: { cx: '30%', cy: '25%', r: '65%' },
-    separatorColor: '#111827',
-    rimColor: 'rgba(255,255,255,0.1)',
-    labelColor: '#ffffff',
-  },
-  light: {
-    // Losing slice — bright red
-    sectorGradient: {
-      cx: '40%', cy: '28%', r: '88%',
-      stops: [
-        { offset: '0%', color: '#ff6b6b' },
-        { offset: '30%', color: '#ef4444' },
-        { offset: '60%', color: '#dc2626' },
-        { offset: '100%', color: '#b91c1c' },
-      ],
-    },
-    // Winning slice — theme teal green
-    baseGradient: {
-      cx: '50%', cy: '35%', r: '90%',
-      stops: [
-        { offset: '0%', color: '#5eead4' },
-        { offset: '25%', color: '#14b8a6' },
-        { offset: '50%', color: '#0d9488' },
-        { offset: '75%', color: '#01696f' },
-        { offset: '100%', color: '#0c4e54' },
-      ],
-    },
-    shine: { cx: '30%', cy: '20%', r: '70%' },
-    separatorColor: '#ffffff',
-    rimColor: 'rgba(0,0,0,0.08)',
-    labelColor: '#ffffff',
-  },
+// Simple flat donut chart colors per theme
+const PIE_FLAT_COLORS = {
+  light: { winning: '#008000', losing: '#FF0000' },
+  dark: { winning: '#22c55e', losing: '#ef4444' },
+  gold: { winning: '#D4A853', losing: '#8a8a8a' },
 };
 
 function MetallicPieChart({ winningPct, losingPct, theme }: { winningPct: number; losingPct: number; theme: 'light' | 'dark' | 'gold' }) {
-  const config = PIE_THEME_CONFIG[theme];
-  const cx = 150, cy = 150, r = 120;
+  const colors = PIE_FLAT_COLORS[theme];
+  const cx = 150, cy = 150, outerR = 120, innerR = 70;
 
-  // Calculate the gold/sector slice (losing %)
-  // Start from 12 o'clock (top), sweep clockwise
+  // Losing slice angle (starts from top, clockwise)
   const angleDeg = (losingPct / 100) * 360;
-  const angleRad = (angleDeg) * (Math.PI / 180);
+  const angleRad = angleDeg * (Math.PI / 180);
 
-  // End point of the arc (starting from top, going clockwise)
-  // Top of circle is (cx, cy - r). Clockwise from top means positive angle from -Y axis
-  const endX = cx + r * Math.sin(angleRad);
-  const endY = cy - r * Math.cos(angleRad);
+  const outerEndX = cx + outerR * Math.sin(angleRad);
+  const outerEndY = cy - outerR * Math.cos(angleRad);
+  const innerEndX = cx + innerR * Math.sin(angleRad);
+  const innerEndY = cy - innerR * Math.cos(angleRad);
 
-  // Large arc flag: if sector > 180 degrees, use large arc
   const largeArc = angleDeg > 180 ? 1 : 0;
 
-  // SVG arc: from top point, clockwise (sweep=1) to endpoint
-  const sectorPath = `M${cx} ${cy} L${cx} ${cy - r} A${r} ${r} 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`;
+  // Losing slice path (donut arc)
+  const losingPath = [
+    `M${cx} ${cy - outerR}`,
+    `A${outerR} ${outerR} 0 ${largeArc} 1 ${outerEndX.toFixed(1)} ${outerEndY.toFixed(1)}`,
+    `L${innerEndX.toFixed(1)} ${innerEndY.toFixed(1)}`,
+    `A${innerR} ${innerR} 0 ${largeArc} 0 ${cx} ${cy - innerR}`,
+    'Z',
+  ].join(' ');
 
-  // Label positions — midpoint angle of each sector
+  // Winning slice path (remaining donut arc)
+  const winLargeArc = (360 - angleDeg) > 180 ? 1 : 0;
+  const winningPath = [
+    `M${outerEndX.toFixed(1)} ${outerEndY.toFixed(1)}`,
+    `A${outerR} ${outerR} 0 ${winLargeArc} 1 ${cx} ${cy - outerR}`,
+    `L${cx} ${cy - innerR}`,
+    `A${innerR} ${innerR} 0 ${winLargeArc} 0 ${innerEndX.toFixed(1)} ${innerEndY.toFixed(1)}`,
+    'Z',
+  ].join(' ');
+
+  // Label positions
   const losingMidAngle = (angleDeg / 2) * (Math.PI / 180);
-  const losingLabelX = cx + r * 0.5 * Math.sin(losingMidAngle);
-  const losingLabelY = cy - r * 0.5 * Math.cos(losingMidAngle);
+  const labelR = (outerR + innerR) / 2;
+  const losingLabelX = cx + labelR * Math.sin(losingMidAngle);
+  const losingLabelY = cy - labelR * Math.cos(losingMidAngle);
 
   const winningMidAngle = (angleDeg + (360 - angleDeg) / 2) * (Math.PI / 180);
-  const winningLabelX = cx + r * 0.5 * Math.sin(winningMidAngle);
-  const winningLabelY = cy - r * 0.5 * Math.cos(winningMidAngle);
+  const winningLabelX = cx + labelR * Math.sin(winningMidAngle);
+  const winningLabelY = cy - labelR * Math.cos(winningMidAngle);
 
   return (
     <svg viewBox="0 0 300 300" className="w-full h-full">
-      <defs>
-        {/* Base (winning) gradient */}
-        <radialGradient id="pieBase" cx={config.baseGradient.cx} cy={config.baseGradient.cy} r={config.baseGradient.r}>
-          {config.baseGradient.stops.map((s, i) => (
-            <stop key={i} offset={s.offset} stopColor={s.color} />
-          ))}
-        </radialGradient>
-        {/* Sector (losing) gradient */}
-        <radialGradient id="pieSector" cx={config.sectorGradient.cx} cy={config.sectorGradient.cy} r={config.sectorGradient.r}>
-          {config.sectorGradient.stops.map((s, i) => (
-            <stop key={i} offset={s.offset} stopColor={s.color} />
-          ))}
-        </radialGradient>
-        {/* Metallic shine overlay */}
-        <radialGradient id="pieShine" cx={config.shine.cx} cy={config.shine.cy} r={config.shine.r}>
-          <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
-          <stop offset="25%" stopColor="rgba(255,255,255,0.4)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
-        {/* Bevel shadow */}
-        <filter id="pieBevel">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.25" />
-        </filter>
-      </defs>
-
-      {/* Base circle (winning %) */}
-      <circle cx={cx} cy={cy} r={r} fill="url(#pieBase)" filter="url(#pieBevel)" />
-
-      {/* Sector slice (losing %) */}
-      <path d={sectorPath} fill="url(#pieSector)" />
-
-      {/* Separator lines */}
-      <line x1={cx} y1={cy} x2={cx} y2={cy - r} stroke={config.separatorColor} strokeWidth="2" />
-      <line x1={cx} y1={cy} x2={endX.toFixed(1)} y2={endY.toFixed(1)} stroke={config.separatorColor} strokeWidth="2" />
-
-      {/* Metallic highlight */}
-      <circle cx={cx} cy={cy} r={r} fill="url(#pieShine)" opacity="0.55" />
-
-      {/* Subtle rim */}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={config.rimColor} strokeWidth="2" />
+      {/* Winning slice */}
+      <path d={winningPath} fill={colors.winning} />
+      {/* Losing slice */}
+      <path d={losingPath} fill={colors.losing} />
 
       {/* Labels */}
-      <text x={losingLabelX} y={losingLabelY} textAnchor="middle" dominantBaseline="central" fontSize="28" fontWeight="700" fill={config.labelColor}>
+      <text x={losingLabelX} y={losingLabelY} textAnchor="middle" dominantBaseline="central" fontSize="22" fontWeight="700" fill="#ffffff">
         {losingPct}%
       </text>
-      <text x={winningLabelX} y={winningLabelY} textAnchor="middle" dominantBaseline="central" fontSize="28" fontWeight="700" fill={config.labelColor}>
+      <text x={winningLabelX} y={winningLabelY} textAnchor="middle" dominantBaseline="central" fontSize="22" fontWeight="700" fill="#ffffff">
         {winningPct}%
       </text>
     </svg>
@@ -538,6 +435,69 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
 }
 */
 
+// ─── Case Type Detail Data ───
+const CASE_TYPE_DETAILS: Record<string, { title: string; intro: string; rows: { label: string; content: string }[] }> = {
+  'Criminal Case': {
+    title: '1. CRIMINAL CASE (as opposed to Civil Case)',
+    intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
+    rows: [
+      { label: 'Category', content: 'Criminal Case' },
+      { label: 'Definition', content: 'A criminal case is one where the State (Government) prosecutes an individual for committing an act that is prohibited by law and harmful to society at large. The State acts as the complainant/prosecutor on behalf of society. The accused faces punishment — imprisonment, fine, or both — if convicted.' },
+      { label: 'Distinguished From', content: 'A civil case involves a dispute between two private parties (e.g., property disputes, contract breaches, divorce). In a civil case, the remedy is usually compensation or an injunction — not imprisonment.' },
+      { label: 'Why This Case is Criminal', content: 'Hemant Desai was accused of theft — an act criminalised by the State under the Indian Penal Code. The case title "State of Maharashtra v. Hemant Pramod Desai" itself shows the State prosecuting on behalf of the victim and society. The remedy sought was imprisonment and fine — characteristic of criminal proceedings. No civil claim was made in this case.' },
+    ],
+  },
+  'Cognizable Offence': {
+    title: '2. COGNIZABLE OFFENCE',
+    intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
+    rows: [
+      { label: 'Category', content: 'Cognizable Offence' },
+      { label: 'Definition', content: 'A cognizable offence is one where the police have the authority to arrest a suspect WITHOUT obtaining a warrant from a magistrate first, register an FIR, and begin investigation on their own motion. These are generally serious offences where immediate police action is required. Defined under the First Schedule to the CrPC 1973 / BNSS 2023.' },
+      { label: 'Legal Basis', content: 'Section 2(c), Code of Criminal Procedure 1973 | Now: Section 2(1)(f), Bharatiya Nagarik Suraksha Sanhita (BNSS) 2023.' },
+      { label: 'Sections 379 & 380 IPC — Are They Cognizable?', content: 'YES. Both Section 379 (theft) and Section 380 (theft in dwelling/shop) are listed as COGNIZABLE offences in the First Schedule to the CrPC. Police can arrest the accused without a warrant and register an FIR immediately.' },
+      { label: 'How This Applied', content: 'When Shoaib Jahagirdar went to Ratnagiri City Police Station and reported the theft, the police were legally obligated to register the FIR (Crime No. 52/2021) immediately. They could — and did — arrest Hemant Desai on 16.03.2021 without requiring a magistrate\'s arrest warrant. The Supreme Court in Lalita Kumari v. State of UP [(2014) 2 SCC 1] has held that police MUST register an FIR for every cognizable offence reported to them — they cannot refuse or conduct a preliminary inquiry first.' },
+      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, Section 303 BNS (theft) remains a cognizable offence. The First Schedule to BNSS continues to classify it as cognizable and non-bailable.' },
+    ],
+  },
+  'Non-Bailable Offence': {
+    title: '3. NON-BAILABLE OFFENCE',
+    intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
+    rows: [
+      { label: 'Category', content: 'Non-Bailable Offence' },
+      { label: 'Definition', content: 'A non-bailable offence is one where the accused does NOT have an automatic right to be released on bail. Bail must be applied for before a court (not a police officer) and the court has discretion to grant or refuse bail, depending on the facts, flight risk, criminal history, and gravity of the offence.' },
+      { label: 'Distinguished From', content: 'In a bailable offence, the accused is entitled to bail as a matter of right — the police or court must release the accused on bail if he offers sufficient surety. There is no judicial discretion to refuse.' },
+      { label: 'Sections 379 & 380 IPC — Bailable or Non-Bailable?', content: 'Section 379 IPC (ordinary theft) — NON-BAILABLE. Section 380 IPC (theft in dwelling/shop) — NON-BAILABLE. Both are listed as non-bailable in the First Schedule to the CrPC.' },
+      { label: 'How This Applied', content: 'After Hemant Desai was arrested on 16.03.2021, he was produced before the JMFC and remanded to judicial custody. He could not be automatically released at the police station. His defence advocate Adv. Sachin Parkar had to file a formal Bail Application under Section 437 CrPC before the JMFC. Hemant remained in judicial custody from 16.03.2021 to 17.06.2021 — a period of approximately 3 months — before being released. This detention was later set off against his final 1-year sentence.' },
+      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, both BNS Section 303(2) (theft) and BNS Section 305 (theft in building/shop) remain non-bailable. Additionally, BNSS Section 479 now gives undertrial prisoners the right to bail if they have served half the maximum sentence for the offence — a new right not available under the old CrPC.' },
+    ],
+  },
+  'Warrant Case': {
+    title: '4. WARRANT CASE (Trial Type)',
+    intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
+    rows: [
+      { label: 'Category', content: 'Warrant Case' },
+      { label: 'Definition', content: 'A warrant case is a criminal case where the offence is punishable with imprisonment exceeding 2 years — or with death, life imprisonment, or rigorous imprisonment. Warrant cases are tried by a more thorough procedure: charges are formally framed, witnesses are cross-examined in detail, and the accused has full opportunity to lead defence evidence. Defined under Section 2(x) CrPC / Section 2(1)(v) BNSS.' },
+      { label: 'Distinguished From', content: 'A summons case involves offences punishable with up to 2 years. It follows a simpler, faster procedure without formal charge-framing.' },
+      { label: 'Sections 379 & 380 IPC — Warrant or Summons?', content: 'Section 379 IPC — punishable up to 3 years. This crosses the 2-year threshold, making it a WARRANT CASE. Section 380 IPC — punishable up to 7 years. This is clearly a WARRANT CASE.' },
+      { label: 'How This Applied', content: 'Since this was a warrant case, the JMFC followed the full warrant case trial procedure under Chapter XIX of the CrPC (Sections 238–250). This meant: (1) the charge-sheet was examined for prima facie case; (2) formal charges were framed and read to the accused (Section 380 IPC and Section 379 IPC); (3) the accused was asked to plead guilty or not guilty; (4) prosecution witnesses were examined and cross-examined; (5) the accused was examined under Section 313 CrPC; (6) the accused was given the opportunity to lead defence evidence (he declined); (7) arguments were heard; and (8) the judgment was pronounced. The conviction was recorded under Section 248(2) CrPC — the specific provision for conviction in a warrant case tried by a Magistrate.' },
+      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, the warrant case procedure is now under Chapter XX (Sections 262–280 BNSS). The conviction in a warrant case Magistrate trial is now under Section 280(2) BNSS — the direct equivalent of Section 248(2) CrPC.' },
+    ],
+  },
+};
+
+// Section icon button (shown when another section is maximized)
+function SectionIcon({ id, icon, title, onClick }: { id: string; icon: string; title: string; onClick: (id: string) => void }) {
+  return (
+    <button
+      onClick={() => onClick(id)}
+      className="w-9 h-9 rounded-lg bg-bg-elevated border border-border flex items-center justify-center hover:bg-accent-primary/10 hover:border-accent-primary transition-colors"
+      title={title}
+    >
+      <span className="text-sm">{icon}</span>
+    </button>
+  );
+}
+
 export function AnalyserPage() {
   const { theme } = useTheme();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -561,11 +521,15 @@ export function AnalyserPage() {
   // Modal states
   const [caseTypeModal, setCaseTypeModal] = useState<string | null>(null);
   const [sectionModal, setSectionModal] = useState<string | null>(null);
+  const [sectionDetailModal, setSectionDetailModal] = useState<number | null>(null);
   const [docModal, setDocModal] = useState<string | null>(null);
   const [similarCaseModal, setSimilarCaseModal] = useState<string | null>(null);
   const [docTitle, setDocTitle] = useState('');
   const [docContent, setDocContent] = useState('');
   const [showExport, setShowExport] = useState(false);
+
+  // Maximize/Minimize state: null = normal view, string = ID of maximized section
+  const [maximizedSection, setMaximizedSection] = useState<string | null>(null);
 
   // Swipe gesture support for carousel
   const touchStartX = useRef<number>(0);
@@ -1020,8 +984,8 @@ export function AnalyserPage() {
                 {displayData && (
                   <>
                     {/* Case Type & Jurisdiction */}
-                    <GlassCard className="!p-4">
-                      <h3 className="text-sm font-semibold text-text-primary mb-3">Case Type &amp; Jurisdiction</h3>
+                    <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {displayData.caseTypes.map((ct) => (
                           <button key={ct} onClick={() => setCaseTypeModal(ct)}
@@ -1034,8 +998,8 @@ export function AnalyserPage() {
                     </GlassCard>
 
                     {/* Applicable Legal Sections */}
-                    <GlassCard className="!p-4">
-                      <h3 className="text-sm font-semibold text-text-primary mb-3">Applicable Legal Sections</h3>
+                    <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.applicableSections.map((sec, i) => (
                           <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
@@ -1043,25 +1007,30 @@ export function AnalyserPage() {
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                               <p className="text-xs text-text-secondary">{sec.description}</p>
                             </div>
-                            <MetallicButton
-                              label={sec.relevance}
-                              variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'}
-                              onClick={() => setSectionModal(sec.section)}
-                              theme={theme}
-                            />
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {sec.detail && (
+                                <button onClick={() => setSectionDetailModal(i)} className="px-2.5 py-1 rounded-md gradient-btn text-xs font-medium text-white">View</button>
+                              )}
+                              <MetallicButton
+                                label={sec.relevance}
+                                variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'}
+                                onClick={() => setSectionDetailModal(i)}
+                                theme={theme}
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
                     </GlassCard>
 
                     {/* Required Documents */}
-                    <GlassCard className="!p-4">
+                    <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
                       <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
                           <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                             <div className="flex items-center gap-2 flex-1 min-w-0">
-                              <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
+                              
                               <span className="text-xs text-text-secondary">{doc.description}</span>
                             </div>
                             <MetallicButton
@@ -1083,8 +1052,8 @@ export function AnalyserPage() {
                 {displayData && (
                   <>
                     {/* Similar Historical Cases */}
-                    <GlassCard className="!p-4">
-                      <h3 className="text-sm font-semibold text-text-primary mb-3">Similar Historical Cases</h3>
+                    <GlassCard className="!p-4 flex-[3] min-h-0 overflow-y-auto">
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Similar Historical Cases</h3><button onClick={() => setMaximizedSection('similar')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.similarCases.length > 0 ? (
                           displayData.similarCases.map((sc, i) => (
@@ -1110,8 +1079,8 @@ export function AnalyserPage() {
                     </GlassCard>
 
                     {/* Outcome Prediction + Key Winning Points + Risk Factors */}
-                    <GlassCard className="!p-4">
-                      <h3 className="text-sm font-semibold text-text-primary mb-3">Outcome Prediction</h3>
+                    <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="flex items-start gap-4 mb-4">
                         <div className="w-44 h-44 relative">
                           <MetallicPieChart
@@ -1154,9 +1123,7 @@ export function AnalyserPage() {
                           <span className="w-2 h-2 rounded-full bg-danger" />
                           <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                         </div>
-                        <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
-                          Explore
-                        </button>
+                        <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                       </div>
                     </GlassCard>
                   </>
@@ -1182,8 +1149,123 @@ export function AnalyserPage() {
           </div>
         ) : (
           <>
-            {/* Standard single-result layout: MIDDLE COLUMN (~37%) */}
-            <div className="md:col-span-4 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+            {/* Standard single-result layout: MIDDLE + RIGHT with maximize support */}
+            {maximizedSection ? (
+              <>
+                {/* Maximized view: one section fills the space, icons on the side */}
+                <div className="md:col-span-8 flex gap-2 max-h-[calc(100vh-180px)]">
+                  {/* Icon bar */}
+                  <div className="flex flex-col gap-2 shrink-0">
+                    {[
+                      { id: 'caseType', icon: '⚖️', title: 'Case Type & Jurisdiction' },
+                      { id: 'sections', icon: '📜', title: 'Applicable Legal Sections' },
+                      { id: 'documents', icon: '📁', title: 'Required Documents' },
+                      { id: 'similar', icon: '📊', title: 'Similar Historical Cases' },
+                      { id: 'outcome', icon: '🎯', title: 'Outcome Prediction' },
+                    ].filter(s => s.id !== maximizedSection).map(s => (
+                      <SectionIcon key={s.id} id={s.id} icon={s.icon} title={s.title} onClick={setMaximizedSection} />
+                    ))}
+                  </div>
+                  {/* Maximized content */}
+                  <div className="flex-1 min-w-0 overflow-y-auto glass-card !p-4">
+                    <div className="flex items-center justify-between mb-3 sticky top-0 z-10">
+                      <h3 className="text-sm font-semibold text-text-primary">
+                        {maximizedSection === 'caseType' && '⚖️ Case Type & Jurisdiction'}
+                        {maximizedSection === 'sections' && '📜 Applicable Legal Sections'}
+                        {maximizedSection === 'documents' && '📁 Required Documents'}
+                        {maximizedSection === 'similar' && '📊 Similar Historical Cases'}
+                        {maximizedSection === 'outcome' && '🎯 Outcome Prediction'}
+                      </h3>
+                      <button onClick={() => setMaximizedSection(null)} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Minimize">
+                        <Minimize2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    {displayData && maximizedSection === 'caseType' && (
+                      <div>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {displayData.caseTypes.map((ct) => (
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">{ct}</button>
+                          ))}
+                        </div>
+                        <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
+                      </div>
+                    )}
+                    {displayData && maximizedSection === 'sections' && (
+                      <div className="space-y-2">
+                        {displayData.applicableSections.map((sec, i) => (
+                          <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
+                              <p className="text-xs text-text-secondary">{sec.description}</p>
+                            </div>
+                            <MetallicButton label={sec.relevance} variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'} onClick={() => setSectionDetailModal(i)} theme={theme} />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {displayData && maximizedSection === 'documents' && (
+                      <div className="space-y-2">
+                        {displayData.requiredDocuments.map((doc) => (
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              
+                              <span className="text-xs text-text-secondary">{doc.description}</span>
+                            </div>
+                            <MetallicButton label="Create" variant="bronze" onClick={() => setDocModal(doc.id)} theme={theme} />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {displayData && maximizedSection === 'similar' && (
+                      <div className="space-y-2">
+                        {displayData.similarCases.map((sc, i) => (
+                          <button key={i} onClick={() => setSimilarCaseModal(sc.citation)} className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
+                              <p className="text-xs text-text-secondary">{sc.outcome}</p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10' : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10' : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'}`}>
+                              {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {displayData && maximizedSection === 'outcome' && (
+                      <div>
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-44 h-44 relative">
+                            <MetallicPieChart winningPct={displayData.outcomePrediction.winningPct} losingPct={displayData.outcomePrediction.losingPct} theme={theme} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                            <ul className="space-y-1 mb-3">
+                              {displayData.keyWinningPoints.map((p, i) => (
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span className="text-success">•</span> {p}</li>
+                              ))}
+                            </ul>
+                            <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                            <ul className="space-y-1">
+                              {displayData.riskFactors.map((r, i) => (
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span className="text-danger">•</span> {r}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="flex-1 px-3 py-1.5 rounded-lg bg-success/10 text-success text-xs font-medium text-center">● {displayData.outcomePrediction.winningPct}% – Winning</span>
+                          <span className="flex-1 px-3 py-1.5 rounded-lg bg-danger/10 text-danger text-xs font-medium text-center">● {displayData.outcomePrediction.losingPct}% – Losing</span>
+                          <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+            {/* Normal layout: MIDDLE COLUMN (~37%) */}
+            <div className="md:col-span-4 flex flex-col gap-4 max-h-[calc(100vh-180px)]">
               {isAnalyzing ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
@@ -1197,8 +1279,8 @@ export function AnalyserPage() {
               ) : (
                 <>
                   {/* Case Type & Jurisdiction */}
-                  <GlassCard className="!p-4">
-                    <h3 className="text-sm font-semibold text-text-primary mb-3">Case Type &amp; Jurisdiction</h3>
+                  <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {displayData.caseTypes.map((ct) => (
                         <button key={ct} onClick={() => setCaseTypeModal(ct)}
@@ -1211,8 +1293,8 @@ export function AnalyserPage() {
                   </GlassCard>
 
                   {/* Applicable Legal Sections */}
-                  <GlassCard className="!p-4">
-                    <h3 className="text-sm font-semibold text-text-primary mb-3">Applicable Legal Sections</h3>
+                  <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.applicableSections.map((sec, i) => (
                         <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
@@ -1223,7 +1305,7 @@ export function AnalyserPage() {
                           <MetallicButton
                             label={sec.relevance}
                             variant={sec.relevance === 'High relevance' ? 'gold' : 'bronze'}
-                            onClick={() => setSectionModal(sec.section)}
+                            onClick={() => setSectionDetailModal(i)}
                             theme={theme}
                           />
                         </div>
@@ -1232,13 +1314,13 @@ export function AnalyserPage() {
                   </GlassCard>
 
                   {/* Required Documents */}
-                  <GlassCard className="!p-4">
+                  <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
                     <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
                     <div className="space-y-2">
                       {displayData.requiredDocuments.map((doc) => (
                         <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
                           <div className="flex items-center gap-2 flex-1 min-w-0">
-                            <input type="checkbox" defaultChecked={doc.checked} className="w-3.5 h-3.5 rounded accent-accent-primary shrink-0" />
+                            
                             <span className="text-xs text-text-secondary">{doc.description}</span>
                           </div>
                           <MetallicButton
@@ -1256,7 +1338,7 @@ export function AnalyserPage() {
             </div>
 
             {/* RIGHT COLUMN (~38%) */}
-            <div className="md:col-span-5 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto pr-1">
+            <div className="md:col-span-5 flex flex-col gap-4 max-h-[calc(100vh-180px)]">
               {isAnalyzing ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
@@ -1270,8 +1352,8 @@ export function AnalyserPage() {
               ) : (
                 <>
                   {/* Similar Historical Cases */}
-                  <GlassCard className="!p-4">
-                    <h3 className="text-sm font-semibold text-text-primary mb-3">Similar Historical Cases</h3>
+                  <GlassCard className="!p-4 flex-[3] min-h-0 overflow-y-auto">
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Similar Historical Cases</h3><button onClick={() => setMaximizedSection('similar')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.similarCases.length > 0 ? (
                         displayData.similarCases.map((sc, i) => (
@@ -1297,8 +1379,8 @@ export function AnalyserPage() {
                   </GlassCard>
 
                   {/* Outcome Prediction + Key Winning Points + Risk Factors */}
-                  <GlassCard className="!p-4">
-                    <h3 className="text-sm font-semibold text-text-primary mb-3">Outcome Prediction</h3>
+                  <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-44 h-44 relative">
                         <MetallicPieChart
@@ -1341,31 +1423,150 @@ export function AnalyserPage() {
                         <span className="w-2 h-2 rounded-full bg-danger" />
                         <span className="text-sm text-text-primary font-semibold">{displayData.outcomePrediction.losingPct}% - Losing</span>
                       </div>
-                      <button className="px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
-                        Explore
-                      </button>
+                      <a href="https://juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                     </div>
                   </GlassCard>
                 </>
               )}
             </div>
+              </>
+            )}
           </>
         )}
       </div>
 
       {/* ─── MODALS ─── */}
 
+      {/* Section Detail Modal */}
+      <Modal
+        isOpen={sectionDetailModal !== null}
+        onClose={() => setSectionDetailModal(null)}
+        title={displayData?.applicableSections[sectionDetailModal ?? 0]?.section ?? 'Section Detail'}
+        size="3xl"
+      >
+        {sectionDetailModal !== null && displayData?.applicableSections[sectionDetailModal]?.detail && (() => {
+          const sec = displayData.applicableSections[sectionDetailModal];
+          const detail = sec.detail!;
+          return (
+            <div className="space-y-5 max-h-[70vh] overflow-y-auto">
+              {/* Header with logo */}
+              <div className="flex items-start gap-4 p-4 rounded-xl" style={{ backgroundColor: '#f6f2eb' }}>
+                <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-16 h-16 shrink-0" />
+                <div>
+                  <h3 className="text-base font-bold" style={{ color: '#cc0000' }}>{detail.sectionTitle || sec.section}</h3>
+                  <p className="text-sm mt-1"><strong>Old Law (Used in Case):</strong> {detail.oldLaw}</p>
+                  <p className="text-sm"><strong>New Law (BNS):</strong> {detail.newLaw}</p>
+                  <p className="text-sm"><strong style={{ color: '#cc0000' }}>Type of Provision:</strong> {detail.typeOfProvision}</p>
+                </div>
+              </div>
+
+              {/* Application heading */}
+              {detail.caseApplication && (
+                <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: '#1a3a5c' }}>
+                  <h4 className="text-sm font-bold text-white uppercase">{detail.caseApplication}</h4>
+                </div>
+              )}
+
+              {/* Paragraphs */}
+              {detail.paragraphs && detail.paragraphs.length > 0 && (
+                <div className="space-y-3 px-1">
+                  {detail.paragraphs.map((p, idx) => (
+                    <p key={idx} className="text-sm leading-relaxed" style={{ color: '#212120' }}>{p}</p>
+                  ))}
+                </div>
+              )}
+
+              {/* Ingredients table */}
+              {detail.ingredients && detail.ingredients.length > 0 && (
+                <div className="overflow-x-auto rounded-lg border" style={{ borderColor: '#d4d1ca' }}>
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr style={{ backgroundColor: '#1a3a5c' }}>
+                        <th className="px-4 py-3 text-left text-white font-bold w-[160px]">Ingredient</th>
+                        <th className="px-4 py-3 text-left text-white font-bold">What It Means in Plain Language</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {detail.ingredients.map((ing, idx) => (
+                        <tr key={idx} className="border-t" style={{ borderColor: '#d4d1ca', backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f6f2eb' }}>
+                          <td className="px-4 py-3 font-semibold align-top" style={{ color: '#28251D' }}>{ing.name}</td>
+                          <td className="px-4 py-3" style={{ color: '#212120' }}>{ing.explanation}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Sub-sections */}
+              {detail.subSections && detail.subSections.length > 0 && (
+                <div className="space-y-4">
+                  {detail.subSections.map((sub, idx) => (
+                    <div key={idx}>
+                      <div className="px-4 py-2 rounded-lg mb-2" style={{ backgroundColor: '#f6f2eb', borderLeft: '4px solid #cc0000' }}>
+                        <h4 className="text-sm font-bold" style={{ color: '#cc0000' }}>{sub.heading}</h4>
+                      </div>
+                      <p className="text-sm leading-relaxed px-1 mb-2" style={{ color: '#212120' }}>{sub.content}</p>
+                      {sub.bullets && sub.bullets.length > 0 && (
+                        <ul className="space-y-1.5 px-1">
+                          {sub.bullets.map((b, bi) => (
+                            <li key={bi} className="text-sm flex items-start gap-2" style={{ color: '#212120' }}>
+                              <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: '#1a3a5c' }} />
+                              {b}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })()}
+      </Modal>
+
       {/* Case Type Modal */}
       <Modal
         isOpen={!!caseTypeModal}
         onClose={() => setCaseTypeModal(null)}
         title={caseTypeModal ?? ''}
+        size="3xl"
       >
-        <p className="text-sm text-text-secondary">
-          {caseTypeModal === 'Criminal'
-            ? 'Criminal cases involve offenses against the state or public, including theft, assault, fraud, and other violations of criminal law. These cases are prosecuted by the government.'
-            : 'Financial fraud cases involve deception for monetary gain, including embezzlement, securities fraud, Ponzi schemes, and other forms of financial misconduct.'}
-        </p>
+        {caseTypeModal && CASE_TYPE_DETAILS[caseTypeModal] ? (() => {
+          const detail = CASE_TYPE_DETAILS[caseTypeModal];
+          return (
+            <div className="space-y-5 max-h-[70vh] overflow-y-auto">
+              {/* Header with logo */}
+              <div className="flex items-start gap-4 p-4 rounded-xl" style={{ backgroundColor: '#f6f2eb' }}>
+                <img src="/logo/JuryfyAIlogo.png" alt="Juryfy AI" className="w-16 h-16 shrink-0" />
+                <div>
+                  <h3 className="text-sm font-bold mb-2" style={{ color: '#1a3a5c' }}>WHAT IS &apos;CASE TYPE&apos;?</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: '#212120' }}>{detail.intro}</p>
+                </div>
+              </div>
+
+              {/* Section title */}
+              <h4 className="text-base font-bold px-1" style={{ color: '#cc0000' }}>{detail.title}</h4>
+
+              {/* Table */}
+              <div className="overflow-x-auto rounded-lg border" style={{ borderColor: '#d4d1ca' }}>
+                <table className="w-full text-sm">
+                  <tbody>
+                    {detail.rows.map((row, idx) => (
+                      <tr key={idx} className="border-t" style={{ borderColor: '#d4d1ca', backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f6f2eb' }}>
+                        <td className="px-4 py-3 font-semibold align-top w-[160px]" style={{ color: '#28251D' }}>{row.label}</td>
+                        <td className="px-4 py-3" style={{ color: '#212120' }}>{row.content}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })() : (
+          <p className="text-sm text-text-secondary">Details not available for this case type.</p>
+        )}
       </Modal>
 
       {/* Section Modal */}

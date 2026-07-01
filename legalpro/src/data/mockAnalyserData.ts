@@ -26,6 +26,16 @@ export interface ApplicableSection {
   section: string;
   description: string;
   relevance: 'High relevance' | 'Medium relevance';
+  detail?: {
+    sectionTitle: string;
+    oldLaw: string;
+    newLaw: string;
+    typeOfProvision: string;
+    caseApplication?: string;
+    ingredients?: { name: string; explanation: string }[];
+    paragraphs?: string[];
+    subSections?: { heading: string; content: string; bullets?: string[] }[];
+  };
 }
 
 export interface RequiredDocument {

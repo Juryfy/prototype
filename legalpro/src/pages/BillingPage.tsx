@@ -136,7 +136,7 @@ export function BillingPage() {
               contentStyle={{ background: tooltipBg, border: `1px solid ${tooltipBorder}`, borderRadius: 12, color: tooltipText }}
               formatter={(value) => [`₹${value}L`, 'Revenue']}
             />
-            <Bar dataKey="revenue" fill={`url(#barGradient${theme === 'gold' ? 'Gold' : theme === 'dark' ? 'Dark' : 'Light'})`} radius={[6, 6, 0, 0]} />
+            <Bar dataKey="revenue" fill={theme === 'gold' ? 'url(#barGradientGold)' : theme === 'dark' ? '#3b82f6' : '#005657'} radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>
