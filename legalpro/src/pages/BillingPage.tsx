@@ -35,7 +35,7 @@ export function BillingPage() {
   const { theme } = useTheme();
 
   const gridColor = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#1E293B' : '#E9ECEF';
-  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#8898AA';
+  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#000000';
   const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#111827' : '#FFFFFF';
   const tooltipBorder = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#1E293B' : '#E9ECEF';
   const tooltipText = theme === 'gold' ? '#F5E6D3' : theme === 'dark' ? '#F8FAFC' : '#172B4D';

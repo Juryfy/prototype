@@ -48,6 +48,7 @@ export interface SimilarCase {
   citation: string;
   outcome: string;
   badge: 'WIN' | 'LOSS' | 'Partial';
+  pdfUrl?: string;
 }
 
 export interface OutcomePrediction {

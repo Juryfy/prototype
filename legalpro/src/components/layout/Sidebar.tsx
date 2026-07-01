@@ -92,7 +92,7 @@ export function Sidebar() {
         case 'gold':
           return 'bg-[#D4A853]/20 text-[#D4A853]';
         case 'light':
-          return 'bg-accent-primary/10 text-accent-primary font-semibold';
+          return 'bg-accent-primary text-white font-semibold';
         default:
           return 'bg-white/15 text-white';
       }

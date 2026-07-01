@@ -67,7 +67,7 @@ function ProgressBar({ label, value, color = 'bg-accent-primary' }: { label: str
 export function ProfilingPage() {
   const { theme } = useTheme();
   const chartColor = theme === 'gold' ? '#D4A853' : theme === 'dark' ? '#6366F1' : '#005657';
-  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#A9A9A9';
+  const axisColor = theme === 'gold' ? '#7A6B5A' : theme === 'dark' ? '#94A3B8' : '#000000';
   const tooltipBg = theme === 'gold' ? '#1A2332' : theme === 'dark' ? '#1E293B' : '#FFFFFF';
   const tooltipBorder = theme === 'gold' ? '#2D3A4A' : theme === 'dark' ? '#334155' : '#E9ECEF';
 

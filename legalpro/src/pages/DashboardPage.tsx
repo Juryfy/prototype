@@ -34,7 +34,7 @@ const THEME_TOOLTIP = {
 };
 
 const THEME_AXIS_COLOR = {
-  light: '#A9A9A9',
+  light: '#000000',
   dark: '#94A3B8',
   gold: '#7A6B5A',
 };

@@ -19,9 +19,9 @@
   --success: #008000;
   --warning: #ffc400;
   --danger: #FF0000;
-  --text-primary: #28251D;
-  --text-secondary: #212120;
-  --text-muted: #A9A9A9;
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-muted: #000000;
   --border-color: #d4d1ca;
   --sidebar-bg: #eeece1;
   --gradient: linear-gradient(135deg, #005657, #025357);

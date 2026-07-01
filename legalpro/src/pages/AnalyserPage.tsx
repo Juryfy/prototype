@@ -89,27 +89,30 @@ const FALLBACK_DATA_1: AnalysisResult = {
     { section: 'Section 65-B / BSA 63', description: 'Electronic Evidence: CCTV Footage Admissibility', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 4 – ELECTRONIC EVIDENCE: CCTV FOOTAGE ADMISSIBILITY', oldLaw: 'Section 65-B, Indian Evidence Act, 1872', newLaw: 'Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023', typeOfProvision: 'Procedural and evidentiary — governs how electronic records (CCTV footage, digital photos, WhatsApp messages, emails, computer printouts) can be made admissible in court', caseApplication: 'HOW THIS APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['The CCTV was owned by Shoaib (the informant) and was installed and maintained by Arman Hodekar. On 19.02.2021, in the presence of the Investigating Officer ASI Ashok Rathod and the panch witness Mohammad Mujid, Arman copied the relevant CCTV footage from the DVR onto a pen drive. He then signed the Section 65-B certificate (Exhibit 21 in court). A colour printout of the CCTV frame showing the accused was also prepared (Article C). During the trial, the pen drive was played in OPEN COURT. Both PW-2 Shoaib (the victim) and PW-4 Arman (the CCTV installer) identified the person visible in the footage as Hemant Pramod Desai. This made the CCTV evidence both legally admissible and factually conclusive. The accused was unable to offer any credible challenge to either the certificate or the identification.'], subSections: [{ heading: 'WHO MUST SIGN THE CERTIFICATE?', content: 'The certificate must be signed by a person in a \'responsible official position\' in relation to the operation of the device. The Supreme Court in Arjun Panditrao Khotkar clarified that this is the person who owns or is responsible for the computer/device — NOT necessarily a government officer or technical expert. In this case, Arman Hodekar (the CCTV installer who maintained the system) was the right person to sign, and the court accepted his certificate as valid.', bullets: [] }] } },
   ],
   requiredDocuments: [
-    { id: 'doc-1', description: 'Original Sale Agreement with signatures', checked: true },
-    { id: 'doc-2', description: 'Payment receipts and bank transfer records', checked: true },
-    { id: 'doc-3', description: 'Possession letter or electricity/water bills in plaintiff name', checked: false },
-    { id: 'doc-4', description: 'Legal notice sent to defendant', checked: false },
+    { id: 'doc-1', description: 'Vakalatnama — Appointment letter signed by complainant authorising the lawyer to appear', checked: true },
+    { id: 'doc-2', description: 'Memo of Appearance — Filed in court to formally record the lawyer\'s presence in the case', checked: true },
+    { id: 'doc-3', description: 'Written Opposition to Bail Application — Detailed submissions arguing why accused should not get bail, citing his prior criminal record (multiple FIRs 2012–2021)', checked: false },
+    { id: 'doc-4', description: 'Application to Play CCTV Footage in Open Court — Filed to arrange laptop/projector for playing the pen drive during PW-4\'s examination', checked: false },
   ],
   similarCases: [
-    { citation: 'Deepika Singh v. Central Administrative Tribunal (2022) 3 SCC 1', outcome: 'Outcome: Specific performance granted', badge: 'WIN' },
-    { citation: 'Rajesh Kumar v. State of UP (2020) AIR SC 2345', outcome: 'Outcome: Partial relief with compensation', badge: 'Partial' },
-    { citation: 'Anil Mehta v. Suresh Properties (2021) 5 SCC 890', outcome: 'Outcome: Decree in favor of plaintiff', badge: 'WIN' },
+    { citation: 'K.N. Mehra v. State of Rajasthan (1957)', outcome: 'Outcome: Conviction upheld for theft of government jeep', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case1_KN_Mehra_Theft_FIXED.pdf' },
+    { citation: 'Pyare Lal Bhargava v. State of Rajasthan (1963)', outcome: 'Outcome: Conviction for theft by public servant', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case2_Pyare_Lal_Bhargava_Theft_FIXED.pdf' },
+    { citation: 'State of Maharashtra v. Satish (Bombay HC, 2014)', outcome: 'Outcome: Conviction for theft in dwelling house', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case3_Satish_Maharashtra_Theft_FIXED.pdf' },
   ],
-  outcomePrediction: { winningPct: 78, losingPct: 22 },
+  outcomePrediction: { winningPct: 65, losingPct: 35 },
   keyWinningPoints: [
-    'Substantial payment of 80% consideration already made',
-    'Continuous possession since 2021 establishes part performance',
-    'Recent Supreme Court judgments favor specific performance over compensation',
-    'Clear documentary evidence of agreement and payments',
+    'CCTV + Section 65-B Certificate — The footage is legally admissible and directly places the accused inside the shop at the time of the crime',
+    'Two independent witnesses — Victim Shoaib and CCTV installer Arman both identified Hemant in open court',
+    'Recovery of stolen scooter — Physical recovery corroborates the FIR and proves the theft occurred',
+    'Prior criminal history — Multiple FIRs from 2012–2021 establish a pattern of habitual theft conduct',
+    'Furtive behaviour on CCTV — Accused visibly checks for witnesses before entering — directly proves dishonest intent',
   ],
   riskFactors: [
-    'Limitation period of 3 years from breach date',
-    'Defendant may allege plaintiff breached payment timeline',
-    'Market value appreciation may affect court discretion',
+    'Mobile phone not recovered — No physical exhibit linking accused to the Section 380 charge inside the shop',
+    'Wage dispute defence — The Rs.15,000 debt claim creates an alternative narrative that could cast reasonable doubt on appeal',
+    'Night-time CCTV quality — Footage clarity at 3:20 AM may be challenged during cross-examination',
+    'No spot-witness identification — Identity rests entirely on CCTV — no independent panch witness placed accused at the scene',
+    'Scooter abandoned — Defence can invoke the temporary-taking argument to dispute permanent dishonest intention',
   ],
   strengths: [
     { title: 'Strong Documentary Evidence', description: 'Sale agreement, receipts, and possession documents available' },
@@ -132,128 +135,9 @@ const FALLBACK_DATA_1: AnalysisResult = {
     'Based on analysis of 127 similar property dispute cases, the recommended approach offers a 78% success probability. The combination of substantial payment, possession, and favorable precedents strongly supports a decree for specific performance. Consider engaging expert witnesses on property valuation.',
 };
 
-// ─── FALLBACK DATA SET 2: Criminal Fraud Case ───
-const FALLBACK_DATA_2: AnalysisResult = {
-  caseSummary: {
-    legalIssue:
-      'The case involves a cyber fraud and financial cheating complaint where the accused used forged documents and impersonation to misappropriate Rs. 25 lakhs from the complainant through a fake real estate investment scheme operated via online platforms.',
-    keyPoints: [
-      'Rs. 25 lakhs transferred through UPI and bank transfers to accused accounts',
-      'Fake property documents and forged NOCs were presented to the complainant',
-      'Accused operated through multiple shell companies and fake identities online',
-      'Digital trail available through IP logs, transaction records, and WhatsApp chats',
-    ],
-    successProbability: 65,
-  },
-  relevantCaseLaws: [
-    {
-      citation: 'State of Maharashtra v. Vijay Mohan Jadhav (2019) 5 SCC 244',
-      court: 'Supreme Court',
-      practiceArea: 'Cyber Crime',
-      citedTimes: 98,
-      description:
-        'Established standards for electronic evidence admissibility under Section 65B of Indian Evidence Act in cyber fraud cases.',
-      outcome: 'Favorable',
-    },
-    {
-      citation: 'Suhas Katti v. State of Tamil Nadu (2004)',
-      court: 'Chennai High Court',
-      practiceArea: 'IT Act',
-      citedTimes: 203,
-      description:
-        'First conviction under IT Act provisions for online fraud. Set precedent for prosecuting cyber criminals using digital evidence.',
-      outcome: 'Favorable',
-    },
-    {
-      citation: 'Shreya Singhal v. Union of India (2015) 5 SCC 1',
-      court: 'Supreme Court',
-      practiceArea: 'Constitutional/IT Law',
-      citedTimes: 340,
-      description:
-        'Defined scope of cyber offenses and online intermediary liability. Important for establishing jurisdiction in online fraud cases.',
-      outcome: 'Neutral',
-    },
-  ],
-  statutoryProvisions: [
-    {
-      section: 'Section 420',
-      act: 'Indian Penal Code',
-      text: 'Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person... shall be punished with imprisonment up to 7 years and fine.',
-      relevance: 'Primary',
-    },
-    {
-      section: 'Section 66D',
-      act: 'Information Technology Act, 2000',
-      text: 'Whoever, by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment up to 3 years and fine up to one lakh rupees.',
-      relevance: 'Primary',
-    },
-    {
-      section: 'Section 468',
-      act: 'Indian Penal Code',
-      text: 'Whoever commits forgery, intending that the document forged shall be used for the purpose of cheating, shall be punished with imprisonment up to 7 years and fine.',
-      relevance: 'Supporting',
-    },
-  ],
-  caseTypes: ['Criminal', 'Cyber Crime', 'Financial Fraud'],
-  jurisdiction: 'India - BNS/IPC & IT Act',
-  applicableSections: [
-    { section: 'Section 420 IPC', description: 'Cheating and dishonestly inducing delivery of property', relevance: 'High relevance' },
-    { section: 'Section 406 IPC', description: 'Criminal breach of trust', relevance: 'High relevance' },
-    { section: 'IT Act Section 66D', description: 'Cheating by personation using computer resource', relevance: 'High relevance' },
-    { section: 'Section 468 IPC', description: 'Forgery for purpose of cheating', relevance: 'Medium relevance' },
-  ],
-  requiredDocuments: [
-    { id: 'doc-1', description: 'FIR copy and police complaint', checked: true },
-    { id: 'doc-2', description: 'Bank statements showing fraudulent transactions', checked: true },
-    { id: 'doc-3', description: 'WhatsApp/email communication screenshots (certified)', checked: false },
-    { id: 'doc-4', description: 'Section 65B certificate for electronic evidence', checked: false },
-    { id: 'doc-5', description: 'Forged documents received from accused', checked: false },
-  ],
-  similarCases: [
-    { citation: 'State v. Rahul Sharma (2023) Delhi HC Crl. A. 456', outcome: 'Outcome: Convicted under 420 IPC & 66D IT Act', badge: 'WIN' },
-    { citation: 'Lata Goyal v. State of NCT Delhi (2019) 8 SCC 456', outcome: 'Outcome: Acquitted due to insufficient digital evidence', badge: 'LOSS' },
-    { citation: 'Pradeep Investments v. Cyber Cell (2022) Bom HC WP 1234', outcome: 'Outcome: Partial recovery ordered', badge: 'Partial' },
-  ],
-  outcomePrediction: { winningPct: 65, losingPct: 35 },
-  keyWinningPoints: [
-    'Clear digital trail of financial transactions to accused',
-    'Forged documents are strong evidence of criminal intent',
-    'Multiple victims strengthen pattern of fraud allegation',
-    'IP logs and device data can link accused to fake identities',
-  ],
-  riskFactors: [
-    'Electronic evidence must strictly comply with Section 65B requirements',
-    'Accused may claim the transactions were legitimate business dealings',
-    'Recovery of misappropriated funds is uncertain even with conviction',
-    'Cross-jurisdictional challenges if accused operated from multiple states',
-  ],
-  strengths: [
-    { title: 'Clear Financial Trail', description: 'Bank records and UPI logs conclusively show fund movement to accused' },
-    { title: 'Documentary Fraud Evidence', description: 'Forged NOCs and fake property papers can be verified as fraudulent' },
-    { title: 'Digital Footprint', description: 'WhatsApp chats, emails, and IP logs establish accused identity' },
-    { title: 'Multiple Complainants', description: 'Pattern of similar fraud strengthens prosecution case' },
-  ],
-  challenges: [
-    { title: 'Section 65B Compliance', description: 'All electronic evidence must have proper certificates for admissibility' },
-    { title: 'Accused Identity Verification', description: 'Need to conclusively link online identities to physical accused' },
-    { title: 'Fund Recovery', description: 'Money may have been laundered through multiple accounts' },
-    { title: 'Jurisdictional Issues', description: 'Online crimes may span multiple state jurisdictions' },
-  ],
-  strategy: [
-    { step: 1, title: 'File FIR with Cyber Cell', description: 'Lodge complaint with specialized cyber crime police station with all digital evidence.' },
-    { step: 2, title: 'Secure Electronic Evidence', description: 'Obtain Section 65B certificates for all digital communications and transaction records.' },
-    { step: 3, title: 'Apply for Freezing Order', description: 'Seek court order to freeze accused bank accounts to prevent further dissipation of funds.' },
-    { step: 4, title: 'Coordinate with Bank', description: 'File complaint with banks for reversal of fraudulent transactions under RBI guidelines.' },
-  ],
-  expertRecommendation:
-    'Based on analysis of 98 similar cyber fraud cases, this case has a 65% success probability for conviction. The digital evidence trail is strong but requires strict Section 65B compliance. Recommend immediate FIR with cyber cell and simultaneous bank complaint for fund recovery. Engaging a forensic IT expert will significantly strengthen the prosecution.',
-};
-
-// Toggle between fallback datasets — uses a simple alternating flag
-let fallbackToggle = false;
+// Always use the primary fallback dataset
 function getNextFallbackData(): AnalysisResult {
-  fallbackToggle = !fallbackToggle;
-  return fallbackToggle ? FALLBACK_DATA_1 : FALLBACK_DATA_2;
+  return FALLBACK_DATA_1;
 }
 
 // ─── SVG Metallic Button (gold theme) ───
@@ -989,7 +873,7 @@ export function AnalyserPage() {
                       <div className="flex flex-wrap gap-1.5 mb-2">
                         {displayData.caseTypes.map((ct) => (
                           <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                            className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
                             {ct}
                           </button>
                         ))}
@@ -1002,7 +886,7 @@ export function AnalyserPage() {
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.applicableSections.map((sec, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                               <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -1025,13 +909,13 @@ export function AnalyserPage() {
 
                     {/* Required Documents */}
                     <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
-                      <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
-                          <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="flex items-center gap-2 flex-1 min-w-0">
                               
-                              <span className="text-xs text-text-secondary">{doc.description}</span>
+                              <span className="text-xs text-text-secondary truncate">{doc.description}</span>
                             </div>
                             <MetallicButton
                               label="Create"
@@ -1057,20 +941,16 @@ export function AnalyserPage() {
                       <div className="space-y-2">
                         {displayData.similarCases.length > 0 ? (
                           displayData.similarCases.map((sc, i) => (
-                            <button key={i} onClick={() => setSimilarCaseModal(sc.citation)}
-                              className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                            <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                               <div className="min-w-0 flex-1">
                                 <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                                 <p className="text-xs text-text-secondary">{sc.outcome}</p>
                               </div>
-                              <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${
-                                sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
-                                  : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
-                                  : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
-                              }`}>
+                              <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
+                                className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
                                 {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
-                              </span>
-                            </button>
+                              </button>
+                            </div>
                           ))
                         ) : (
                           <p className="text-xs text-text-muted italic">No similar cases found for this analysis.</p>
@@ -1081,7 +961,7 @@ export function AnalyserPage() {
                     {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                     <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="flex items-start gap-4 mb-4">
+                      <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                         <div className="w-44 h-44 relative">
                           <MetallicPieChart
                             winningPct={displayData.outcomePrediction.winningPct}
@@ -1091,7 +971,7 @@ export function AnalyserPage() {
                         </div>
                         <div className="flex-1 space-y-3">
                           <div>
-                            <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                            <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                             <ul className="space-y-1">
                               {displayData.keyWinningPoints.map((point, i) => (
                                 <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
@@ -1101,7 +981,7 @@ export function AnalyserPage() {
                             </ul>
                           </div>
                           <div>
-                            <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                            <h4 className="text-xs font-bold mb-1" style={{ color: '#FF0000' }}>Risk Factors:</h4>
                             <ul className="space-y-1">
                               {displayData.riskFactors.map((risk, i) => (
                                 <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
@@ -1184,7 +1064,7 @@ export function AnalyserPage() {
                       <div>
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">{ct}</button>
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>{ct}</button>
                           ))}
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
@@ -1193,7 +1073,7 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'sections' && (
                       <div className="space-y-2">
                         {displayData.applicableSections.map((sec, i) => (
-                          <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="flex-1 min-w-0">
                               <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                               <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -1206,10 +1086,10 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'documents' && (
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
-                          <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                          <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="flex items-center gap-2 flex-1 min-w-0">
                               
-                              <span className="text-xs text-text-secondary">{doc.description}</span>
+                              <span className="text-xs text-text-secondary truncate">{doc.description}</span>
                             </div>
                             <MetallicButton label="Create" variant="bronze" onClick={() => setDocModal(doc.id)} theme={theme} />
                           </div>
@@ -1219,42 +1099,43 @@ export function AnalyserPage() {
                     {displayData && maximizedSection === 'similar' && (
                       <div className="space-y-2">
                         {displayData.similarCases.map((sc, i) => (
-                          <button key={i} onClick={() => setSimilarCaseModal(sc.citation)} className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="min-w-0 flex-1">
                               <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
-                            <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10' : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10' : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'}`}>
+                            <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
+                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
-                            </span>
-                          </button>
+                            </button>
+                          </div>
                         ))}
                       </div>
                     )}
                     {displayData && maximizedSection === 'outcome' && (
                       <div>
-                        <div className="flex items-start gap-4 mb-4">
+                        <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                           <div className="w-44 h-44 relative">
                             <MetallicPieChart winningPct={displayData.outcomePrediction.winningPct} losingPct={displayData.outcomePrediction.losingPct} theme={theme} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                            <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                             <ul className="space-y-1 mb-3">
                               {displayData.keyWinningPoints.map((p, i) => (
-                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span className="text-success">•</span> {p}</li>
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#008000' }}>•</span> {p}</li>
                               ))}
                             </ul>
-                            <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                            <h4 className="text-xs font-bold mb-1" style={{ color: '#FF0000' }}>Risk Factors:</h4>
                             <ul className="space-y-1">
                               {displayData.riskFactors.map((r, i) => (
-                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span className="text-danger">•</span> {r}</li>
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#FF0000' }}>•</span> {r}</li>
                               ))}
                             </ul>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="flex-1 px-3 py-1.5 rounded-lg bg-success/10 text-success text-xs font-medium text-center">● {displayData.outcomePrediction.winningPct}% – Winning</span>
-                          <span className="flex-1 px-3 py-1.5 rounded-lg bg-danger/10 text-danger text-xs font-medium text-center">● {displayData.outcomePrediction.losingPct}% – Losing</span>
+                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#008000' }}>● {displayData.outcomePrediction.winningPct}% – Winning</span>
+                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#FF0000' }}>● {displayData.outcomePrediction.losingPct}% – Losing</span>
                           <a href="https://docs.juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                         </div>
                       </div>
@@ -1284,7 +1165,7 @@ export function AnalyserPage() {
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {displayData.caseTypes.map((ct) => (
                         <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition-opacity text-xs font-medium border border-accent-primary text-accent-primary bg-accent-primary/10">
+                          className="px-4 py-2 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-sm font-semibold shadow-sm border-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
                           {ct}
                         </button>
                       ))}
@@ -1297,7 +1178,7 @@ export function AnalyserPage() {
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Applicable Legal Sections</h3><button onClick={() => setMaximizedSection('sections')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.applicableSections.map((sec, i) => (
-                        <div key={i} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                        <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                           <div className="flex-1 min-w-0">
                             <h4 className="text-xs font-semibold text-text-primary">{sec.section}</h4>
                             <p className="text-xs text-text-secondary">{sec.description}</p>
@@ -1315,13 +1196,13 @@ export function AnalyserPage() {
 
                   {/* Required Documents */}
                   <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
-                    <h3 className="text-sm font-semibold text-text-primary mb-3">📁 Required Documents</h3>
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.requiredDocuments.map((doc) => (
-                        <div key={doc.id} className="flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg">
+                        <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             
-                            <span className="text-xs text-text-secondary">{doc.description}</span>
+                            <span className="text-xs text-text-secondary truncate">{doc.description}</span>
                           </div>
                           <MetallicButton
                             label="Create"
@@ -1357,20 +1238,16 @@ export function AnalyserPage() {
                     <div className="space-y-2">
                       {displayData.similarCases.length > 0 ? (
                         displayData.similarCases.map((sc, i) => (
-                          <button key={i} onClick={() => setSimilarCaseModal(sc.citation)}
-                            className="w-full flex items-center justify-between p-2.5 bg-bg-elevated rounded-lg hover:bg-bg-elevated/80 transition-colors text-left">
+                          <div key={i} className="flex items-center justify-between p-2.5 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                             <div className="min-w-0 flex-1">
                               <h4 className="text-xs font-semibold text-text-primary">{sc.citation}</h4>
                               <p className="text-xs text-text-secondary">{sc.outcome}</p>
                             </div>
-                            <span className={`px-3 py-1 rounded-md text-xs font-bold shrink-0 ml-2 border ${
-                              sc.badge === 'WIN' ? 'border-green-400 text-green-400 bg-green-400/10'
-                                : sc.badge === 'LOSS' ? 'border-red-400 text-red-400 bg-red-400/10'
-                                : 'border-yellow-400 text-yellow-400 bg-yellow-400/10'
-                            }`}>
+                            <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
+                              className="px-3 py-1.5 rounded-xl cursor-pointer hover:opacity-80 transition-opacity text-xs font-semibold shadow-sm border-2 shrink-0 ml-2" style={{ backgroundColor: '#d4edda', borderColor: '#2d7a6e', color: '#1a3c34' }}>
                               {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
-                            </span>
-                          </button>
+                            </button>
+                          </div>
                         ))
                       ) : (
                         <p className="text-xs text-text-muted italic">No similar cases found for this analysis.</p>
@@ -1381,7 +1258,7 @@ export function AnalyserPage() {
                   {/* Outcome Prediction + Key Winning Points + Risk Factors */}
                   <GlassCard className="!p-4 flex-[7] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Outcome Prediction</h3><button onClick={() => setMaximizedSection('outcome')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="flex items-start gap-4 mb-4">
+                    <div className="flex items-start gap-4 mb-4 p-3 rounded-lg border border-[#e0e0e0] shadow-sm" style={{ backgroundColor: '#f5f2e8' }}>
                       <div className="w-44 h-44 relative">
                         <MetallicPieChart
                           winningPct={displayData.outcomePrediction.winningPct}
@@ -1391,7 +1268,7 @@ export function AnalyserPage() {
                       </div>
                       <div className="flex-1 space-y-3">
                         <div>
-                          <h4 className="text-xs font-bold text-text-primary mb-1">Key Winning Points:</h4>
+                          <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                           <ul className="space-y-1">
                             {displayData.keyWinningPoints.map((point, i) => (
                               <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
@@ -1401,7 +1278,7 @@ export function AnalyserPage() {
                           </ul>
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold text-text-primary mb-1">Risk Factors:</h4>
+                          <h4 className="text-xs font-bold mb-1" style={{ color: '#FF0000' }}>Risk Factors:</h4>
                           <ul className="space-y-1">
                             {displayData.riskFactors.map((risk, i) => (
                               <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
