@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, Send, Bot, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { chatWithGemini } from '@/services/geminiService';
+import { chatWithClaude } from '@/services/claudeService';
 import firData from '@/data/firRecords.json';
 
 interface Message {
@@ -263,8 +263,8 @@ export function Chatbot() {
       text: m.text,
     }));
 
-    // Call Gemini AI
-    chatWithGemini(messageText, history)
+    // Call Claude AI
+    chatWithClaude(messageText, history)
       .then((response) => {
         const botMsg: Message = {
           id: `bot-${Date.now()}`,
