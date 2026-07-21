@@ -22,6 +22,122 @@ import { extractTextFromFile, SUPPORTED_FILE_TYPES, SUPPORTED_FILE_TYPES_LABEL }
 import { PageHeader, GlassCard, Modal } from '@/components/ui';
 import { useTheme } from '@/contexts/ThemeContext';
 
+// ─── FALLBACK DATA SET 1: Property Dispute Case ───
+const FALLBACK_DATA_1: AnalysisResult = {
+  caseSummary: {
+    legalIssue:
+      'The case involves a property dispute under Section 9 of the Specific Relief Act, 1963. The plaintiff seeks specific performance of a contract for sale of immovable property where the seller has refused to execute the sale deed despite receiving 80% of the consideration amount.',
+    keyPoints: [
+      'Sale agreement executed with Rs. 40 lakhs paid as advance',
+      'Seller refusing to execute sale deed citing market value appreciation',
+      'Plaintiff in continuous possession of the property since 2021',
+      'Time is not of the essence in property contracts under Indian law',
+    ],
+    successProbability: 78,
+  },
+  relevantCaseLaws: [
+    {
+      citation: 'Saralamani Kandappan v. S. Rajalakshmi (2011) 12 SCC 18',
+      court: 'Supreme Court',
+      practiceArea: 'Specific Relief',
+      citedTimes: 127,
+      description:
+        'Landmark judgment on specific performance of contracts relating to immovable property. Established that readiness and willingness must be pleaded and proved.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'Nirmala Anand v. Advent Corporation (2002) 8 SCC 146',
+      court: 'Supreme Court',
+      practiceArea: 'Contract Law',
+      citedTimes: 89,
+      description:
+        'Established principles for granting specific performance when the plaintiff has performed substantial part of the contract.',
+      outcome: 'Favorable',
+    },
+    {
+      citation: 'K.S. Vidyanadam v. Vairavan (1997) 3 SCC 1',
+      court: 'Supreme Court',
+      practiceArea: 'Property Law',
+      citedTimes: 156,
+      description:
+        'Principles regarding partial performance and possession of property under sale agreement. Time is not of essence in property contracts.',
+      outcome: 'Neutral',
+    },
+  ],
+  statutoryProvisions: [
+    {
+      section: 'Section 9',
+      act: 'Specific Relief Act, 1963',
+      text: 'Except as otherwise provided in this Chapter, specific performance of a contract may, in the discretion of the court, be enforced...',
+      relevance: 'Primary',
+    },
+    {
+      section: 'Section 16',
+      act: 'Specific Relief Act, 1963',
+      text: 'Personal bars to relief: Specific performance of a contract cannot be enforced in favour of a person who would not be entitled to recover compensation...',
+      relevance: 'Supporting',
+    },
+  ],
+  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Non-Bailable Offence', 'Warrant Case'],
+  jurisdiction: 'India - JMFC Ratnagiri',
+  applicableSections: [
+    { section: 'Section 378 / BNS 303(1)', description: 'Definition of Theft — Applied in the Hemant Desai Case', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 1 – DEFINITION OF THEFT', oldLaw: 'Section 378, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(1), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Definitional — defines the offence. Does NOT prescribe punishment. Punishment is in Section 379 / BNS 303(2).', caseApplication: 'HOW SECTION 378 / BNS 303(1) APPLIED IN THE HEMANT DESAI CASE', ingredients: [ { name: 'Dishonest Intention', explanation: 'The CCTV footage clearly showed Hemant looking around to check if anyone was watching before picking up the items — classic furtive behaviour that demonstrates a guilty mind. The court found dishonest intent proved beyond reasonable doubt from this conduct alone.' }, { name: 'Moveable Property', explanation: 'Honda Activa scooter (Registration No. MH-8/AT/6350) and Redmi Note 8 Pro mobile phone are both moveable properties — physical objects capable of being lifted and carried away from one place to another.' }, { name: "Out of Another Person's Possession", explanation: "The scooter was in Shoaib Jahagirdar's possession — he owned and regularly used it for his fish supply business. The mobile phone was in Faiyyaz Hubali's possession — he had placed it on the charging socket and was the user of that phone." }, { name: "Without That Person's Consent", explanation: 'Hemant had no permission from either Shoaib or Faiyyaz to take the items. The court comprehensively rejected his defence that "Shoaib asked him to fetch the keys" — finding it unbelievable given that Shoaib immediately went to the police and filed an FIR.' }, { name: 'Moving the Property', explanation: 'Hemant physically picked up the scooter keys and mobile phone from the office table (moving them from the table) and then used the keys to drive the scooter away from the parking spot outside. The property was moved in every sense — all five ingredients fully and conclusively satisfied.' } ] } },
+    { section: 'Section 379 / BNS 303(2)', description: 'Punishment for Theft (Scooter stolen from outside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 2 – PUNISHMENT FOR THEFT (SCOOTER STOLEN FROM OUTSIDE)', oldLaw: 'Section 379, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(2), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — prescribes the punishment for the offence of theft defined under Section 378 / BNS 303(1)', caseApplication: 'HOW SECTION 379 / BNS 303(2) APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai was convicted under Section 379 IPC specifically for stealing the Honda Activa scooter (Registration No. MH-8/AT/6350). The scooter was parked OUTSIDE the office — on the road in front of the shop. Since the vehicle was in an open/public area and not inside any building or enclosed premises, this constituted ordinary theft under Section 379 (not the aggravated Section 380).', 'The court sentenced him to SIMPLE IMPRISONMENT FOR ONE YEAR under Section 379 IPC. The maximum possible under this section is 3 years. The judge chose 1 year, balancing the accused\'s young age and the nature of the offence against his prior criminal history (multiple FIRs registered).'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Imprisonment up to 3 years, Or fine, Or both imprisonment and fine' }] } },
+    { section: 'Section 380 / BNS 305', description: 'Theft in a Dwelling House / Shop (Mobile phone stolen from inside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 3 – THEFT IN A DWELLING HOUSE / SHOP (MOBILE PHONE STOLEN FROM INSIDE)', oldLaw: 'Section 380, Indian Penal Code (IPC), 1860', newLaw: 'Section 305, Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — Aggravated theft — a more serious form of theft carrying a higher punishment when the theft occurs inside a building, shop, or property-custody place', caseApplication: 'HOW SECTION 380 / BNS 305 APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai physically entered the INTERIOR of Shoaib\'s office — SSJ Sea Foods, Mirkarwada, Ratnagiri. This office is a commercial premises and a building used for the custody of property: Shoaib runs his fish supply business from it, stores equipment, vehicles, cash, and his workers\' belongings there. By entering the office and stealing Faiyyaz\'s Redmi Note 8 Pro mobile phone from the charging socket on the office table, Hemant committed theft INSIDE a premises — making it Section 380.', 'The CCTV footage (the key evidence) shows Hemant entering the office, which itself proved the \'inside the building\' element. The court sentenced him to RIGOROUS IMPRISONMENT FOR ONE YEAR under Section 380 IPC — the minimum that a reasonable court would award given the facts.'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Minimum 1 year to Maximum 7 years Rigorous Imprisonment + Fine. BNS adds a mandatory minimum sentence that judges cannot reduce below.' }], subSections: [{ heading: 'WHAT QUALIFIES AS A \'BUILDING USED FOR CUSTODY OF PROPERTY\'?', content: 'Section 380 / BNS 305 applies not only to homes — it covers ANY building, tent, or vessel that is used for storing or keeping property, even if no one lives there permanently. This includes:', bullets: ['Shops and commercial premises — including Shoaib\'s SSJ Sea Foods office (fish supply business)', 'Warehouses, godowns, and storage facilities used to keep goods', 'Offices and business workplaces where equipment, cash, or files are kept', 'Tents at construction sites, event venues, or temporary setups where property is stored', 'Vessels such as ships or boats used to store goods or cargo', 'Factory premises, storerooms, or any enclosed space regularly used to keep moveable property'] }] } },
+    { section: 'Section 65-B / BSA 63', description: 'Electronic Evidence: CCTV Footage Admissibility', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 4 – ELECTRONIC EVIDENCE: CCTV FOOTAGE ADMISSIBILITY', oldLaw: 'Section 65-B, Indian Evidence Act, 1872', newLaw: 'Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023', typeOfProvision: 'Procedural and evidentiary — governs how electronic records (CCTV footage, digital photos, WhatsApp messages, emails, computer printouts) can be made admissible in court', caseApplication: 'HOW THIS APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['The CCTV was owned by Shoaib (the informant) and was installed and maintained by Arman Hodekar. On 19.02.2021, in the presence of the Investigating Officer ASI Ashok Rathod and the panch witness Mohammad Mujid, Arman copied the relevant CCTV footage from the DVR onto a pen drive. He then signed the Section 65-B certificate (Exhibit 21 in court). A colour printout of the CCTV frame showing the accused was also prepared (Article C). During the trial, the pen drive was played in OPEN COURT. Both PW-2 Shoaib (the victim) and PW-4 Arman (the CCTV installer) identified the person visible in the footage as Hemant Pramod Desai. This made the CCTV evidence both legally admissible and factually conclusive. The accused was unable to offer any credible challenge to either the certificate or the identification.'], subSections: [{ heading: 'WHO MUST SIGN THE CERTIFICATE?', content: 'The certificate must be signed by a person in a \'responsible official position\' in relation to the operation of the device. The Supreme Court in Arjun Panditrao Khotkar clarified that this is the person who owns or is responsible for the computer/device — NOT necessarily a government officer or technical expert. In this case, Arman Hodekar (the CCTV installer who maintained the system) was the right person to sign, and the court accepted his certificate as valid.', bullets: [] }] } },
+  ],
+  requiredDocuments: [
+    { id: 'doc-1', description: 'Vakalatnama — Appointment letter signed by complainant authorising the lawyer to appear', checked: true },
+    { id: 'doc-2', description: 'Memo of Appearance — Filed in court to formally record the lawyer\'s presence in the case', checked: true },
+    { id: 'doc-3', description: 'Written Opposition to Bail Application — Detailed submissions arguing why accused should not get bail, citing his prior criminal record (multiple FIRs 2012–2021)', checked: false },
+    { id: 'doc-4', description: 'Application to Play CCTV Footage in Open Court — Filed to arrange laptop/projector for playing the pen drive during PW-4\'s examination', checked: false },
+  ],
+  similarCases: [
+    { citation: 'K.N. Mehra v. State of Rajasthan (1957)', outcome: 'Outcome: Conviction upheld for theft of government jeep', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case1_KN_Mehra_Theft_FIXED.pdf' },
+    { citation: 'Pyare Lal Bhargava v. State of Rajasthan (1963)', outcome: 'Outcome: Conviction for theft by public servant', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case2_Pyare_Lal_Bhargava_Theft_FIXED.pdf' },
+    { citation: 'State of Maharashtra v. Satish (Bombay HC, 2014)', outcome: 'Outcome: Conviction for theft in dwelling house', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case3_Satish_Maharashtra_Theft_FIXED.pdf' },
+  ],
+  outcomePrediction: { winningPct: 65, losingPct: 35 },
+  keyWinningPoints: [
+    'CCTV + Section 65-B Certificate — The footage is legally admissible and directly places the accused inside the shop at the time of the crime',
+    'Two independent witnesses — Victim Shoaib and CCTV installer Arman both identified Hemant in open court',
+    'Recovery of stolen scooter — Physical recovery corroborates the FIR and proves the theft occurred',
+    'Prior criminal history — Multiple FIRs from 2012–2021 establish a pattern of habitual theft conduct',
+    'Furtive behaviour on CCTV — Accused visibly checks for witnesses before entering — directly proves dishonest intent',
+  ],
+  riskFactors: [
+    'Mobile phone not recovered — No physical exhibit linking accused to the Section 380 charge inside the shop',
+    'Wage dispute defence — The Rs.15,000 debt claim creates an alternative narrative that could cast reasonable doubt on appeal',
+    'Night-time CCTV quality — Footage clarity at 3:20 AM may be challenged during cross-examination',
+    'No spot-witness identification — Identity rests entirely on CCTV — no independent panch witness placed accused at the scene',
+    'Scooter abandoned — Defence can invoke the temporary-taking argument to dispute permanent dishonest intention',
+  ],
+  strengths: [
+    { title: 'Strong Documentary Evidence', description: 'Sale agreement, receipts, and possession documents available' },
+    { title: 'Readiness & Willingness Proven', description: 'Plaintiff has demonstrated continuous readiness to perform' },
+    { title: 'Favorable Recent Precedents', description: 'Supreme Court rulings support similar claims' },
+    { title: 'Part Performance', description: 'Substantial payment made and possession transferred' },
+  ],
+  challenges: [
+    { title: 'Limitation Period Concerns', description: 'Need to establish cause of action within 3 years' },
+    { title: "Opposing Party's Counter Claims", description: 'Defendant may argue breach by plaintiff' },
+    { title: 'Market Value Changes', description: "Significant appreciation may affect court's discretion" },
+  ],
+  strategy: [
+    { step: 1, title: 'File Suit for Specific Performance', description: 'Immediately file suit under Section 9 of Specific Relief Act with strong documentary evidence.' },
+    { step: 2, title: 'Apply for Interim Injunction', description: 'Seek court order preventing defendant from alienating the property to third parties.' },
+    { step: 3, title: 'Strengthen Documentation', description: 'Gather additional evidence of readiness, payment records, and possession documents.' },
+    { step: 4, title: 'Explore Mediation', description: 'Pursue mediation alongside litigation for faster resolution and optimal outcomes.' },
+  ],
+  expertRecommendation:
+    'Based on analysis of 127 similar property dispute cases, the recommended approach offers a 78% success probability. The combination of substantial payment, possession, and favorable precedents strongly supports a decree for specific performance. Consider engaging expert witnesses on property valuation.',
+};
+
+// Always use the primary fallback dataset
+function getNextFallbackData(): AnalysisResult {
+  return FALLBACK_DATA_1;
+}
+
 // ─── SVG Metallic Button (gold theme) ───
 function MetallicButton({ label, variant, onClick, theme }: { label: string; variant: 'gold' | 'bronze'; onClick?: () => void; theme: 'light' | 'dark' | 'gold' }) {
   // For non-gold themes, render a normal styled button
@@ -738,15 +854,13 @@ export function AnalyserPage() {
                     {/* Case Type & Jurisdiction */}
                     <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
-                        <div className="flex flex-wrap gap-1.5">
-                          {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                              className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                              {ct}
-                            </button>
-                          ))}
-                        </div>
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {displayData.caseTypes.map((ct) => (
+                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                            {ct}
+                          </button>
+                        ))}
                       </div>
                       <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                     </GlassCard>
@@ -932,12 +1046,10 @@ export function AnalyserPage() {
                     </div>
                     {displayData && maximizedSection === 'caseType' && (
                       <div>
-                        <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
-                          <div className="flex flex-wrap gap-1.5">
-                            {displayData.caseTypes.map((ct) => (
-                              <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
-                            ))}
-                          </div>
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {displayData.caseTypes.map((ct) => (
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
+                          ))}
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                       </div>
@@ -1034,15 +1146,13 @@ export function AnalyserPage() {
                   {/* Case Type & Jurisdiction */}
                   <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
-                      <div className="flex flex-wrap gap-1.5">
-                        {displayData.caseTypes.map((ct) => (
-                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                            {ct}
-                          </button>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {displayData.caseTypes.map((ct) => (
+                        <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                          className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                          {ct}
+                        </button>
+                      ))}
                     </div>
                     <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                   </GlassCard>
