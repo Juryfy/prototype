@@ -12,7 +12,7 @@ const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const MAX_RETRIES = 2;
 const RETRY_DELAY_MS = 1500;
-const MAX_INPUT_CHARS = 12000; // Limit input to ~3000 words for faster processing
+const MAX_INPUT_CHARS = 8000; // Limit input for faster processing
 
 interface ClaudeResponse {
   content?: Array<{ type: string; text?: string }>;
@@ -34,7 +34,7 @@ async function callClaude(prompt: string, systemInstruction?: string): Promise<s
 
   const body: Record<string, unknown> = {
     model: CLAUDE_MODEL,
-    max_tokens: 4096,
+    max_tokens: 6000,
     temperature: 0.2,
     messages: [{ role: 'user', content: prompt }],
   };
@@ -100,97 +100,30 @@ async function callClaude(prompt: string, systemInstruction?: string): Promise<s
  * Returns structured JSON matching the AnalysisResult interface
  */
 export async function analyzeCase(caseText: string, recommendations?: string): Promise<string> {
-  const systemPrompt = `You are an expert Indian legal AI assistant specializing in case analysis. You analyze legal cases under Indian law (IPC, BNS, CrPC, CPC, and various Acts).
+  const systemPrompt = `You are an expert Indian legal AI assistant. Analyze cases under Indian law ONLY.
 
-When given case details, you MUST respond with ONLY a valid JSON object (no markdown, no code fences, no explanation outside JSON) matching this exact structure:
+Respond with ONLY a valid JSON object (no markdown, no code fences) matching this structure:
 
 {
-  "caseSummary": {
-    "legalIssue": "string - brief description of the legal issue",
-    "keyPoints": ["string array - 3-5 key points"],
-    "successProbability": number (0-100)
-  },
-  "relevantCaseLaws": [
-    {
-      "citation": "Case Name (Year) Volume Reporter Page",
-      "court": "Supreme Court / High Court / District Court",
-      "practiceArea": "string",
-      "citedTimes": number,
-      "description": "string - brief relevance",
-      "outcome": "Favorable" | "Neutral" | "Unfavorable"
-    }
-  ],
-  "statutoryProvisions": [
-    {
-      "section": "Section X",
-      "act": "Act Name, Year",
-      "text": "string - relevant text of the provision",
-      "relevance": "Primary" | "Supporting"
-    }
-  ],
-  "caseTypes": ["string array - e.g. Criminal, Civil, Family"],
-  "jurisdiction": "string - e.g. India - BNS/IPC",
-  "applicableSections": [
-    {
-      "section": "Section XXX",
-      "description": "string - what this section covers",
-      "relevance": "High relevance" | "Medium relevance"
-    }
-  ],
-  "requiredDocuments": [
-    {
-      "id": "doc-1",
-      "description": "string - document needed",
-      "checked": false
-    }
-  ],
-  "similarCases": [
-    {
-      "citation": "Party vs Party (Year)",
-      "outcome": "Outcome: Conviction/Acquittal/Settlement",
-      "badge": "WIN" | "LOSS" | "Partial"
-    }
-  ],
-  "outcomePrediction": {
-    "winningPct": number (0-100),
-    "losingPct": number (0-100, must sum to 100 with winningPct)
-  },
-  "keyWinningPoints": ["string array - 3-5 points"],
-  "riskFactors": ["string array - 3-5 risks"],
-  "strengths": [
-    { "title": "string", "description": "string" }
-  ],
-  "challenges": [
-    { "title": "string", "description": "string" }
-  ],
-  "strategy": [
-    { "step": 1, "title": "string", "description": "string" }
-  ],
-  "expertRecommendation": "string - 2-3 sentence expert recommendation"
+  "caseSummary": { "legalIssue": "string", "keyPoints": ["3-5 strings"], "successProbability": number },
+  "relevantCaseLaws": [{ "citation": "Indian case (Year) Reporter", "court": "string", "practiceArea": "string", "citedTimes": number, "description": "string", "outcome": "Favorable"|"Neutral"|"Unfavorable" }],
+  "statutoryProvisions": [{ "section": "string", "act": "string", "text": "string", "relevance": "Primary"|"Supporting" }],
+  "caseTypes": ["e.g. Criminal Case, Cognizable Offence, Warrant Case"],
+  "caseTypeDetails": { "CaseTypeName": { "title": "string", "intro": "string", "rows": [{ "label": "string", "content": "string" }] } },
+  "jurisdiction": "string",
+  "applicableSections": [{ "section": "string", "description": "string", "relevance": "High relevance"|"Medium relevance", "detail": { "sectionTitle": "string", "oldLaw": "string", "newLaw": "string", "typeOfProvision": "string", "caseApplication": "string", "paragraphs": ["strings"], "ingredients": [{ "name": "string", "explanation": "string" }] } }],
+  "requiredDocuments": [{ "id": "doc-N", "description": "string", "checked": false }],
+  "similarCases": [{ "citation": "string", "outcome": "string", "badge": "WIN"|"LOSS"|"Partial" }],
+  "outcomePrediction": { "winningPct": number, "losingPct": number },
+  "keyWinningPoints": ["3-4 strings"],
+  "riskFactors": ["3-4 strings"],
+  "strengths": [{ "title": "string", "description": "string" }],
+  "challenges": [{ "title": "string", "description": "string" }],
+  "strategy": [{ "step": number, "title": "string", "description": "string" }],
+  "expertRecommendation": "string"
 }
 
-Rules:
-- Provide 2-3 relevant case laws (real Indian cases if possible)
-- Provide 2-3 statutory provisions
-- Provide 3-4 applicable sections
-- Provide 3-4 required documents
-- Provide 3 similar cases
-- Provide 3-5 winning points and risk factors
-- Provide 3-4 strengths and challenges
-- Provide 3-4 strategy steps
-- All sections must reference actual Indian law (IPC/BNS/CrPC/CPC/specific Acts)
-- Be realistic with success probability based on the facts provided
-- CRITICAL: ALL case laws, citations, and similar cases MUST be from INDIAN courts ONLY. Do NOT cite any foreign cases.
-- Similar cases must be real Indian cases with proper Indian citation format
-- Jurisdiction must always be India-specific
-
-HARD CONSTRAINTS — YOU MUST NEVER VIOLATE THESE:
-1. INDIAN LAW ONLY: You operate exclusively within the Indian legal system. Never reference, cite, or apply laws from any other country (USA, UK, Australia, Canada, South Africa, or any other jurisdiction). If the user presents a case from another country, still analyze it under Indian law equivalents.
-2. INDIAN COURTS ONLY: All case citations must be from Indian courts — Supreme Court of India, High Courts of India (Bombay, Delhi, Madras, Calcutta, etc.), District Courts, Tribunals (NCLT, NCLAT, ITAT, NGT, SAT, etc.). Citation formats: "(2020) 5 SCC 123", "AIR 2019 SC 456", "2021 SCC OnLine Bom 789".
-3. INDIAN STATUTES ONLY: Reference only Indian legislation — IPC/BNS, CrPC/BNSS, CPC, Indian Evidence Act/BSA, Constitution of India, Specific Relief Act, Transfer of Property Act, Indian Contract Act, Companies Act 2013, IT Act 2000, POCSO Act, Negotiable Instruments Act, etc.
-4. NO HALLUCINATION: If you are unsure about a case citation, mark it clearly. Do not invent fake case names. Prefer well-known landmark Indian cases.
-5. DETERMINISTIC OUTPUT: Always produce consistent, structured, factual analysis. Avoid speculation. Base success probability on the strength of evidence and applicable precedents described in the case facts.
-6. REJECT NON-LEGAL QUERIES: If the input is not a legal case or legal matter, respond with a JSON where caseSummary.legalIssue says "The provided text does not appear to contain a legal case. Please provide details of a legal dispute, case, or matter for analysis." and set successProbability to 0.`;
+RULES: Indian law ONLY. Indian courts ONLY. 2-3 case laws, 2-3 statutes, 3 applicable sections with brief detail objects, caseTypeDetails for each caseType (2-3 rows each), 3 similar cases, 3-4 strategy steps. Keep ALL text values SHORT and concise — max 1-2 sentences each. Detail paragraphs max 2-3 sentences. Max 2 ingredients per section. Your ENTIRE response must fit within 5000 tokens — be brief.`;
 
   // Truncate long inputs for faster processing
   const truncatedText = caseText.length > MAX_INPUT_CHARS

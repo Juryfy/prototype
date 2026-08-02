@@ -15,14 +15,14 @@ import {
   Maximize2,
   Minimize2,
 } from 'lucide-react';
-// Recharts removed — using custom SVG metallic pie chart
+// Recharts removed � using custom SVG metallic pie chart
 import { type AnalysisResult } from '@/data/mockAnalyserData';
 import { analyzeCase } from '@/services/claudeService';
 import { extractTextFromFile, SUPPORTED_FILE_TYPES, SUPPORTED_FILE_TYPES_LABEL } from '@/services/fileExtractor';
 import { PageHeader, GlassCard, Modal } from '@/components/ui';
 import { useTheme } from '@/contexts/ThemeContext';
 
-// ─── FALLBACK DATA SET 1: Property Dispute Case ───
+// --- FALLBACK DATA SET 1: Property Dispute Case ---
 const FALLBACK_DATA_1: AnalysisResult = {
   caseSummary: {
     legalIssue:
@@ -78,19 +78,19 @@ const FALLBACK_DATA_1: AnalysisResult = {
       relevance: 'Supporting',
     },
   ],
-  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Non-Bailable Offence', 'Warrant Case'],
+  caseTypes: ['Criminal Case', 'Cognizable Offence', 'Warrant Case', 'Non-Bailable Offence'],
   jurisdiction: 'India - JMFC Ratnagiri',
   applicableSections: [
-    { section: 'Section 378 / BNS 303(1)', description: 'Definition of Theft — Applied in the Hemant Desai Case', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 1 – DEFINITION OF THEFT', oldLaw: 'Section 378, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(1), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Definitional — defines the offence. Does NOT prescribe punishment. Punishment is in Section 379 / BNS 303(2).', caseApplication: 'HOW SECTION 378 / BNS 303(1) APPLIED IN THE HEMANT DESAI CASE', ingredients: [ { name: 'Dishonest Intention', explanation: 'The CCTV footage clearly showed Hemant looking around to check if anyone was watching before picking up the items — classic furtive behaviour that demonstrates a guilty mind. The court found dishonest intent proved beyond reasonable doubt from this conduct alone.' }, { name: 'Moveable Property', explanation: 'Honda Activa scooter (Registration No. MH-8/AT/6350) and Redmi Note 8 Pro mobile phone are both moveable properties — physical objects capable of being lifted and carried away from one place to another.' }, { name: "Out of Another Person's Possession", explanation: "The scooter was in Shoaib Jahagirdar's possession — he owned and regularly used it for his fish supply business. The mobile phone was in Faiyyaz Hubali's possession — he had placed it on the charging socket and was the user of that phone." }, { name: "Without That Person's Consent", explanation: 'Hemant had no permission from either Shoaib or Faiyyaz to take the items. The court comprehensively rejected his defence that "Shoaib asked him to fetch the keys" — finding it unbelievable given that Shoaib immediately went to the police and filed an FIR.' }, { name: 'Moving the Property', explanation: 'Hemant physically picked up the scooter keys and mobile phone from the office table (moving them from the table) and then used the keys to drive the scooter away from the parking spot outside. The property was moved in every sense — all five ingredients fully and conclusively satisfied.' } ] } },
-    { section: 'Section 379 / BNS 303(2)', description: 'Punishment for Theft (Scooter stolen from outside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 2 – PUNISHMENT FOR THEFT (SCOOTER STOLEN FROM OUTSIDE)', oldLaw: 'Section 379, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(2), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — prescribes the punishment for the offence of theft defined under Section 378 / BNS 303(1)', caseApplication: 'HOW SECTION 379 / BNS 303(2) APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai was convicted under Section 379 IPC specifically for stealing the Honda Activa scooter (Registration No. MH-8/AT/6350). The scooter was parked OUTSIDE the office — on the road in front of the shop. Since the vehicle was in an open/public area and not inside any building or enclosed premises, this constituted ordinary theft under Section 379 (not the aggravated Section 380).', 'The court sentenced him to SIMPLE IMPRISONMENT FOR ONE YEAR under Section 379 IPC. The maximum possible under this section is 3 years. The judge chose 1 year, balancing the accused\'s young age and the nature of the offence against his prior criminal history (multiple FIRs registered).'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Imprisonment up to 3 years, Or fine, Or both imprisonment and fine' }] } },
-    { section: 'Section 380 / BNS 305', description: 'Theft in a Dwelling House / Shop (Mobile phone stolen from inside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 3 – THEFT IN A DWELLING HOUSE / SHOP (MOBILE PHONE STOLEN FROM INSIDE)', oldLaw: 'Section 380, Indian Penal Code (IPC), 1860', newLaw: 'Section 305, Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal — Aggravated theft — a more serious form of theft carrying a higher punishment when the theft occurs inside a building, shop, or property-custody place', caseApplication: 'HOW SECTION 380 / BNS 305 APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai physically entered the INTERIOR of Shoaib\'s office — SSJ Sea Foods, Mirkarwada, Ratnagiri. This office is a commercial premises and a building used for the custody of property: Shoaib runs his fish supply business from it, stores equipment, vehicles, cash, and his workers\' belongings there. By entering the office and stealing Faiyyaz\'s Redmi Note 8 Pro mobile phone from the charging socket on the office table, Hemant committed theft INSIDE a premises — making it Section 380.', 'The CCTV footage (the key evidence) shows Hemant entering the office, which itself proved the \'inside the building\' element. The court sentenced him to RIGOROUS IMPRISONMENT FOR ONE YEAR under Section 380 IPC — the minimum that a reasonable court would award given the facts.'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Minimum 1 year to Maximum 7 years Rigorous Imprisonment + Fine. BNS adds a mandatory minimum sentence that judges cannot reduce below.' }], subSections: [{ heading: 'WHAT QUALIFIES AS A \'BUILDING USED FOR CUSTODY OF PROPERTY\'?', content: 'Section 380 / BNS 305 applies not only to homes — it covers ANY building, tent, or vessel that is used for storing or keeping property, even if no one lives there permanently. This includes:', bullets: ['Shops and commercial premises — including Shoaib\'s SSJ Sea Foods office (fish supply business)', 'Warehouses, godowns, and storage facilities used to keep goods', 'Offices and business workplaces where equipment, cash, or files are kept', 'Tents at construction sites, event venues, or temporary setups where property is stored', 'Vessels such as ships or boats used to store goods or cargo', 'Factory premises, storerooms, or any enclosed space regularly used to keep moveable property'] }] } },
-    { section: 'Section 65-B / BSA 63', description: 'Electronic Evidence: CCTV Footage Admissibility', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 4 – ELECTRONIC EVIDENCE: CCTV FOOTAGE ADMISSIBILITY', oldLaw: 'Section 65-B, Indian Evidence Act, 1872', newLaw: 'Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023', typeOfProvision: 'Procedural and evidentiary — governs how electronic records (CCTV footage, digital photos, WhatsApp messages, emails, computer printouts) can be made admissible in court', caseApplication: 'HOW THIS APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['The CCTV was owned by Shoaib (the informant) and was installed and maintained by Arman Hodekar. On 19.02.2021, in the presence of the Investigating Officer ASI Ashok Rathod and the panch witness Mohammad Mujid, Arman copied the relevant CCTV footage from the DVR onto a pen drive. He then signed the Section 65-B certificate (Exhibit 21 in court). A colour printout of the CCTV frame showing the accused was also prepared (Article C). During the trial, the pen drive was played in OPEN COURT. Both PW-2 Shoaib (the victim) and PW-4 Arman (the CCTV installer) identified the person visible in the footage as Hemant Pramod Desai. This made the CCTV evidence both legally admissible and factually conclusive. The accused was unable to offer any credible challenge to either the certificate or the identification.'], subSections: [{ heading: 'WHO MUST SIGN THE CERTIFICATE?', content: 'The certificate must be signed by a person in a \'responsible official position\' in relation to the operation of the device. The Supreme Court in Arjun Panditrao Khotkar clarified that this is the person who owns or is responsible for the computer/device — NOT necessarily a government officer or technical expert. In this case, Arman Hodekar (the CCTV installer who maintained the system) was the right person to sign, and the court accepted his certificate as valid.', bullets: [] }] } },
+    { section: 'Section 378 / BNS 303(1)', description: 'Definition of Theft � Applied in the Hemant Desai Case', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 1 � DEFINITION OF THEFT', oldLaw: 'Section 378, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(1), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Definitional � defines the offence. Does NOT prescribe punishment. Punishment is in Section 379 / BNS 303(2).', caseApplication: 'HOW SECTION 378 / BNS 303(1) APPLIED IN THE HEMANT DESAI CASE', ingredients: [ { name: 'Dishonest Intention', explanation: 'The CCTV footage clearly showed Hemant looking around to check if anyone was watching before picking up the items � classic furtive behaviour that demonstrates a guilty mind. The court found dishonest intent proved beyond reasonable doubt from this conduct alone.' }, { name: 'Moveable Property', explanation: 'Honda Activa scooter (Registration No. MH-8/AT/6350) and Redmi Note 8 Pro mobile phone are both moveable properties � physical objects capable of being lifted and carried away from one place to another.' }, { name: "Out of Another Person's Possession", explanation: "The scooter was in Shoaib Jahagirdar's possession � he owned and regularly used it for his fish supply business. The mobile phone was in Faiyyaz Hubali's possession � he had placed it on the charging socket and was the user of that phone." }, { name: "Without That Person's Consent", explanation: 'Hemant had no permission from either Shoaib or Faiyyaz to take the items. The court comprehensively rejected his defence that "Shoaib asked him to fetch the keys" � finding it unbelievable given that Shoaib immediately went to the police and filed an FIR.' }, { name: 'Moving the Property', explanation: 'Hemant physically picked up the scooter keys and mobile phone from the office table (moving them from the table) and then used the keys to drive the scooter away from the parking spot outside. The property was moved in every sense � all five ingredients fully and conclusively satisfied.' } ] } },
+    { section: 'Section 379 / BNS 303(2)', description: 'Punishment for Theft (Scooter stolen from outside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 2 � PUNISHMENT FOR THEFT (SCOOTER STOLEN FROM OUTSIDE)', oldLaw: 'Section 379, Indian Penal Code (IPC), 1860', newLaw: 'Section 303(2), Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal � prescribes the punishment for the offence of theft defined under Section 378 / BNS 303(1)', caseApplication: 'HOW SECTION 379 / BNS 303(2) APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai was convicted under Section 379 IPC specifically for stealing the Honda Activa scooter (Registration No. MH-8/AT/6350). The scooter was parked OUTSIDE the office � on the road in front of the shop. Since the vehicle was in an open/public area and not inside any building or enclosed premises, this constituted ordinary theft under Section 379 (not the aggravated Section 380).', 'The court sentenced him to SIMPLE IMPRISONMENT FOR ONE YEAR under Section 379 IPC. The maximum possible under this section is 3 years. The judge chose 1 year, balancing the accused\'s young age and the nature of the offence against his prior criminal history (multiple FIRs registered).'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Imprisonment up to 3 years, Or fine, Or both imprisonment and fine' }] } },
+    { section: 'Section 380 / BNS 305', description: 'Theft in a Dwelling House / Shop (Mobile phone stolen from inside)', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 3 � THEFT IN A DWELLING HOUSE / SHOP (MOBILE PHONE STOLEN FROM INSIDE)', oldLaw: 'Section 380, Indian Penal Code (IPC), 1860', newLaw: 'Section 305, Bharatiya Nyaya Sanhita (BNS), 2023', typeOfProvision: 'Penal � Aggravated theft � a more serious form of theft carrying a higher punishment when the theft occurs inside a building, shop, or property-custody place', caseApplication: 'HOW SECTION 380 / BNS 305 APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['Hemant Desai physically entered the INTERIOR of Shoaib\'s office � SSJ Sea Foods, Mirkarwada, Ratnagiri. This office is a commercial premises and a building used for the custody of property: Shoaib runs his fish supply business from it, stores equipment, vehicles, cash, and his workers\' belongings there. By entering the office and stealing Faiyyaz\'s Redmi Note 8 Pro mobile phone from the charging socket on the office table, Hemant committed theft INSIDE a premises � making it Section 380.', 'The CCTV footage (the key evidence) shows Hemant entering the office, which itself proved the \'inside the building\' element. The court sentenced him to RIGOROUS IMPRISONMENT FOR ONE YEAR under Section 380 IPC � the minimum that a reasonable court would award given the facts.'], ingredients: [{ name: 'Maximum Punishment', explanation: 'Minimum 1 year to Maximum 7 years Rigorous Imprisonment + Fine. BNS adds a mandatory minimum sentence that judges cannot reduce below.' }], subSections: [{ heading: 'WHAT QUALIFIES AS A \'BUILDING USED FOR CUSTODY OF PROPERTY\'?', content: 'Section 380 / BNS 305 applies not only to homes � it covers ANY building, tent, or vessel that is used for storing or keeping property, even if no one lives there permanently. This includes:', bullets: ['Shops and commercial premises � including Shoaib\'s SSJ Sea Foods office (fish supply business)', 'Warehouses, godowns, and storage facilities used to keep goods', 'Offices and business workplaces where equipment, cash, or files are kept', 'Tents at construction sites, event venues, or temporary setups where property is stored', 'Vessels such as ships or boats used to store goods or cargo', 'Factory premises, storerooms, or any enclosed space regularly used to keep moveable property'] }] } },
+    { section: 'Section 65-B / BSA 63', description: 'Electronic Evidence: CCTV Footage Admissibility', relevance: 'High relevance', detail: { sectionTitle: 'SECTION 4 � ELECTRONIC EVIDENCE: CCTV FOOTAGE ADMISSIBILITY', oldLaw: 'Section 65-B, Indian Evidence Act, 1872', newLaw: 'Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023', typeOfProvision: 'Procedural and evidentiary � governs how electronic records (CCTV footage, digital photos, WhatsApp messages, emails, computer printouts) can be made admissible in court', caseApplication: 'HOW THIS APPLIED IN THE HEMANT DESAI CASE', paragraphs: ['The CCTV was owned by Shoaib (the informant) and was installed and maintained by Arman Hodekar. On 19.02.2021, in the presence of the Investigating Officer ASI Ashok Rathod and the panch witness Mohammad Mujid, Arman copied the relevant CCTV footage from the DVR onto a pen drive. He then signed the Section 65-B certificate (Exhibit 21 in court). A colour printout of the CCTV frame showing the accused was also prepared (Article C). During the trial, the pen drive was played in OPEN COURT. Both PW-2 Shoaib (the victim) and PW-4 Arman (the CCTV installer) identified the person visible in the footage as Hemant Pramod Desai. This made the CCTV evidence both legally admissible and factually conclusive. The accused was unable to offer any credible challenge to either the certificate or the identification.'], subSections: [{ heading: 'WHO MUST SIGN THE CERTIFICATE?', content: 'The certificate must be signed by a person in a \'responsible official position\' in relation to the operation of the device. The Supreme Court in Arjun Panditrao Khotkar clarified that this is the person who owns or is responsible for the computer/device � NOT necessarily a government officer or technical expert. In this case, Arman Hodekar (the CCTV installer who maintained the system) was the right person to sign, and the court accepted his certificate as valid.', bullets: [] }] } },
   ],
   requiredDocuments: [
-    { id: 'doc-1', description: 'Vakalatnama — Appointment letter signed by complainant authorising the lawyer to appear', checked: true },
-    { id: 'doc-2', description: 'Memo of Appearance — Filed in court to formally record the lawyer\'s presence in the case', checked: true },
-    { id: 'doc-3', description: 'Written Opposition to Bail Application — Detailed submissions arguing why accused should not get bail, citing his prior criminal record (multiple FIRs 2012–2021)', checked: false },
-    { id: 'doc-4', description: 'Application to Play CCTV Footage in Open Court — Filed to arrange laptop/projector for playing the pen drive during PW-4\'s examination', checked: false },
+    { id: 'doc-1', description: 'Vakalatnama � Appointment letter signed by complainant authorising the lawyer to appear', checked: true },
+    { id: 'doc-2', description: 'Memo of Appearance � Filed in court to formally record the lawyer\'s presence in the case', checked: true },
+    { id: 'doc-3', description: 'Written Opposition to Bail Application � Detailed submissions arguing why accused should not get bail, citing his prior criminal record (multiple FIRs 2012�2021)', checked: false },
+    { id: 'doc-4', description: 'Application to Play CCTV Footage in Open Court � Filed to arrange laptop/projector for playing the pen drive during PW-4\'s examination', checked: false },
   ],
   similarCases: [
     { citation: 'K.N. Mehra v. State of Rajasthan (1957)', outcome: 'Outcome: Conviction upheld for theft of government jeep', badge: 'WIN', pdfUrl: 'https://docs.juryfyai.com/Similar_Case1_KN_Mehra_Theft_FIXED.pdf' },
@@ -99,18 +99,18 @@ const FALLBACK_DATA_1: AnalysisResult = {
   ],
   outcomePrediction: { winningPct: 65, losingPct: 35 },
   keyWinningPoints: [
-    'CCTV + Section 65-B Certificate — The footage is legally admissible and directly places the accused inside the shop at the time of the crime',
-    'Two independent witnesses — Victim Shoaib and CCTV installer Arman both identified Hemant in open court',
-    'Recovery of stolen scooter — Physical recovery corroborates the FIR and proves the theft occurred',
-    'Prior criminal history — Multiple FIRs from 2012–2021 establish a pattern of habitual theft conduct',
-    'Furtive behaviour on CCTV — Accused visibly checks for witnesses before entering — directly proves dishonest intent',
+    'CCTV + Section 65-B Certificate � The footage is legally admissible and directly places the accused inside the shop at the time of the crime',
+    'Two independent witnesses � Victim Shoaib and CCTV installer Arman both identified Hemant in open court',
+    'Recovery of stolen scooter � Physical recovery corroborates the FIR and proves the theft occurred',
+    'Prior criminal history � Multiple FIRs from 2012�2021 establish a pattern of habitual theft conduct',
+    'Furtive behaviour on CCTV � Accused visibly checks for witnesses before entering � directly proves dishonest intent',
   ],
   riskFactors: [
-    'Mobile phone not recovered — No physical exhibit linking accused to the Section 380 charge inside the shop',
-    'Wage dispute defence — The Rs.15,000 debt claim creates an alternative narrative that could cast reasonable doubt on appeal',
-    'Night-time CCTV quality — Footage clarity at 3:20 AM may be challenged during cross-examination',
-    'No spot-witness identification — Identity rests entirely on CCTV — no independent panch witness placed accused at the scene',
-    'Scooter abandoned — Defence can invoke the temporary-taking argument to dispute permanent dishonest intention',
+    'Mobile phone not recovered � No physical exhibit linking accused to the Section 380 charge inside the shop',
+    'Wage dispute defence � The Rs.15,000 debt claim creates an alternative narrative that could cast reasonable doubt on appeal',
+    'Night-time CCTV quality � Footage clarity at 3:20 AM may be challenged during cross-examination',
+    'No spot-witness identification � Identity rests entirely on CCTV � no independent panch witness placed accused at the scene',
+    'Scooter abandoned � Defence can invoke the temporary-taking argument to dispute permanent dishonest intention',
   ],
   strengths: [
     { title: 'Strong Documentary Evidence', description: 'Sale agreement, receipts, and possession documents available' },
@@ -138,7 +138,7 @@ function getNextFallbackData(): AnalysisResult {
   return FALLBACK_DATA_1;
 }
 
-// ─── SVG Metallic Button (gold theme) ───
+// --- SVG Metallic Button (gold theme) ---
 function MetallicButton({ label, variant, onClick, theme }: { label: string; variant: 'gold' | 'bronze'; onClick?: () => void; theme: 'light' | 'dark' | 'gold' }) {
   // For non-gold themes, render a normal styled button
   if (theme !== 'gold') {
@@ -271,6 +271,28 @@ function MetallicPieChart({ winningPct, losingPct, theme }: { winningPct: number
 
 const INPUT_TABS = ['Text Entry', 'Copy-Paste', 'Upload Doc'] as const;
 
+/** Attempt to parse JSON, repairing truncated responses by closing open brackets */
+function safeParseJSON(text: string): Record<string, unknown> {
+  try {
+    return JSON.parse(text);
+  } catch {
+    // Try to repair truncated JSON by closing open brackets/braces
+    let repaired = text;
+    // Count open vs close brackets
+    const openBraces = (repaired.match(/\{/g) || []).length;
+    const closeBraces = (repaired.match(/\}/g) || []).length;
+    const openBrackets = (repaired.match(/\[/g) || []).length;
+    const closeBrackets = (repaired.match(/\]/g) || []).length;
+    // Remove trailing incomplete key/value
+    repaired = repaired.replace(/,\s*"[^"]*"?\s*:?\s*"?[^"]*$/, '');
+    repaired = repaired.replace(/,\s*$/, '');
+    // Close open brackets/braces
+    for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
+    for (let i = 0; i < openBraces - closeBraces; i++) repaired += '}';
+    return JSON.parse(repaired);
+  }
+}
+
 /** Normalize raw parsed JSON into a valid AnalysisResult with defaults */
 function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   const normalized: AnalysisResult = {
@@ -282,6 +304,7 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
     relevantCaseLaws: (parsed.relevantCaseLaws as AnalysisResult['relevantCaseLaws']) || [],
     statutoryProvisions: (parsed.statutoryProvisions as AnalysisResult['statutoryProvisions']) || [],
     caseTypes: (parsed.caseTypes as string[]) || ['General'],
+    caseTypeDetails: (parsed.caseTypeDetails as AnalysisResult['caseTypeDetails']) || undefined,
     jurisdiction: (parsed.jurisdiction as string) || 'India',
     applicableSections: (parsed.applicableSections as AnalysisResult['applicableSections']) || [],
     requiredDocuments: ((parsed.requiredDocuments as Array<Record<string, unknown>>) || []).map((doc, i) => ({
@@ -312,16 +335,16 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
   return normalized;
 }
 
-// ─── Case Type Detail Data ───
+// --- Case Type Detail Data ---
 const CASE_TYPE_DETAILS: Record<string, { title: string; intro: string; rows: { label: string; content: string }[] }> = {
   'Criminal Case': {
     title: '1. CRIMINAL CASE (as opposed to Civil Case)',
     intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
     rows: [
       { label: 'Category', content: 'Criminal Case' },
-      { label: 'Definition', content: 'A criminal case is one where the State (Government) prosecutes an individual for committing an act that is prohibited by law and harmful to society at large. The State acts as the complainant/prosecutor on behalf of society. The accused faces punishment — imprisonment, fine, or both — if convicted.' },
-      { label: 'Distinguished From', content: 'A civil case involves a dispute between two private parties (e.g., property disputes, contract breaches, divorce). In a civil case, the remedy is usually compensation or an injunction — not imprisonment.' },
-      { label: 'Why This Case is Criminal', content: 'Hemant Desai was accused of theft — an act criminalised by the State under the Indian Penal Code. The case title "State of Maharashtra v. Hemant Pramod Desai" itself shows the State prosecuting on behalf of the victim and society. The remedy sought was imprisonment and fine — characteristic of criminal proceedings. No civil claim was made in this case.' },
+      { label: 'Definition', content: 'A criminal case is one where the State (Government) prosecutes an individual for committing an act that is prohibited by law and harmful to society at large. The State acts as the complainant/prosecutor on behalf of society. The accused faces punishment � imprisonment, fine, or both � if convicted.' },
+      { label: 'Distinguished From', content: 'A civil case involves a dispute between two private parties (e.g., property disputes, contract breaches, divorce). In a civil case, the remedy is usually compensation or an injunction � not imprisonment.' },
+      { label: 'Why This Case is Criminal', content: 'Hemant Desai was accused of theft � an act criminalised by the State under the Indian Penal Code. The case title "State of Maharashtra v. Hemant Pramod Desai" itself shows the State prosecuting on behalf of the victim and society. The remedy sought was imprisonment and fine � characteristic of criminal proceedings. No civil claim was made in this case.' },
     ],
   },
   'Cognizable Offence': {
@@ -331,8 +354,8 @@ const CASE_TYPE_DETAILS: Record<string, { title: string; intro: string; rows: { 
       { label: 'Category', content: 'Cognizable Offence' },
       { label: 'Definition', content: 'A cognizable offence is one where the police have the authority to arrest a suspect WITHOUT obtaining a warrant from a magistrate first, register an FIR, and begin investigation on their own motion. These are generally serious offences where immediate police action is required. Defined under the First Schedule to the CrPC 1973 / BNSS 2023.' },
       { label: 'Legal Basis', content: 'Section 2(c), Code of Criminal Procedure 1973 | Now: Section 2(1)(f), Bharatiya Nagarik Suraksha Sanhita (BNSS) 2023.' },
-      { label: 'Sections 379 & 380 IPC — Are They Cognizable?', content: 'YES. Both Section 379 (theft) and Section 380 (theft in dwelling/shop) are listed as COGNIZABLE offences in the First Schedule to the CrPC. Police can arrest the accused without a warrant and register an FIR immediately.' },
-      { label: 'How This Applied', content: 'When Shoaib Jahagirdar went to Ratnagiri City Police Station and reported the theft, the police were legally obligated to register the FIR (Crime No. 52/2021) immediately. They could — and did — arrest Hemant Desai on 16.03.2021 without requiring a magistrate\'s arrest warrant. The Supreme Court in Lalita Kumari v. State of UP [(2014) 2 SCC 1] has held that police MUST register an FIR for every cognizable offence reported to them — they cannot refuse or conduct a preliminary inquiry first.' },
+      { label: 'Sections 379 & 380 IPC � Are They Cognizable?', content: 'YES. Both Section 379 (theft) and Section 380 (theft in dwelling/shop) are listed as COGNIZABLE offences in the First Schedule to the CrPC. Police can arrest the accused without a warrant and register an FIR immediately.' },
+      { label: 'How This Applied', content: 'When Shoaib Jahagirdar went to Ratnagiri City Police Station and reported the theft, the police were legally obligated to register the FIR (Crime No. 52/2021) immediately. They could � and did � arrest Hemant Desai on 16.03.2021 without requiring a magistrate\'s arrest warrant. The Supreme Court in Lalita Kumari v. State of UP [(2014) 2 SCC 1] has held that police MUST register an FIR for every cognizable offence reported to them � they cannot refuse or conduct a preliminary inquiry first.' },
       { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, Section 303 BNS (theft) remains a cognizable offence. The First Schedule to BNSS continues to classify it as cognizable and non-bailable.' },
     ],
   },
@@ -342,10 +365,10 @@ const CASE_TYPE_DETAILS: Record<string, { title: string; intro: string; rows: { 
     rows: [
       { label: 'Category', content: 'Non-Bailable Offence' },
       { label: 'Definition', content: 'A non-bailable offence is one where the accused does NOT have an automatic right to be released on bail. Bail must be applied for before a court (not a police officer) and the court has discretion to grant or refuse bail, depending on the facts, flight risk, criminal history, and gravity of the offence.' },
-      { label: 'Distinguished From', content: 'In a bailable offence, the accused is entitled to bail as a matter of right — the police or court must release the accused on bail if he offers sufficient surety. There is no judicial discretion to refuse.' },
-      { label: 'Sections 379 & 380 IPC — Bailable or Non-Bailable?', content: 'Section 379 IPC (ordinary theft) — NON-BAILABLE. Section 380 IPC (theft in dwelling/shop) — NON-BAILABLE. Both are listed as non-bailable in the First Schedule to the CrPC.' },
-      { label: 'How This Applied', content: 'After Hemant Desai was arrested on 16.03.2021, he was produced before the JMFC and remanded to judicial custody. He could not be automatically released at the police station. His defence advocate Adv. Sachin Parkar had to file a formal Bail Application under Section 437 CrPC before the JMFC. Hemant remained in judicial custody from 16.03.2021 to 17.06.2021 — a period of approximately 3 months — before being released. This detention was later set off against his final 1-year sentence.' },
-      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, both BNS Section 303(2) (theft) and BNS Section 305 (theft in building/shop) remain non-bailable. Additionally, BNSS Section 479 now gives undertrial prisoners the right to bail if they have served half the maximum sentence for the offence — a new right not available under the old CrPC.' },
+      { label: 'Distinguished From', content: 'In a bailable offence, the accused is entitled to bail as a matter of right � the police or court must release the accused on bail if he offers sufficient surety. There is no judicial discretion to refuse.' },
+      { label: 'Sections 379 & 380 IPC � Bailable or Non-Bailable?', content: 'Section 379 IPC (ordinary theft) � NON-BAILABLE. Section 380 IPC (theft in dwelling/shop) � NON-BAILABLE. Both are listed as non-bailable in the First Schedule to the CrPC.' },
+      { label: 'How This Applied', content: 'After Hemant Desai was arrested on 16.03.2021, he was produced before the JMFC and remanded to judicial custody. He could not be automatically released at the police station. His defence advocate Adv. Sachin Parkar had to file a formal Bail Application under Section 437 CrPC before the JMFC. Hemant remained in judicial custody from 16.03.2021 to 17.06.2021 � a period of approximately 3 months � before being released. This detention was later set off against his final 1-year sentence.' },
+      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, both BNS Section 303(2) (theft) and BNS Section 305 (theft in building/shop) remain non-bailable. Additionally, BNSS Section 479 now gives undertrial prisoners the right to bail if they have served half the maximum sentence for the offence � a new right not available under the old CrPC.' },
     ],
   },
   'Warrant Case': {
@@ -353,11 +376,11 @@ const CASE_TYPE_DETAILS: Record<string, { title: string; intro: string; rows: { 
     intro: "In India's criminal justice system, every case is classified into a specific 'case type' that determines the procedure to be followed, which court will hear it, the rights of the accused, and the powers of the police. The case type is determined primarily by the nature of the offence charged.",
     rows: [
       { label: 'Category', content: 'Warrant Case' },
-      { label: 'Definition', content: 'A warrant case is a criminal case where the offence is punishable with imprisonment exceeding 2 years — or with death, life imprisonment, or rigorous imprisonment. Warrant cases are tried by a more thorough procedure: charges are formally framed, witnesses are cross-examined in detail, and the accused has full opportunity to lead defence evidence. Defined under Section 2(x) CrPC / Section 2(1)(v) BNSS.' },
+      { label: 'Definition', content: 'A warrant case is a criminal case where the offence is punishable with imprisonment exceeding 2 years � or with death, life imprisonment, or rigorous imprisonment. Warrant cases are tried by a more thorough procedure: charges are formally framed, witnesses are cross-examined in detail, and the accused has full opportunity to lead defence evidence. Defined under Section 2(x) CrPC / Section 2(1)(v) BNSS.' },
       { label: 'Distinguished From', content: 'A summons case involves offences punishable with up to 2 years. It follows a simpler, faster procedure without formal charge-framing.' },
-      { label: 'Sections 379 & 380 IPC — Warrant or Summons?', content: 'Section 379 IPC — punishable up to 3 years. This crosses the 2-year threshold, making it a WARRANT CASE. Section 380 IPC — punishable up to 7 years. This is clearly a WARRANT CASE.' },
-      { label: 'How This Applied', content: 'Since this was a warrant case, the JMFC followed the full warrant case trial procedure under Chapter XIX of the CrPC (Sections 238–250). This meant: (1) the charge-sheet was examined for prima facie case; (2) formal charges were framed and read to the accused (Section 380 IPC and Section 379 IPC); (3) the accused was asked to plead guilty or not guilty; (4) prosecution witnesses were examined and cross-examined; (5) the accused was examined under Section 313 CrPC; (6) the accused was given the opportunity to lead defence evidence (he declined); (7) arguments were heard; and (8) the judgment was pronounced. The conviction was recorded under Section 248(2) CrPC — the specific provision for conviction in a warrant case tried by a Magistrate.' },
-      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, the warrant case procedure is now under Chapter XX (Sections 262–280 BNSS). The conviction in a warrant case Magistrate trial is now under Section 280(2) BNSS — the direct equivalent of Section 248(2) CrPC.' },
+      { label: 'Sections 379 & 380 IPC � Warrant or Summons?', content: 'Section 379 IPC � punishable up to 3 years. This crosses the 2-year threshold, making it a WARRANT CASE. Section 380 IPC � punishable up to 7 years. This is clearly a WARRANT CASE.' },
+      { label: 'How This Applied', content: 'Since this was a warrant case, the JMFC followed the full warrant case trial procedure under Chapter XIX of the CrPC (Sections 238�250). This meant: (1) the charge-sheet was examined for prima facie case; (2) formal charges were framed and read to the accused (Section 380 IPC and Section 379 IPC); (3) the accused was asked to plead guilty or not guilty; (4) prosecution witnesses were examined and cross-examined; (5) the accused was examined under Section 313 CrPC; (6) the accused was given the opportunity to lead defence evidence (he declined); (7) arguments were heard; and (8) the judgment was pronounced. The conviction was recorded under Section 248(2) CrPC � the specific provision for conviction in a warrant case tried by a Magistrate.' },
+      { label: 'BNS/BNSS 2023', content: 'Under BNSS 2023, the warrant case procedure is now under Chapter XX (Sections 262�280 BNSS). The conviction in a warrant case Magistrate trial is now under Section 280(2) BNSS � the direct equivalent of Section 248(2) CrPC.' },
     ],
   },
 };
@@ -377,6 +400,7 @@ function SectionIcon({ id, icon, title, onClick }: { id: string; icon: string; t
 
 export function AnalyserPage() {
   const { theme } = useTheme();
+  const [analysisMode, setAnalysisMode] = useState<'static' | 'ai'>('static');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [caseText, setCaseText] = useState('');
   const [activeInputTab, setActiveInputTab] = useState<string>('Text Entry');
@@ -425,10 +449,10 @@ export function AnalyserPage() {
     const threshold = 50; // minimum swipe distance in px
 
     if (diff > threshold && activeSlide < analysisResults.length - 1) {
-      // Swiped left → next slide
+      // Swiped left ? next slide
       setActiveSlide(activeSlide + 1);
     } else if (diff < -threshold && activeSlide > 0) {
-      // Swiped right → previous slide
+      // Swiped right ? previous slide
       setActiveSlide(activeSlide - 1);
     }
   };
@@ -461,30 +485,61 @@ export function AnalyserPage() {
   };
 
   const handleAnalyze = async () => {
-    // Multiple files — analyze each with Claude
+    const textToAnalyze = caseText.trim() || (extractedTexts.length === 1 ? extractedTexts[0].text.trim() : '');
+
+    // --- STATIC MODE ---
+    if (analysisMode === 'static') {
+      if (extractedTexts.length > 1) {
+        setIsAnalyzing(true);
+        setAnalysisError(null);
+        setAnalysisResult(null);
+        const results: Array<{ fileName: string; result: AnalysisResult }> = [];
+        for (let i = 0; i < extractedTexts.length; i++) {
+          const { name, text } = extractedTexts[i];
+          if (!text.trim() || text.length < 50) continue;
+          setAnalyzeProgress(`Analyzing file ${i + 1} of ${extractedTexts.length}: ${name}`);
+          await new Promise(resolve => setTimeout(resolve, 800));
+          results.push({ fileName: name, result: getNextFallbackData() });
+        }
+        setAnalysisResults(results);
+        setActiveSlide(0);
+        setAnalyzeProgress('');
+        setIsAnalyzing(false);
+        return;
+      }
+
+      if (!textToAnalyze && extractedTexts.length === 0) return;
+      setIsAnalyzing(true);
+      setAnalysisError(null);
+      await new Promise(resolve => setTimeout(resolve, 1200));
+      const fallbackResult = getNextFallbackData();
+      setAnalysisResult(fallbackResult);
+      setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: fallbackResult }]);
+      setActiveSlide(0);
+      setIsAnalyzing(false);
+      return;
+    }
+
+    // --- AI MODE ---
     if (extractedTexts.length > 1) {
       setIsAnalyzing(true);
       setAnalysisError(null);
       setAnalysisResult(null);
       const results: Array<{ fileName: string; result: AnalysisResult }> = [];
-
       for (let i = 0; i < extractedTexts.length; i++) {
         const { name, text } = extractedTexts[i];
         if (!text.trim() || text.length < 50) continue;
         setAnalyzeProgress(`Analyzing file ${i + 1} of ${extractedTexts.length}: ${name}`);
-
         try {
           const rawResponse = await analyzeCase(text, recommendations);
           const cleanedResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-          const parsed = JSON.parse(cleanedResponse);
-          const normalized = normalizeResult(parsed);
-          results.push({ fileName: name, result: normalized });
+          const parsed = safeParseJSON(cleanedResponse);
+          results.push({ fileName: name, result: normalizeResult(parsed) });
         } catch (error) {
-          // Skip files that fail
-          console.error(`Failed to analyze ${name}:`, error);
+          console.error(`AI failed for ${name}:`, error);
+          setAnalysisError(`AI analysis failed for ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
-
       setAnalysisResults(results);
       setActiveSlide(0);
       setAnalyzeProgress('');
@@ -492,29 +547,26 @@ export function AnalyserPage() {
       return;
     }
 
-    // Single text/file analysis
-    const textToAnalyze = caseText.trim() || (extractedTexts.length === 1 ? extractedTexts[0].text.trim() : '');
     if (!textToAnalyze) return;
-
     if (textToAnalyze.length < 50) {
       setAnalysisError('Please provide detailed case information (at least 50 characters).');
-      setAnalysisResult(null);
       return;
     }
 
     setIsAnalyzing(true);
     setAnalysisError(null);
-
     try {
       const rawResponse = await analyzeCase(textToAnalyze, recommendations);
       const cleanedResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      const parsed = JSON.parse(cleanedResponse);
+      const parsed = safeParseJSON(cleanedResponse);
       const normalized = normalizeResult(parsed);
       setAnalysisResult(normalized);
       setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: normalized }]);
       setActiveSlide(0);
     } catch (error) {
-      setAnalysisError(error instanceof Error ? error.message : 'Analysis failed. Please try again.');
+      setAnalysisError(error instanceof Error ? error.message : 'AI analysis failed. Please try again.');
+      setAnalysisResult(null);
+      setAnalysisResults([]);
     } finally {
       setIsAnalyzing(false);
     }
@@ -580,7 +632,7 @@ export function AnalyserPage() {
 
       doc.save('case-analysis-report.pdf');
     } else if (type === 'Export to Word') {
-      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '• ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '• ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '✓ ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '⚠ ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
+      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '� ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '� ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '? ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '? ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
       const blob = new Blob([analysisText], { type: 'application/msword' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -593,11 +645,11 @@ export function AnalyserPage() {
     } else if (type === 'Print Analysis') {
       window.print();
     } else if (type === 'Save to Case File') {
-      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '• ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '• ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '✓ ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '⚠ ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
+      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '� ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '� ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '? ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '? ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
       localStorage.setItem('juryfy_saved_analysis', analysisText);
       alert('Analysis saved to case file!');
     } else if (type === 'Email Report') {
-      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '• ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '• ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '✓ ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '⚠ ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
+      const analysisText = `LEGAL CASE ANALYSIS REPORT\n${'='.repeat(40)}\n\nCase Summary:\n${data.caseSummary.legalIssue}\n\nSuccess Probability: ${data.caseSummary.successProbability}%\n\nKey Points:\n${data.caseSummary.keyPoints.map(p => '� ' + p).join('\n')}\n\nApplicable Sections:\n${data.applicableSections.map(s => '� ' + s.section + ' - ' + s.description).join('\n')}\n\nKey Winning Points:\n${data.keyWinningPoints.map(p => '? ' + p).join('\n')}\n\nRisk Factors:\n${data.riskFactors.map(r => '? ' + r).join('\n')}\n\nExpert Recommendation:\n${data.expertRecommendation}`;
       window.open(`mailto:?subject=Case Analysis Report&body=${encodeURIComponent(analysisText.substring(0, 2000))}`);
     }
   };
@@ -623,14 +675,14 @@ export function AnalyserPage() {
       {/* Error indicator */}
       {analysisError && (
         <div className="px-4 py-2 bg-danger/10 border border-danger/30 rounded-xl text-sm text-danger">
-          ⚠️ {analysisError}
+          {analysisError}
         </div>
       )}
       {/* Success indicator */}
       {hasAnyResult && !analysisError && (
         <div className="px-4 py-2 bg-success/10 border border-success/30 rounded-xl text-sm text-success">
-          ✓ Analysis powered by Claude AI
-          {isCarousel && ` — ${analysisResults.length} files analyzed`}
+          {analysisMode === 'ai' ? 'Analysis powered by Claude AI' : 'Analysis complete (Static Mode - showing sample data)'}
+          {isCarousel && ` - ${analysisResults.length} files analyzed`}
         </div>
       )}
 
@@ -644,7 +696,6 @@ export function AnalyserPage() {
             {/* Tabs */}
             <div className="flex flex-wrap gap-1.5 mb-3">
               {INPUT_TABS.map((tab) => {
-                const icon = tab === 'Text Entry' ? '📄' : tab === 'Copy-Paste' ? '📋' : '✉️';
                 return (
                   <button
                     key={tab}
@@ -663,7 +714,7 @@ export function AnalyserPage() {
                         : 'bg-transparent border-border text-text-secondary hover:text-text-primary hover:border-text-muted'
                     }`}
                   >
-                    {icon} {tab}
+                    {tab}
                   </button>
                 );
               })}
@@ -718,7 +769,7 @@ export function AnalyserPage() {
                           <span className="text-xs text-text-primary truncate">{info.name}</span>
                         </div>
                         <span className="text-xs text-text-muted shrink-0 ml-2">
-                          {info.pages}p • {info.wordCount.toLocaleString()}w
+                          {info.pages}p � {info.wordCount.toLocaleString()}w
                         </span>
                       </div>
                     ))}
@@ -744,6 +795,45 @@ export function AnalyserPage() {
               placeholder="Type or paste the details of your case here..."
               className="w-full h-20 bg-white/10 border border-accent-primary/30 rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary/50 mb-4"
             />
+
+            {/* Static / AI Toggle */}
+            <div className="flex items-center justify-between mb-3 px-1">
+              <span className="text-xs font-medium text-text-secondary">Analysis Mode:</span>
+              <div className="flex items-center gap-1 bg-bg-elevated rounded-lg p-0.5 border border-border">
+                <button
+                  onClick={() => {
+                    setAnalysisMode('static');
+                    // Reset results when switching mode
+                    setAnalysisResult(null);
+                    setAnalysisResults([]);
+                    setAnalysisError(null);
+                  }}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                    analysisMode === 'static'
+                      ? 'bg-accent-primary text-white shadow-sm'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  Static
+                </button>
+                <button
+                  onClick={() => {
+                    setAnalysisMode('ai');
+                    // Reset results when switching mode
+                    setAnalysisResult(null);
+                    setAnalysisResults([]);
+                    setAnalysisError(null);
+                  }}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                    analysisMode === 'ai'
+                      ? 'bg-accent-primary text-white shadow-sm'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  AI
+                </button>
+              </div>
+            </div>
 
             {/* Analyze button */}
             <button
@@ -776,7 +866,7 @@ export function AnalyserPage() {
                 Export
               </button>
 
-              {/* Popover bubble — opens upward */}
+              {/* Popover bubble � opens upward */}
               {showExport && (
                 <>
                   {/* Backdrop to close on click outside */}
@@ -818,7 +908,7 @@ export function AnalyserPage() {
             {/* Carousel header with file name and navigation */}
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-text-primary truncate">
-                📄 {analysisResults[activeSlide]?.fileName}
+                {analysisResults[activeSlide]?.fileName}
               </h3>
               <span className="text-xs text-text-muted">
                 {activeSlide + 1} / {analysisResults.length}
@@ -854,13 +944,15 @@ export function AnalyserPage() {
                     {/* Case Type & Jurisdiction */}
                     <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                       <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                      <div className="flex flex-wrap gap-1.5 mb-2">
-                        {displayData.caseTypes.map((ct) => (
-                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                            {ct}
-                          </button>
-                        ))}
+                      <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                        <div className="flex flex-wrap gap-1.5">
+                          {displayData.caseTypes.map((ct) => (
+                            <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                              className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                              {ct}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                       <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                     </GlassCard>
@@ -893,7 +985,7 @@ export function AnalyserPage() {
 
                     {/* Required Documents */}
                     <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
-                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
+                      <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                       <div className="space-y-2">
                         {displayData.requiredDocuments.map((doc) => (
                           <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
@@ -932,7 +1024,7 @@ export function AnalyserPage() {
                               </div>
                               <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
                                 className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
-                                {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                                {sc.badge === 'WIN' ? '? ' : sc.badge === 'LOSS' ? '? ' : '? '}{sc.badge}
                               </button>
                             </div>
                           ))
@@ -959,7 +1051,7 @@ export function AnalyserPage() {
                             <ul className="space-y-1">
                               {displayData.keyWinningPoints.map((point, i) => (
                                 <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
-                                  <span className="text-success mt-0.5">•</span>{point}
+                                  <span className="text-success mt-0.5">�</span>{point}
                                 </li>
                               ))}
                             </ul>
@@ -969,7 +1061,7 @@ export function AnalyserPage() {
                             <ul className="space-y-1">
                               {displayData.riskFactors.map((risk, i) => (
                                 <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
-                                  <span className="text-danger mt-0.5">•</span>{risk}
+                                  <span className="text-danger mt-0.5">�</span>{risk}
                                 </li>
                               ))}
                             </ul>
@@ -1021,11 +1113,11 @@ export function AnalyserPage() {
                   {/* Icon bar */}
                   <div className="flex flex-col gap-2 shrink-0">
                     {[
-                      { id: 'caseType', icon: '⚖️', title: 'Case Type & Jurisdiction' },
-                      { id: 'sections', icon: '📜', title: 'Applicable Legal Sections' },
-                      { id: 'documents', icon: '📁', title: 'Required Documents' },
-                      { id: 'similar', icon: '📊', title: 'Similar Historical Cases' },
-                      { id: 'outcome', icon: '🎯', title: 'Outcome Prediction' },
+                      { id: 'caseType', icon: 'CT', title: 'Case Type & Jurisdiction' },
+                      { id: 'sections', icon: 'AS', title: 'Applicable Legal Sections' },
+                      { id: 'documents', icon: 'RD', title: 'Required Documents' },
+                      { id: 'similar', icon: 'SC', title: 'Similar Historical Cases' },
+                      { id: 'outcome', icon: 'OP', title: 'Outcome Prediction' },
                     ].filter(s => s.id !== maximizedSection).map(s => (
                       <SectionIcon key={s.id} id={s.id} icon={s.icon} title={s.title} onClick={setMaximizedSection} />
                     ))}
@@ -1034,11 +1126,11 @@ export function AnalyserPage() {
                   <div className="flex-1 min-w-0 overflow-y-auto glass-card !p-4">
                     <div className="flex items-center justify-between mb-3 sticky top-0 z-10">
                       <h3 className="text-sm font-semibold text-text-primary">
-                        {maximizedSection === 'caseType' && '⚖️ Case Type & Jurisdiction'}
-                        {maximizedSection === 'sections' && '📜 Applicable Legal Sections'}
-                        {maximizedSection === 'documents' && '📁 Required Documents'}
-                        {maximizedSection === 'similar' && '📊 Similar Historical Cases'}
-                        {maximizedSection === 'outcome' && '🎯 Outcome Prediction'}
+                        {maximizedSection === 'caseType' && 'Case Type & Jurisdiction'}
+                        {maximizedSection === 'sections' && 'Applicable Legal Sections'}
+                        {maximizedSection === 'documents' && 'Required Documents'}
+                        {maximizedSection === 'similar' && 'Similar Historical Cases'}
+                        {maximizedSection === 'outcome' && 'Outcome Prediction'}
                       </h3>
                       <button onClick={() => setMaximizedSection(null)} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Minimize">
                         <Minimize2 className="w-4 h-4" />
@@ -1046,10 +1138,12 @@ export function AnalyserPage() {
                     </div>
                     {displayData && maximizedSection === 'caseType' && (
                       <div>
-                        <div className="flex flex-wrap gap-1.5 mb-2">
-                          {displayData.caseTypes.map((ct) => (
-                            <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
-                          ))}
+                        <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                          <div className="flex flex-wrap gap-1.5">
+                            {displayData.caseTypes.map((ct) => (
+                              <button key={ct} onClick={() => setCaseTypeModal(ct)} className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">{ct}</button>
+                            ))}
+                          </div>
                         </div>
                         <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                       </div>
@@ -1090,7 +1184,7 @@ export function AnalyserPage() {
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
                               className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
-                              {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                              {sc.badge === 'WIN' ? '? ' : sc.badge === 'LOSS' ? '? ' : '? '}{sc.badge}
                             </button>
                           </div>
                         ))}
@@ -1106,20 +1200,20 @@ export function AnalyserPage() {
                             <h4 className="text-xs font-bold mb-1" style={{ color: '#008000' }}>Key Winning Points:</h4>
                             <ul className="space-y-1 mb-3">
                               {displayData.keyWinningPoints.map((p, i) => (
-                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#008000' }}>•</span> {p}</li>
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#008000' }}>�</span> {p}</li>
                               ))}
                             </ul>
                             <h4 className="text-xs font-bold mb-1" style={{ color: '#FF0000' }}>Risk Factors:</h4>
                             <ul className="space-y-1">
                               {displayData.riskFactors.map((r, i) => (
-                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#FF0000' }}>•</span> {r}</li>
+                                <li key={i} className="text-xs text-text-secondary flex items-start gap-1"><span style={{ color: '#FF0000' }}>�</span> {r}</li>
                               ))}
                             </ul>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#008000' }}>● {displayData.outcomePrediction.winningPct}% – Winning</span>
-                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#FF0000' }}>● {displayData.outcomePrediction.losingPct}% – Losing</span>
+                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#008000' }}>? {displayData.outcomePrediction.winningPct}% � Winning</span>
+                          <span className="flex-1 px-3 py-2.5 rounded-lg text-white text-xs font-bold text-center" style={{ backgroundColor: '#FF0000' }}>? {displayData.outcomePrediction.losingPct}% � Losing</span>
                           <a href="https://docs.juryfyai.com/Explore_Predictive_Analysis_RCC_146_2021.pdf" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg gradient-btn text-xs font-medium text-white">Explore</a>
                         </div>
                       </div>
@@ -1146,13 +1240,15 @@ export function AnalyserPage() {
                   {/* Case Type & Jurisdiction */}
                   <GlassCard className="!p-4 flex-[2] min-h-0 overflow-y-auto">
                     <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Case Type &amp; Jurisdiction</h3><button onClick={() => setMaximizedSection('caseType')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
-                    <div className="flex flex-wrap gap-1.5 mb-2">
-                      {displayData.caseTypes.map((ct) => (
-                        <button key={ct} onClick={() => setCaseTypeModal(ct)}
-                          className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
-                          {ct}
-                        </button>
-                      ))}
+                    <div className="p-2.5 rounded-lg analyser-inner-card mb-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        {displayData.caseTypes.map((ct) => (
+                          <button key={ct} onClick={() => setCaseTypeModal(ct)}
+                            className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn">
+                            {ct}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <p className="text-xs text-text-secondary">Jurisdiction: {displayData.jurisdiction}</p>
                   </GlassCard>
@@ -1180,7 +1276,7 @@ export function AnalyserPage() {
 
                   {/* Required Documents */}
                   <GlassCard className="!p-4 flex-[4] min-h-0 overflow-y-auto">
-                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">📁 Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
+                    <div className="flex items-center justify-between mb-3"><h3 className="text-sm font-semibold text-text-primary">Required Documents</h3><button onClick={() => setMaximizedSection('documents')} className="p-1 rounded hover:bg-bg-elevated transition-colors text-text-muted hover:text-text-primary" title="Maximize"><Maximize2 className="w-3.5 h-3.5" /></button></div>
                     <div className="space-y-2">
                       {displayData.requiredDocuments.map((doc) => (
                         <div key={doc.id} className="flex items-center justify-between p-2.5 rounded-lg analyser-inner-card">
@@ -1229,7 +1325,7 @@ export function AnalyserPage() {
                             </div>
                             <button onClick={() => sc.pdfUrl ? window.open(sc.pdfUrl, '_blank') : setSimilarCaseModal(sc.citation)}
                               className="px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-[10px] font-medium analyser-teal-btn shrink-0 ml-2">
-                              {sc.badge === 'WIN' ? '✓ ' : sc.badge === 'LOSS' ? '✗ ' : '⚠ '}{sc.badge}
+                              {sc.badge === 'WIN' ? '? ' : sc.badge === 'LOSS' ? '? ' : '? '}{sc.badge}
                             </button>
                           </div>
                         ))
@@ -1256,7 +1352,7 @@ export function AnalyserPage() {
                           <ul className="space-y-1">
                             {displayData.keyWinningPoints.map((point, i) => (
                               <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
-                                <span className="text-success mt-0.5">•</span>{point}
+                                <span className="text-success mt-0.5">�</span>{point}
                               </li>
                             ))}
                           </ul>
@@ -1266,7 +1362,7 @@ export function AnalyserPage() {
                           <ul className="space-y-1">
                             {displayData.riskFactors.map((risk, i) => (
                               <li key={i} className="flex items-start gap-1.5 text-xs text-text-secondary">
-                                <span className="text-danger mt-0.5">•</span>{risk}
+                                <span className="text-danger mt-0.5">�</span>{risk}
                               </li>
                             ))}
                           </ul>
@@ -1296,7 +1392,7 @@ export function AnalyserPage() {
         )}
       </div>
 
-      {/* ─── MODALS ─── */}
+      {/* --- MODALS --- */}
 
       {/* Section Detail Modal */}
       <Modal
@@ -1394,8 +1490,9 @@ export function AnalyserPage() {
         title={caseTypeModal ?? ''}
         size="3xl"
       >
-        {caseTypeModal && CASE_TYPE_DETAILS[caseTypeModal] ? (() => {
-          const detail = CASE_TYPE_DETAILS[caseTypeModal];
+        {caseTypeModal && (CASE_TYPE_DETAILS[caseTypeModal] || displayData?.caseTypeDetails?.[caseTypeModal]) ? (() => {
+          const detail = CASE_TYPE_DETAILS[caseTypeModal] || displayData?.caseTypeDetails?.[caseTypeModal];
+          if (!detail) return null;
           return (
             <div className="space-y-5 max-h-[70vh] overflow-y-auto">
               {/* Header with logo */}

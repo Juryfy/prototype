@@ -77,6 +77,7 @@ export interface AnalysisResult {
   relevantCaseLaws: RelevantCaseLaw[];
   statutoryProvisions: StatutoryProvision[];
   caseTypes: string[];
+  caseTypeDetails?: Record<string, { title: string; intro: string; rows: { label: string; content: string }[] }>;
   jurisdiction: string;
   applicableSections: ApplicableSection[];
   requiredDocuments: RequiredDocument[];
