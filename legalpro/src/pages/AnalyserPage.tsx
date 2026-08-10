@@ -304,19 +304,57 @@ function normalizeResult(parsed: Record<string, unknown>): AnalysisResult {
     relevantCaseLaws: (parsed.relevantCaseLaws as AnalysisResult['relevantCaseLaws']) || [],
     statutoryProvisions: (parsed.statutoryProvisions as AnalysisResult['statutoryProvisions']) || [],
     caseTypes: (parsed.caseTypes as string[]) || ['General'],
-    caseTypeDetails: (parsed.caseTypeDetails as AnalysisResult['caseTypeDetails']) || undefined,
+    caseTypeDetails: (() => {
+      const raw = parsed.caseTypeDetails as Record<string, unknown> | undefined;
+      if (!raw) return undefined;
+      const normalized: Record<string, { title: string; intro: string; rows: { label: string; content: string }[] }> = {};
+      for (const key of Object.keys(raw)) {
+        const entry = raw[key] as Record<string, unknown>;
+        normalized[key] = {
+          title: (entry.title as string) || key,
+          intro: (entry.intro as string) || '',
+          rows: (entry.rows as { label: string; content: string }[]) || [],
+        };
+      }
+      return Object.keys(normalized).length > 0 ? normalized : undefined;
+    })(),
     jurisdiction: (parsed.jurisdiction as string) || 'India',
-    applicableSections: (parsed.applicableSections as AnalysisResult['applicableSections']) || [],
+    applicableSections: ((parsed.applicableSections as Array<Record<string, unknown>>) || []).map((sec) => {
+      const rawDetail = sec.detail as Record<string, unknown> | undefined;
+      const detail = rawDetail ? {
+        sectionTitle: (rawDetail.sectionTitle as string) || (sec.section as string) || '',
+        oldLaw: (rawDetail.oldLaw as string) || 'Refer to original Act',
+        newLaw: (rawDetail.newLaw as string) || 'Refer to updated Act/BNS',
+        typeOfProvision: (rawDetail.typeOfProvision as string) || '',
+        caseApplication: (rawDetail.caseApplication as string) || undefined,
+        paragraphs: (rawDetail.paragraphs as string[]) || [],
+        ingredients: (rawDetail.ingredients as { name: string; explanation: string }[]) || [],
+        subSections: (rawDetail.subSections as { heading: string; content: string; bullets?: string[] }[]) || [],
+      } : undefined;
+      return {
+        section: (sec.section as string) || '',
+        description: (sec.description as string) || '',
+        relevance: (['High relevance', 'Medium relevance'].includes(sec.relevance as string)
+          ? sec.relevance
+          : 'Medium relevance') as 'High relevance' | 'Medium relevance',
+        detail,
+      };
+    }),
     requiredDocuments: ((parsed.requiredDocuments as Array<Record<string, unknown>>) || []).map((doc, i) => ({
       id: (doc.id as string) || `doc-${i + 1}`,
       description: (doc.description as string) || '',
       checked: (doc.checked as boolean) ?? false,
     })),
-    similarCases: ((parsed.similarCases as Array<Record<string, unknown>>) || []).map((sc) => ({
-      citation: (sc.citation as string) || 'Unknown Case',
-      outcome: (sc.outcome as string) || 'Outcome: Unknown',
-      badge: (['WIN', 'LOSS', 'Partial'].includes(sc.badge as string) ? sc.badge : 'Partial') as 'WIN' | 'LOSS' | 'Partial',
-    })),
+    similarCases: ((parsed.similarCases as Array<Record<string, unknown>>) || []).map((sc) => {
+      const rawBadge = String(sc.badge || '').toUpperCase();
+      return {
+        citation: (sc.citation as string) || 'Unknown Case',
+        outcome: (sc.outcome as string) || 'Outcome: Unknown',
+        badge: (['WIN', 'LOSS', 'Partial'].includes(rawBadge) ? rawBadge
+          : (['WIN', 'LOSS', 'Partial'].includes(sc.badge as string) ? sc.badge : 'Partial')) as 'WIN' | 'LOSS' | 'Partial',
+        pdfUrl: (sc.pdfUrl as string) || undefined,
+      };
+    }),
     outcomePrediction: {
       winningPct: Math.max(5, Math.min(95, (parsed.outcomePrediction as Record<string, unknown>)?.winningPct as number ?? 50)),
       losingPct: Math.max(5, Math.min(95, (parsed.outcomePrediction as Record<string, unknown>)?.losingPct as number ?? 50)),
@@ -536,8 +574,8 @@ export function AnalyserPage() {
           const parsed = safeParseJSON(cleanedResponse);
           results.push({ fileName: name, result: normalizeResult(parsed) });
         } catch (error) {
-          console.error(`AI failed for ${name}:`, error);
-          setAnalysisError(`AI analysis failed for ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          console.error(`Dynamic analysis failed for ${name}:`, error);
+          setAnalysisError(`Dynamic analysis failed for ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
       setAnalysisResults(results);
@@ -547,7 +585,12 @@ export function AnalyserPage() {
       return;
     }
 
-    if (!textToAnalyze) return;
+    if (!textToAnalyze) {
+      if (analysisMode === 'ai') {
+        setAnalysisError('Please upload a document or enter case text before running Dynamic analysis.');
+      }
+      return;
+    }
     if (textToAnalyze.length < 50) {
       setAnalysisError('Please provide detailed case information (at least 50 characters).');
       return;
@@ -564,7 +607,7 @@ export function AnalyserPage() {
       setAnalysisResults([{ fileName: uploadedFiles.length === 1 ? uploadedFiles[0].name : 'Text Input', result: normalized }]);
       setActiveSlide(0);
     } catch (error) {
-      setAnalysisError(error instanceof Error ? error.message : 'AI analysis failed. Please try again.');
+      setAnalysisError(error instanceof Error ? error.message : 'Dynamic analysis failed. Please try again.');
       setAnalysisResult(null);
       setAnalysisResults([]);
     } finally {
@@ -681,7 +724,7 @@ export function AnalyserPage() {
       {/* Success indicator */}
       {hasAnyResult && !analysisError && (
         <div className="px-4 py-2 bg-success/10 border border-success/30 rounded-xl text-sm text-success">
-          {analysisMode === 'ai' ? 'Analysis powered by Claude AI' : 'Analysis complete (Static Mode - showing sample data)'}
+          {analysisMode === 'ai' ? '⚡ Dynamic Analysis powered by Claude AI' : 'Analysis complete (Static Mode - showing sample data)'}
           {isCarousel && ` - ${analysisResults.length} files analyzed`}
         </div>
       )}
@@ -835,6 +878,14 @@ export function AnalyserPage() {
               </div>
             </div>
 
+            {/* Dynamic mode hint */}
+            {analysisMode === 'ai' && (
+              <div className="mb-3 px-2 py-2 bg-accent-primary/10 border border-accent-primary/30 rounded-lg text-xs text-accent-primary flex items-start gap-1.5">
+                <Brain className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                <span>Dynamic mode sends your uploaded file or text to the Claude AI API for real-time analysis.</span>
+              </div>
+            )}
+
             {/* Analyze button */}
             <button
               onClick={handleAnalyze}
@@ -844,7 +895,7 @@ export function AnalyserPage() {
               {isAnalyzing ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  {analyzeProgress || 'Analyzing...'}
+                  {analyzeProgress || (analysisMode === 'ai' ? 'Calling Claude AI...' : 'Analyzing...')}
                 </>
               ) : (
                 <>
