@@ -830,7 +830,7 @@ export function AnalyserPage() {
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
-                  AI
+                  Dynamic
                 </button>
               </div>
             </div>
